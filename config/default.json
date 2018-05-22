@@ -1,0 +1,16 @@
+{
+  "app": {
+    "port": 4600
+  },
+  "network": {
+    "broadcastAddress": "192.168.47.255"
+  },
+  "server": {
+    "macAddress": "AB:CD:EF:FF:FF:FE:DC:BA",
+    "hostname": "myserver",
+    "user": "bob"
+  },
+  "schedule": {
+    "enabled": true
+  }
+}
