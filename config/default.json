@@ -3,14 +3,20 @@
     "port": 4600
   },
   "network": {
-    "broadcastAddress": "192.168.47.255"
+    "broadcastAddress": "255.255.255.255"
   },
   "server": {
-    "macAddress": "AB:CD:EF:FF:FF:FE:DC:BA",
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
     "hostname": "myserver",
     "user": "bob"
   },
   "schedule": {
-    "enabled": true
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
   }
 }
