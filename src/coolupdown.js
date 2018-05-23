@@ -16,7 +16,6 @@ const stateWrapper = (callback, state, message) => (req, res) => {
   callback(req, res, state);
 };
 
-
 /**
  * Main entry point
  */
