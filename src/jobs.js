@@ -18,8 +18,9 @@ const cronWrapper = (callback, message) => () => {
  * @private
  */
 function toCronSyntax({ at }) {
-  const [hr, mn] = (at || '').split(':');
-  return `00 ${mn || '*'} ${hr || '*'} * * *`;
+  if (!at) return '* * * * * *';
+  const [hr, mn] = at.split(':');
+  return `00 ${mn || '00'} ${hr || '00'} * * *`;
 }
 
 /**
@@ -48,4 +49,5 @@ function createOffJob(schedule, isEnabled) {
 module.exports = {
   createOnJob,
   createOffJob,
+  toCronSyntax, // For testing
 };
