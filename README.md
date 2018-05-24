@@ -124,6 +124,6 @@ coolupdown alive and running!
 
 Path: `/on`
 
-#### OFF: manually turns server ON
+#### OFF: manually turns server OFF
 
 Path: `/off`
