@@ -32,7 +32,7 @@ function on(req, res) {
     if (error) {
       console.error(`${messages.wakeKO}\n${JSON.stringify(error, null, '  ')}`);
 
-      if (res) res.send('ko');
+      if (res) res.status(500).send('ko');
     } else {
       console.log(messages.wakeOK);
 
@@ -66,7 +66,7 @@ function off(req, res) {
   }, (error) => {
     console.log(`${messages.sshKO}\n${JSON.stringify(error, null, '  ')}`);
 
-    if (res) res.send('ko');
+    if (res) res.status(500).send('ko');
   });
 }
 
@@ -83,7 +83,7 @@ function enableSchedule(req, res, appState) {
 }
 
 /**
- * Handles ENABLE SCHEDULE request
+ * Handles DISABLE SCHEDULE request
  */
 function disableSchedule(req, res, appState) {
   const state = appState;
