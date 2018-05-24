@@ -34,6 +34,8 @@ function main() {
 
   const app = express();
 
+  // TODO Basic auth
+
   app.get('/', stateWrapper(ping, appState, 'ping'));
 
   app.get('/on', stateWrapper(on, appState, 'on'));

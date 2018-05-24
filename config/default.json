@@ -2,13 +2,15 @@
   "app": {
     "port": 4600
   },
-  "network": {
-    "broadcastAddress": "255.255.255.255"
-  },
   "server": {
     "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
     "hostname": "myserver",
-    "user": "bob"
+    "user": "bob",
+    "password": "alice",
+    "offCommand": "sudo -S shutdown -h 1",
+    "sshPort": 22,
+    "keyPath": "~/.ssh/id_rsa"
   },
   "schedule": {
     "enabled": true,

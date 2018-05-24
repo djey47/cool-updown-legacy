@@ -16,6 +16,7 @@ function ping(req, res, appState) {
     statusMessage = messages.pingNoSchedule;
   }
 
+  // TODO remove or obfuscate server.password node!
   res.send(`<h1>${statusMessage}</h1><pre>${JSON.stringify(config, null, '  ')}</pre>`);
 }
 
@@ -24,7 +25,7 @@ function ping(req, res, appState) {
  */
 function on(req, res) {
   const macAddress = config.get('server.macAddress');
-  const broadcastAddress = config.get('network.broadcastAddress');
+  const broadcastAddress = config.get('server.broadcastAddress');
   const options = {
     address: broadcastAddress,
   };
@@ -48,7 +49,9 @@ function off(req, res) {
   const host = config.get('server.hostname');
   const port = config.get('server.sshPort');
   const username = config.get('server.user');
+  const password = config.get('server.password');
   const privateKey = config.get('server.keyPath');
+  const command = config.get('server.offCommand');
   ssh.connect({
     host,
     port,
@@ -57,7 +60,7 @@ function off(req, res) {
   }).then(() => {
     console.log(messages.sshOK);
 
-    ssh.execCommand('shutdown -h now').then(({ stdout, stderr }) => {
+    ssh.execCommand(command, { stdin: `${password}\n` }).then(({ stdout, stderr }) => {
       console.log(`STDOUT: ${stdout}`);
       console.error(`STDERR: ${stderr}`);
     });
