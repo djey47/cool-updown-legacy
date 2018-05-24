@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`services functions ping function should send appropriate response when schedule disabled 1`] = `
+"<h1>coolupdown alive but schedule is disabled!</h1><pre>{
+  \\"app\\": {
+    \\"port\\": 4600
+  },
+  \\"network\\": {
+    \\"broadcastAddress\\": \\"192.168.47.255\\"
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"AB:CD:EF:FF:FF:FE:DC:BA\\",
+    \\"hostname\\": \\"myserver\\",
+    \\"user\\": \\"bob\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"11:49\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"11:50\\"
+    }
+  }
+}</pre>"
+`;
+
+exports[`services functions ping function should send appropriate response when schedule enabled 1`] = `
+"<h1>coolupdown alive and running!</h1><pre>{
+  \\"app\\": {
+    \\"port\\": 4600
+  },
+  \\"network\\": {
+    \\"broadcastAddress\\": \\"192.168.47.255\\"
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"AB:CD:EF:FF:FF:FE:DC:BA\\",
+    \\"hostname\\": \\"myserver\\",
+    \\"user\\": \\"bob\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"11:49\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"11:50\\"
+    }
+  }
+}</pre>"
+`;
