@@ -1,4 +1,4 @@
-const express = require('express');
+const app = require('express')();
 const config = require('config');
 const messages = require('./messages');
 const {
@@ -7,6 +7,7 @@ const {
 const {
   createOnJob, createOffJob,
 } = require('./jobs');
+const { initBasicAuth } = require('./helpers/auth');
 
 /**
  * @private
@@ -17,9 +18,9 @@ const stateWrapper = (callback, state, message) => (req, res) => {
 };
 
 /**
- * Main entry point
+ * Main entry point for HTTP server
  */
-function main() {
+function serverMain() {
   console.log(messages.intro);
 
   const port = config.get('app.port');
@@ -32,10 +33,13 @@ function main() {
     offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled),
   };
 
-  const app = express();
+  // Auth support
+  const isAuthEnabled = config.get('app.authEnabled');
+  const userName = config.get('server.user');
+  const password = config.get('server.password');
+  initBasicAuth(app, isAuthEnabled, userName, password);
 
-  // TODO Basic auth
-
+  // Request mapping
   app.get('/', stateWrapper(ping, appState, 'ping'));
 
   app.get('/on', stateWrapper(on, appState, 'on'));
@@ -46,10 +50,11 @@ function main() {
 
   app.get('/disable', stateWrapper(disableSchedule, appState, 'disableSchedule'));
 
+  // Starting
   console.log(`${messages.ready} http://localhost:${port}`);
   console.log(messages.exitNotice);
 
   app.listen(port);
 }
 
-main();
+serverMain();
