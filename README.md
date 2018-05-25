@@ -21,7 +21,8 @@ Default configuration is given as example in `config/default.json` file.
 ```json
 {
   "app": {
-    "port": 4600
+    "port": 4600,
+    "authEnabled": false,
   },
   "server": {
     "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
@@ -49,17 +50,20 @@ To override settings, create a `config/local.json` file and add changes to your 
 
 ### Available settings
 
-- `app.port`: TCP port to be used by the service
-- `server.macAddress`: used to wake the server up
-- `server.broadcastAddress`: override it to fix wake on lan on Windows systems, eventually
-- `server.hostName`: name or IP address to join your server via SSH
-- `server.user`: user name to join your server via SSH (sudoer)
-- `server.password`: password for user above
-- `server.offCommand`: any command used to shut the system down
-- `server.sshPort`: TCP port to join your server via SSH
-- `server.keyPath`: location of your private key to be used for SSH
-- `schedule.enabled`: `true` will execute provided schedules, `false` won't
-- `schedule.on.at`, `schedule.off.at`: time as `HH:MM` when automatically triggering ON or OFF actions, respectively
+| Setting | Description | Default value |
+| ------- | ----------- | ------------- |
+| `app.authEnabled`| `true` will perform basic HTTP authentication; using `server.user` and `server.password` settings below. `false` will allow public access | false (=disabled) |
+| `app.port`| TCP port to be used by the service | 4600 |
+| `server.broadcastAddress`| useful to fix wake on lan on Windows systems, eventually | 255.255.255.255 |
+| `server.hostName`| name or IP address to join your server via SSH | myserver (**change it**) |
+| `server.keyPath`| location of your private key to be used for SSH | ~/.ssh/id_rsa |
+| `server.macAddress`| used to wake the server up | FF:FF:FF:FF:FF:FF:FF:FF (**change it**) |
+| `server.offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
+| `server.password`| password for user above | alice (**change it**) |
+| `server.sshPort`| TCP port to join your server via SSH | 22 |
+| `server.user`| user name to join your server via SSH (sudoer) | bob (**change it**) |
+| `schedule.enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
+| `schedule.on.at`, `schedule.off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
 
 ### SSH Configuration
 

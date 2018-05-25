@@ -1,6 +1,7 @@
 {
   "app": {
-    "port": 4600
+    "port": 4600,
+    "authEnabled": false
   },
   "server": {
     "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
