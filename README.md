@@ -1,6 +1,8 @@
 # cool-updown
 NodeJS script to enable scheduled server start/stop. Runs as a HTTP server.
 
+[ ![Codeship Status for djey47/cool-updown](https://app.codeship.com/projects/73f40680-44c8-0136-0fea-7ae0ce2de283/status?branch=master)](https://app.codeship.com/projects/291823)
+
 ## Install
 
 ### Requirements
