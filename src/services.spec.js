@@ -22,7 +22,7 @@ describe('services functions', () => {
         ...appState,
         isScheduleEnabled: true,
       };
-      
+
       // when
       ping({}, res, state);
 
@@ -36,7 +36,7 @@ describe('services functions', () => {
       const state = {
         ...appState,
       };
-      
+
       // when
       ping({}, res, state);
 

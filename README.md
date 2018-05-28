@@ -32,7 +32,7 @@ Default configuration is given as example in `config/default.json` file.
     "password": "alice",
     "offCommand": "sudo -S shutdown -h 1",
     "sshPort": 22,
-    "keyPath": "~/.ssh/id_rsa"        
+    "keyPath": "/home/user/.ssh/id_rsa"        
   },
   "schedule": {
     "enabled": true,
@@ -48,6 +48,8 @@ Default configuration is given as example in `config/default.json` file.
 
 To override settings, create a `config/local.json` file and add changes to your liking.
 
+Note: `config/local-test.json` is used for testing during development only!
+
 ### Available settings
 
 | Setting | Description | Default value |
@@ -56,7 +58,7 @@ To override settings, create a `config/local.json` file and add changes to your 
 | `app.port`| TCP port to be used by the service | 4600 |
 | `server.broadcastAddress`| useful to fix wake on lan on Windows systems, eventually | 255.255.255.255 |
 | `server.hostName`| name or IP address to join your server via SSH | myserver (**change it**) |
-| `server.keyPath`| location of your private key to be used for SSH | ~/.ssh/id_rsa |
+| `server.keyPath`| location of your private key to be used for SSH | /home/user/.ssh/id_rsa (**change it**) |
 | `server.macAddress`| used to wake the server up | FF:FF:FF:FF:FF:FF:FF:FF (**change it**) |
 | `server.offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
 | `server.password`| password for user above | alice (**change it**) |
@@ -109,7 +111,7 @@ coolupdown alive and running!
     "broadcastAddress": "255.255.255.255",
     "hostname": "myserver",
     "user": "bob",
-    "password": "alice",
+    "password": "********",
     "offCommand": "sudo -S shutdown -h 1"
   },
   "schedule": {

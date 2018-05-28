@@ -1,6 +1,8 @@
 const NodeSSH = require('node-ssh');
 const wol = require('wake_on_lan');
 const config = require('config');
+const loCloneDeep = require('lodash/cloneDeep');
+const loGet = require('lodash/get');
 const messages = require('./messages');
 
 const ssh = new NodeSSH();
@@ -16,8 +18,12 @@ function ping(req, res, appState) {
     statusMessage = messages.pingNoSchedule;
   }
 
-  // TODO remove or obfuscate server.password node!
-  res.send(`<h1>${statusMessage}</h1><pre>${JSON.stringify(config, null, '  ')}</pre>`);
+  const displayedConfig = loCloneDeep(config);
+
+  // Server password setting is obfuscated
+  if (loGet(displayedConfig, 'server.password')) displayedConfig.server.password = '********';
+
+  res.send(`<h1>${statusMessage}</h1><pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>`);
 }
 
 /**

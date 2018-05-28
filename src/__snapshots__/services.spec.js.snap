@@ -3,23 +3,26 @@
 exports[`services functions ping function should send appropriate response when schedule disabled 1`] = `
 "<h1>coolupdown alive but schedule is disabled!</h1><pre>{
   \\"app\\": {
-    \\"port\\": 4600
-  },
-  \\"network\\": {
-    \\"broadcastAddress\\": \\"192.168.47.255\\"
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
   },
   \\"server\\": {
-    \\"macAddress\\": \\"AB:CD:EF:FF:FF:FE:DC:BA\\",
-    \\"hostname\\": \\"myserver\\",
-    \\"user\\": \\"bob\\"
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
   },
   \\"schedule\\": {
     \\"enabled\\": true,
     \\"on\\": {
-      \\"at\\": \\"11:49\\"
+      \\"at\\": \\"00:00\\"
     },
     \\"off\\": {
-      \\"at\\": \\"11:50\\"
+      \\"at\\": \\"01:00\\"
     }
   }
 }</pre>"
@@ -28,23 +31,26 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when schedule enabled 1`] = `
 "<h1>coolupdown alive and running!</h1><pre>{
   \\"app\\": {
-    \\"port\\": 4600
-  },
-  \\"network\\": {
-    \\"broadcastAddress\\": \\"192.168.47.255\\"
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
   },
   \\"server\\": {
-    \\"macAddress\\": \\"AB:CD:EF:FF:FF:FE:DC:BA\\",
-    \\"hostname\\": \\"myserver\\",
-    \\"user\\": \\"bob\\"
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
   },
   \\"schedule\\": {
     \\"enabled\\": true,
     \\"on\\": {
-      \\"at\\": \\"11:49\\"
+      \\"at\\": \\"00:00\\"
     },
     \\"off\\": {
-      \\"at\\": \\"11:50\\"
+      \\"at\\": \\"01:00\\"
     }
   }
 }</pre>"
