@@ -1,17 +1,17 @@
 {
   "app": {
     "port": 4600,
-    "authEnabled": false
+    "authEnabled": true
   },
   "server": {
     "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
     "broadcastAddress": "255.255.255.255",
-    "hostname": "myserver",
-    "user": "bob",
-    "password": "alice",
-    "offCommand": "sudo -S shutdown -h 1",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "Password",
+    "offCommand": "OFF Command",
     "sshPort": 22,
-    "keyPath": "/home/user/.ssh/id_rsa"
+    "keyPath": "Key Path"
   },
   "schedule": {
     "enabled": true,
