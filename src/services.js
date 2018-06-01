@@ -4,18 +4,57 @@ const config = require('config');
 const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
 const messages = require('./messages');
+const { ping: sgPing } = require('./helpers/systemGateway');
 
 const ssh = new NodeSSH();
 
 /**
+ * @private
+ */
+async function serverPingTest(host) {
+  return new Promise((resolve) => {
+    sgPing(host, (err, stdout, stderr) => {
+      const isPingSuccess = !err;
+      if (isPingSuccess) {
+        console.log(`ping: ${host}: Alive`);
+        resolve(true);
+      } else {
+        console.log(`ping: ${host}: ${stderr}`);
+        resolve(false);
+      }
+    });
+  });
+}
+
+/**
+ * @private
+ */
+async function serverSSHTest(host, port, username, privateKey) {
+  try {
+    await ssh.connect({
+      host,
+      port,
+      username,
+      privateKey,
+    });
+    console.log('ping: SSH connection OK');
+    return Promise.resolve(true);
+  } catch (err) {
+    console.log(`ping: SSH connection KO: ${err}`);
+    return Promise.resolve(false);
+  }
+}
+
+/**
  * Returns simple ping with status message
  */
-function ping(req, res, appState) {
+async function ping(req, res, appState) {
+  const { ping: pingMessages } = messages;
   let statusMessage;
   if (appState.isScheduleEnabled) {
-    statusMessage = messages.ping;
+    statusMessage = pingMessages.statusTitle;
   } else {
-    statusMessage = messages.pingNoSchedule;
+    statusMessage = pingMessages.statusTitleNoSchedule;
   }
 
   const displayedConfig = loCloneDeep(config);
@@ -23,7 +62,30 @@ function ping(req, res, appState) {
   // Server password setting is obfuscated
   if (loGet(displayedConfig, 'server.password')) displayedConfig.server.password = '********';
 
-  res.send(`<h1>${statusMessage}</h1><pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>`);
+  // Diagnostics
+  const host = config.get('server.hostname');
+  const port = config.get('server.sshPort');
+  const username = config.get('server.user');
+  const privateKey = config.get('server.keyPath');
+
+  const [isPingSuccess, isSSHSuccess] = await Promise.all([
+    serverPingTest(host),
+    serverSSHTest(host, port, username, privateKey),
+  ]);
+
+  res.send(`
+<h1>${statusMessage}</h1>
+<h2>${pingMessages.configurationTitle}</h2>
+<pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>
+<h2>${pingMessages.serverTitle}</h2>
+<p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
+<ul>
+<li>${pingMessages.pingItem} ${isPingSuccess ? 'OK' : 'KO'}</li>
+<li>${pingMessages.sshItem} ${isSSHSuccess ? 'OK' : 'KO'} </li>
+</ul>
+<p>${pingMessages.instructions}</p>`);
+
+  return Promise.resolve();
 }
 
 /**

@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`services functions ping function should send appropriate response when schedule disabled 1`] = `
-"<h1>coolupdown alive but schedule is disabled!</h1><pre>{
+exports[`services functions ping function should perform diagnosis and send appropriate response when schedule enabled 1`] = `
+"
+<h1>coolupdown alive and running!</h1>
+<h2>Server</h2>
+<p></p>
+<ul>
+<li>Ping test: OK</li>
+<li>SSH test: OK </li>
+</ul>
+<p>See logs for details.</p>
+<h2>Configuration</h2>
+<pre>{
   \\"app\\": {
     \\"port\\": 4600,
     \\"authEnabled\\": true
@@ -25,11 +35,22 @@ exports[`services functions ping function should send appropriate response when 
       \\"at\\": \\"01:00\\"
     }
   }
-}</pre>"
+}</pre>
+"
 `;
 
-exports[`services functions ping function should send appropriate response when schedule enabled 1`] = `
-"<h1>coolupdown alive and running!</h1><pre>{
+exports[`services functions ping function should send appropriate response when schedule disabled 1`] = `
+"
+<h1>coolupdown alive but schedule is disabled!</h1>
+<h2>Server</h2>
+<p></p>
+<ul>
+<li>Ping test: OK</li>
+<li>SSH test: OK </li>
+</ul>
+<p>See logs for details.</p>
+<h2>Configuration</h2>
+<pre>{
   \\"app\\": {
     \\"port\\": 4600,
     \\"authEnabled\\": true
@@ -53,5 +74,123 @@ exports[`services functions ping function should send appropriate response when 
       \\"at\\": \\"01:00\\"
     }
   }
-}</pre>"
+}</pre>
+"
+`;
+
+exports[`services functions ping function should send appropriate response when server OFFLINE 1`] = `
+"
+<h1>coolupdown alive and running!</h1>
+<h2>Server</h2>
+<p>Server is likely to be OFFLINE!</p>
+<ul>
+<li>Ping test: KO</li>
+<li>SSH test: KO </li>
+</ul>
+<p>See logs for details.</p>
+<h2>Configuration</h2>
+<pre>{
+  \\"app\\": {
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"00:00\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"01:00\\"
+    }
+  }
+}</pre>
+"
+`;
+
+exports[`services functions ping function should send appropriate response when server SSH KO 1`] = `
+"
+<h1>coolupdown alive and running!</h1>
+<h2>Server</h2>
+<p></p>
+<ul>
+<li>Ping test: OK</li>
+<li>SSH test: KO </li>
+</ul>
+<p>See logs for details.</p>
+<h2>Configuration</h2>
+<pre>{
+  \\"app\\": {
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"00:00\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"01:00\\"
+    }
+  }
+}</pre>
+"
+`;
+
+exports[`services functions ping function should send appropriate response when server ping KO 1`] = `
+"
+<h1>coolupdown alive and running!</h1>
+<h2>Server</h2>
+<p></p>
+<ul>
+<li>Ping test: KO</li>
+<li>SSH test: OK </li>
+</ul>
+<p>See logs for details.</p>
+<h2>Configuration</h2>
+<pre>{
+  \\"app\\": {
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"00:00\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"01:00\\"
+    }
+  }
+}</pre>
+"
 `;
