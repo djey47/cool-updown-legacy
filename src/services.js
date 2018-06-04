@@ -10,6 +10,7 @@ const ssh = new NodeSSH();
 
 /**
  * @private
+ * TODO move to gateway
  */
 async function serverPingTest(host) {
   return new Promise((resolve) => {
@@ -28,6 +29,7 @@ async function serverPingTest(host) {
 
 /**
  * @private
+ * TODO move to gateway
  */
 async function serverSSHTest(host, port, username, privateKey) {
   try {
@@ -42,11 +44,13 @@ async function serverSSHTest(host, port, username, privateKey) {
   } catch (err) {
     console.log(`ping: SSH connection KO: ${err}`);
     return Promise.resolve(false);
+  } finally {
+    ssh.dispose();
   }
 }
 
 /**
- * Returns simple ping with status message
+ * Returns diagnostics with status message
  */
 async function ping(req, res, appState) {
   const { ping: pingMessages } = messages;
@@ -75,15 +79,16 @@ async function ping(req, res, appState) {
 
   res.send(`
 <h1>${statusMessage}</h1>
-<h2>${pingMessages.configurationTitle}</h2>
-<pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>
 <h2>${pingMessages.serverTitle}</h2>
 <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
 <ul>
 <li>${pingMessages.pingItem} ${isPingSuccess ? 'OK' : 'KO'}</li>
 <li>${pingMessages.sshItem} ${isSSHSuccess ? 'OK' : 'KO'} </li>
 </ul>
-<p>${pingMessages.instructions}</p>`);
+<p>${pingMessages.instructions}</p>
+<h2>${pingMessages.configurationTitle}</h2>
+<pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>
+`);
 
   return Promise.resolve();
 }
@@ -113,32 +118,36 @@ function on(req, res) {
 /**
  * Handles OFF request
  */
-function off(req, res) {
+async function off(req, res) {
   const host = config.get('server.hostname');
   const port = config.get('server.sshPort');
   const username = config.get('server.user');
   const password = config.get('server.password');
   const privateKey = config.get('server.keyPath');
   const command = config.get('server.offCommand');
-  ssh.connect({
-    host,
-    port,
-    username,
-    privateKey,
-  }).then(() => {
-    console.log(messages.sshOK);
 
-    ssh.execCommand(command, { stdin: `${password}\n` }).then(({ stdout, stderr }) => {
-      console.log(`STDOUT: ${stdout}`);
-      console.error(`STDERR: ${stderr}`);
+  try {
+    await ssh.connect({
+      host,
+      port,
+      username,
+      privateKey,
     });
 
+    console.log(messages.sshOK);
+
+    const { stdout, stderr } = await ssh.execCommand(command, { stdin: `${password}\n` });
+    console.log(`STDOUT: ${stdout}`);
+    console.error(`STDERR: ${stderr}`);
+
     if (res) res.send('ok');
-  }, (error) => {
-    console.log(`${messages.sshKO}\n${JSON.stringify(error, null, '  ')}`);
+  } catch (err) {
+    console.log(`${messages.sshKO}\n${JSON.stringify(err, null, '  ')}`);
 
     if (res) res.status(500).send('ko');
-  });
+  } finally {
+    ssh.dispose();
+  }
 }
 
 /**
