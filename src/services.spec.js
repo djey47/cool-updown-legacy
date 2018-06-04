@@ -94,7 +94,7 @@ describe('services functions', () => {
       ping({}, res, state).then(() => {
         expect(mockGatewayPing).toHaveBeenCalled();
         expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();        
+        expect(mockSSHDispose).toHaveBeenCalled();
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -113,7 +113,7 @@ describe('services functions', () => {
       ping({}, res, state).then(() => {
         expect(mockGatewayPing).toHaveBeenCalled();
         expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();        
+        expect(mockSSHDispose).toHaveBeenCalled();
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -176,7 +176,7 @@ describe('services functions', () => {
 
       // when
       on(undefined, res);
-      
+
       // then
       expect(mockWOLWake).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(500);
@@ -205,7 +205,7 @@ describe('services functions', () => {
       // given
       // ExecCommand KO
       mockSSHExecCommand.mockImplementation(() => Promise.reject());
-      
+
       // when-then
       off(undefined, res).then(() => {
         expect(mockSSHConnect).toHaveBeenCalled();
@@ -221,7 +221,7 @@ describe('services functions', () => {
       // given
       // Connect KO
       mockSSHConnect.mockImplementation(() => Promise.reject());
-      
+
       // when-then
       off(undefined, res).then(() => {
         expect(mockSSHConnect).toHaveBeenCalled();
