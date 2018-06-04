@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`services functions off function should invoke SSH and generate correct response on command failure 1`] = `"ko"`;
+
+exports[`services functions off function should invoke SSH and generate correct response on connect failure 1`] = `"ko"`;
+
+exports[`services functions off function should invoke SSH and generate correct response on success 1`] = `"ok"`;
+
+exports[`services functions on function should invoke wol and generate correct response on failure 1`] = `"ko"`;
+
+exports[`services functions on function should invoke wol and generate correct response on success 1`] = `"ok"`;
+
 exports[`services functions ping function should perform diagnosis and send appropriate response when schedule enabled 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
