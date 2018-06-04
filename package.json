@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "node src/coolupdown.js",
-    "start:service": "mkdir -p logs && npm start >> logs/app.log 2>&1 &",
+    "start:service": "mkdir -p logs && nohup npm start >> logs/app.log 2>&1 &",
     "stop": "pkill --signal SIGINT cool-updown",
     "logs": "tail -f logs/app.log",
     "lint": "eslint ./src",
