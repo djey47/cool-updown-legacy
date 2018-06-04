@@ -5,10 +5,22 @@ const childProcess = require('child_process');
  */
 
 /**
- * Ping command wrapper
+ * ICMP Ping command wrapper
+ * @returns Promise
  */
-function ping(host, callback) {
-  childProcess.exec(`ping -c 2 ${host}`, callback);
+async function ping(host) {
+  return new Promise((resolve) => {
+    childProcess.exec(`ping -c 2 ${host}`, (err, stdout, stderr) => {
+      const isPingSuccess = !err;
+      if (isPingSuccess) {
+        console.log(`ping: ${host}: Alive`);
+        resolve(true);
+      } else {
+        console.log(`ping: ${host}: ${stderr}`);
+        resolve(false);
+      }
+    });
+  });
 }
 
 module.exports = {

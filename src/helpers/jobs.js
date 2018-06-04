@@ -1,8 +1,8 @@
 const cron = require('cron');
 const {
   on, off,
-} = require('./services');
-const messages = require('./messages');
+} = require('../services');
+const messages = require('../resources/messages');
 
 const { CronJob } = cron;
 
