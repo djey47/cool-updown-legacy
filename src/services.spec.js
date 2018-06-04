@@ -1,4 +1,10 @@
-const { ping, on, off } = require('./services');
+const {
+  ping,
+  on,
+  off,
+  enableSchedule,
+  disableSchedule,
+} = require('./services');
 
 const mockSend = jest.fn();
 const mockStatus = jest.fn();
@@ -7,6 +13,10 @@ const mockSSHConnect = jest.fn();
 const mockSSHExecCommand = jest.fn();
 const mockSSHDispose = jest.fn();
 const mockWOLWake = jest.fn();
+const mockOnJobStart = jest.fn();
+const mockOffJobStart = jest.fn();
+const mockOnJobStop = jest.fn();
+const mockOffJobStop = jest.fn();
 
 jest.mock('wake_on_lan', () => ({
   wake: (a, o, f) => mockWOLWake(a, o, f),
@@ -36,6 +46,10 @@ describe('services functions', () => {
     mockSSHExecCommand.mockReset();
     mockSSHDispose.mockReset();
     mockWOLWake.mockReset();
+    mockOnJobStart.mockReset();
+    mockOffJobStart.mockReset();
+    mockOnJobStop.mockReset();
+    mockOffJobStop.mockReset();
 
     // Ping OK
     mockGatewayPing.mockImplementation(() => Promise.resolve(true));
@@ -52,6 +66,17 @@ describe('services functions', () => {
 
   const appState = {
     isScheduleEnabled: true,
+  };
+
+  const mockJobs = {
+    onJob: {
+      start: () => mockOnJobStart(),
+      stop: () => mockOnJobStop(),
+    },
+    offJob: {
+      start: () => mockOffJobStart(),
+      stop: () => mockOffJobStop(),
+    },
   };
 
   describe('ping function', () => {
@@ -226,6 +251,48 @@ describe('services functions', () => {
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
       });
+    });
+  });
+
+  describe('enableSchedule function', () => {
+    it('should set jobs state correctly and generate correct response', () => {
+      // given
+      const state = {
+        ...appState,
+        ...mockJobs,
+        isScheduleEnabled: false,
+      };
+
+      // when
+      enableSchedule(undefined, res, state);
+
+      // then
+      expect(mockOnJobStart).toHaveBeenCalled();
+      expect(mockOffJobStart).toHaveBeenCalled();
+      expect(state.isScheduleEnabled).toEqual(true);
+      expect(mockSend).toHaveBeenCalled();
+      expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+    });
+  });
+
+  describe('disableSchedule function', () => {
+    it('should set jobs state correctly and generate correct response', () => {
+      // given
+      const state = {
+        ...appState,
+        ...mockJobs,
+        isScheduleEnabled: true,
+      };
+
+      // when
+      disableSchedule(undefined, res, state);
+
+      // then
+      expect(mockOnJobStop).toHaveBeenCalled();
+      expect(mockOffJobStop).toHaveBeenCalled();
+      expect(state.isScheduleEnabled).toEqual(false);
+      expect(mockSend).toHaveBeenCalled();
+      expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 });
