@@ -1,5 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`services functions disableSchedule function should set jobs state correctly and generate correct response 1`] = `"ok"`;
+
+exports[`services functions enableSchedule function should set jobs state correctly and generate correct response 1`] = `"ok"`;
+
 exports[`services functions off function should invoke SSH and generate correct response on command failure 1`] = `"ko"`;
 
 exports[`services functions off function should invoke SSH and generate correct response on connect failure 1`] = `"ko"`;
