@@ -34,7 +34,7 @@ Default configuration is given as example in `config/default.json` file.
     "password": "alice",
     "offCommand": "sudo -S shutdown -h 1",
     "sshPort": 22,
-    "keyPath": "/home/user/.ssh/id_rsa"        
+    "keyPath": "/home/user/.ssh/id_rsa"
   },
   "schedule": {
     "enabled": true,
@@ -96,13 +96,24 @@ With your favourite web browser, head to http://machine:4600 (4600 being default
 
 Append to this URL value of `path` below.
 
-#### Ping: displays status and configuration
+#### PING: displays status and configuration
 
 Path: `/` (default)
 
-Here is a sample output:
+Here is a sample page output:
 ```
 coolupdown alive and running!
+
+Server
+
+Server is likely to be OFFLINE!
+
+- Ping test: KO
+- SSH test: KO
+
+See logs for details.
+
+Configuration
 
 {
   "app": {
@@ -135,3 +146,11 @@ Path: `/on`
 #### OFF: manually turns server OFF
 
 Path: `/off`
+
+#### SCHEDULE ENABLE: automatically turns server ON/OFF at given hours
+
+Path: `/enable`
+
+#### SCHEDULE DISABLE: will NOT automatically turns server ON/OFF at given hours
+
+Path: `/disable`
