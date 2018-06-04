@@ -57,4 +57,5 @@ function serverMain() {
   app.listen(port);
 }
 
+process.title = 'cool-updown';
 serverMain();

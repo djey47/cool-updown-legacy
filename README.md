@@ -9,6 +9,7 @@ NodeJS script to enable scheduled server start/stop. Runs as a HTTP server.
 - *Client*:
   - LAN
   - NodeJS 8+
+  - Yarn (optionally)
 - *Remote server*:
   - LAN, SSH service running, WOL enabled
   - User with root privileges (sudoer)
@@ -82,17 +83,17 @@ OFF command does require a correct communication via SSH; you should check both 
 - Add client public key in `.ssh/authorized_keys` file for the user you wanna connect with.
 
 ### Run
-    npm start
+Simply with `npm start` or `yarn start`.
 
-or
+Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service`.
 
-    yarn start
+While running in background, logs are written to `logs/app.log` file; to display logs current command will help you: `npm run logs` or `yarn logs`.
 
-Remember that application has to remain active for ON/OFF scheduling to work.
+To stop application, hit CTRL+C when launched in foreground, otherwise `npm stop` or `yarn stop`.
 
 ### Web-based usage
 
-With your favourite web browser, head to http://machine:4600 (4600 being default port, can be changed in configuration).
+With your favourite web browser, head to URL: http://machine:4600 (4600 being default port, can be changed in configuration).
 
 Append to this URL value of `path` below.
 

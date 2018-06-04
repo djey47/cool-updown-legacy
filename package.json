@@ -20,6 +20,9 @@
   },
   "scripts": {
     "start": "node src/coolupdown.js",
+    "start:service": "mkdir -p logs && npm start >> logs/app.log 2>&1 &",
+    "stop": "pkill --signal SIGINT cool-updown",
+    "logs": "tail -f logs/app.log",
     "lint": "eslint ./src",
     "test": "export NODE_ENV=test && jest",
     "jest:watch": "export NODE_ENV=test && jest --watch src"
