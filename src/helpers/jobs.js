@@ -3,6 +3,7 @@ const {
   on, off,
 } = require('../services');
 const messages = require('../resources/messages');
+const logger = require('./logger');
 
 const { CronJob } = cron;
 
@@ -10,7 +11,7 @@ const { CronJob } = cron;
  * @private
  */
 const cronWrapper = (callback, message) => () => {
-  if (message) console.log(message);
+  if (message) logger.log('info', `=>(...${message}...)`);
   callback();
 };
 

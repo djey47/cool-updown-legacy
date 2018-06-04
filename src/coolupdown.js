@@ -8,12 +8,13 @@ const {
   createOnJob, createOffJob,
 } = require('./helpers/jobs');
 const { initBasicAuth } = require('./helpers/auth');
+const logger = require('./helpers/logger');
 
 /**
  * @private
  */
 const stateWrapper = (callback, state, message) => (req, res) => {
-  if (message) console.log(message);
+  if (message) logger.log('info', `=>(...${message}...)`);
   callback(req, res, state);
 };
 
@@ -21,7 +22,7 @@ const stateWrapper = (callback, state, message) => (req, res) => {
  * Main entry point for HTTP server
  */
 function serverMain() {
-  console.log(messages.intro);
+  logger.log('info', messages.intro);
 
   const port = config.get('app.port');
   const isScheduleEnabled = config.get('schedule.enabled');
@@ -46,13 +47,13 @@ function serverMain() {
 
   app.get('/off', stateWrapper(off, appState, 'off'));
 
-  app.get('/enable', stateWrapper(enableSchedule, appState, 'enableSchedule'));
+  app.get('/enable', stateWrapper(enableSchedule, appState, 'enable'));
 
-  app.get('/disable', stateWrapper(disableSchedule, appState, 'disableSchedule'));
+  app.get('/disable', stateWrapper(disableSchedule, appState, 'disable'));
 
   // Starting
-  console.log(`${messages.ready} http://localhost:${port}`);
-  console.log(messages.exitNotice);
+  logger.log('info', `${messages.ready} http://localhost:${port}`);
+  logger.log('info', messages.exitNotice);
 
   app.listen(port);
 }

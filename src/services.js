@@ -5,6 +5,7 @@ const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
 const messages = require('./resources/messages');
 const { ping: sgPing } = require('./helpers/systemGateway');
+const logger = require('./helpers/logger');
 
 const ssh = new NodeSSH();
 
@@ -19,10 +20,10 @@ async function serverSSHTest(host, port, username, privateKey) {
       username,
       privateKey,
     });
-    console.log('ping: SSH connection OK');
+    logger.log('info', '(ping) SSH connection OK');
     return Promise.resolve(true);
   } catch (err) {
-    console.log(`ping: SSH connection KO: ${err}`);
+    logger.error(`(ping) SSH connection KO: ${err}`);
     return Promise.resolve(false);
   } finally {
     ssh.dispose();
@@ -84,11 +85,11 @@ function on(req, res) {
   };
   wol.wake(macAddress, options, (error) => {
     if (error) {
-      console.error(`${messages.wakeKO}\n${JSON.stringify(error, null, '  ')}`);
+      logger.error(`(on) ${messages.wakeKO} - ${JSON.stringify(error, null, '  ')}`);
 
       if (res) res.status(500).send('ko');
     } else {
-      console.log(messages.wakeOK);
+      logger.log('info', `(on) ${messages.wakeOK}`);
 
       if (res) res.send('ok');
     }
@@ -114,15 +115,17 @@ async function off(req, res) {
       privateKey,
     });
 
-    console.log(messages.sshOK);
+    logger.log('info', messages.sshOK);
 
-    const { stdout, stderr } = await ssh.execCommand(command, { stdin: `${password}\n` });
-    console.log(`STDOUT: ${stdout}`);
-    console.error(`STDERR: ${stderr}`);
+    const { stdout, stderr, code } = await ssh.execCommand(command, { stdin: `${password}\n` });
+    logger.log('debug', `(off) STDOUT: ${stdout}`);
+    logger.log('debug', `(off) STDERR: ${stderr}`);
+
+    if (code !== 0) throw stderr;
 
     if (res) res.send('ok');
   } catch (err) {
-    console.log(`${messages.sshKO}\n${JSON.stringify(err, null, '  ')}`);
+    logger.error(`(off) ${messages.sshKO} - ${JSON.stringify(err, null, '  ')}`);
 
     if (res) res.status(500).send('ko');
   } finally {
