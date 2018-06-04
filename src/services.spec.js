@@ -61,7 +61,7 @@ describe('services functions', () => {
 
     mockStatus.mockImplementation(() => res);
 
-    mockSSHExecCommand.mockImplementation(() => Promise.resolve({ stdout: '', stderr: '' }));
+    mockSSHExecCommand.mockImplementation(() => Promise.resolve({ stdout: '', stderr: '', code: 0 }));
   });
 
   const appState = {
@@ -221,10 +221,26 @@ describe('services functions', () => {
       });
     });
 
+    it('should invoke SSH and generate correct response on failure (promise rejection)', (done) => {
+      // given
+      // ExecCommand KO (rejection)
+      mockSSHExecCommand.mockImplementation(() => Promise.reject());
+
+      // when-then
+      off(undefined, res).then(() => {
+        expect(mockSSHConnect).toHaveBeenCalled();
+        expect(mockSSHExecCommand).toHaveBeenCalled();
+        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(mockStatus).toHaveBeenCalledWith(500);
+        expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        done();
+      });
+    });
+
     it('should invoke SSH and generate correct response on command failure', (done) => {
       // given
-      // ExecCommand KO
-      mockSSHExecCommand.mockImplementation(() => Promise.reject());
+      // ExecCommand KO (non 0 exit code)
+      mockSSHExecCommand.mockImplementation(() => Promise.resolve({ stdin: '', stdout: '', code: 1 }));
 
       // when-then
       off(undefined, res).then(() => {

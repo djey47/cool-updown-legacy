@@ -8,6 +8,8 @@ exports[`services functions off function should invoke SSH and generate correct 
 
 exports[`services functions off function should invoke SSH and generate correct response on connect failure 1`] = `"ko"`;
 
+exports[`services functions off function should invoke SSH and generate correct response on failure (promise rejection) 1`] = `"ko"`;
+
 exports[`services functions off function should invoke SSH and generate correct response on success 1`] = `"ok"`;
 
 exports[`services functions on function should invoke wol and generate correct response on failure 1`] = `"ko"`;

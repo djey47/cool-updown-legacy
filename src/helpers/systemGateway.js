@@ -1,4 +1,5 @@
 const childProcess = require('child_process');
+const logger = require('./logger');
 
 /*
  * Mockable system gateway for command line calls
@@ -13,10 +14,10 @@ async function ping(host) {
     childProcess.exec(`ping -c 2 ${host}`, (err, stdout, stderr) => {
       const isPingSuccess = !err;
       if (isPingSuccess) {
-        console.log(`ping: ${host}: Alive`);
+        logger.log('info', `(ping) ${host}: Alive`);
         resolve(true);
       } else {
-        console.log(`ping: ${host}: ${stderr}`);
+        logger.log('info', `(ping) ${host}: Not responding (${stderr})`);
         resolve(false);
       }
     });
