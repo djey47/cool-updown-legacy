@@ -1,12 +1,12 @@
 const app = require('express')();
 const config = require('config');
-const messages = require('./messages');
+const messages = require('./resources/messages');
 const {
   ping, on, off, enableSchedule, disableSchedule,
 } = require('./services');
 const {
   createOnJob, createOffJob,
-} = require('./jobs');
+} = require('./helpers/jobs');
 const { initBasicAuth } = require('./helpers/auth');
 
 /**

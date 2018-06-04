@@ -3,33 +3,13 @@ const wol = require('wake_on_lan');
 const config = require('config');
 const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
-const messages = require('./messages');
+const messages = require('./resources/messages');
 const { ping: sgPing } = require('./helpers/systemGateway');
 
 const ssh = new NodeSSH();
 
 /**
  * @private
- * TODO move to gateway
- */
-async function serverPingTest(host) {
-  return new Promise((resolve) => {
-    sgPing(host, (err, stdout, stderr) => {
-      const isPingSuccess = !err;
-      if (isPingSuccess) {
-        console.log(`ping: ${host}: Alive`);
-        resolve(true);
-      } else {
-        console.log(`ping: ${host}: ${stderr}`);
-        resolve(false);
-      }
-    });
-  });
-}
-
-/**
- * @private
- * TODO move to gateway
  */
 async function serverSSHTest(host, port, username, privateKey) {
   try {
@@ -73,7 +53,7 @@ async function ping(req, res, appState) {
   const privateKey = config.get('server.keyPath');
 
   const [isPingSuccess, isSSHSuccess] = await Promise.all([
-    serverPingTest(host),
+    sgPing(host),
     serverSSHTest(host, port, username, privateKey),
   ]);
 

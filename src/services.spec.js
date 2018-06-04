@@ -19,7 +19,7 @@ jest.mock('node-ssh', () => jest.fn(() => ({
 })));
 
 jest.mock('./helpers/systemGateway', () => ({
-  ping: (h, f) => mockGatewayPing(h, f),
+  ping: h => mockGatewayPing(h),
 }));
 
 const res = {
@@ -38,9 +38,7 @@ describe('services functions', () => {
     mockWOLWake.mockReset();
 
     // Ping OK
-    mockGatewayPing.mockImplementation((h, f) => {
-      f();
-    });
+    mockGatewayPing.mockImplementation(() => Promise.resolve(true));
 
     // WOL OK
     mockWOLWake.mockImplementation((a, o, f) => {
@@ -86,9 +84,8 @@ describe('services functions', () => {
         ...appState,
       };
       // Ping KO
-      mockGatewayPing.mockImplementation((h, f) => {
-        f({});
-      });
+      mockGatewayPing.mockImplementation(() => Promise.resolve(false));
+
 
       // when-then
       ping({}, res, state).then(() => {
@@ -126,9 +123,7 @@ describe('services functions', () => {
         ...appState,
       };
       // Ping KO
-      mockGatewayPing.mockImplementation((h, f) => {
-        f({});
-      });
+      mockGatewayPing.mockImplementation(() => Promise.resolve(false));
       // SSH KO
       mockSSHConnect.mockImplementation(() => Promise.reject());
 
