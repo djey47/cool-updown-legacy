@@ -1,3 +1,4 @@
+/* @flow */
 /* eslint-disable import/prefer-default-export */
 
 const REGEX_TEMPLATE = /{([\s\S]+?)}/g;
@@ -6,7 +7,7 @@ const REGEX_TEMPLATE = /{([\s\S]+?)}/g;
  * Template interpolation helper
  * @return string with replaced {item} by corresponding value in templateContext
  */
-function interpolate(template, templateContext) {
+function interpolate(template: string, templateContext: Object): string {
   return template.replace(
     REGEX_TEMPLATE,
     (match, submatch) => ({}.hasOwnProperty.call(templateContext, submatch) ?
@@ -17,14 +18,14 @@ function interpolate(template, templateContext) {
 /**
  * @private
  */
-function toDurationUnit(timeDetail, unitLabel) {
+function toDurationUnit(timeDetail?: number, unitLabel: string): string {
   return timeDetail ? `${timeDetail} ${unitLabel}` : '';
 }
 
 /**
  * @return string with readable time (till minutes)
  */
-function toHumanDuration(timeDetails) {
+function toHumanDuration(timeDetails?: Object): string {
   if (!timeDetails) return '';
 
   const { days, hours, minutes } = timeDetails;

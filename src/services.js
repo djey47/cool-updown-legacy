@@ -1,3 +1,8 @@
+/* @flow */
+
+import type { $Request, $Response } from 'express';
+import type { AppState } from './constants/types';
+
 const NodeSSH = require('node-ssh');
 const wol = require('wake_on_lan');
 const config = require('config');
@@ -9,7 +14,7 @@ const appRootDir = require('app-root-dir');
 const path = require('path');
 const differenceInMilliseconds = require('date-fns/difference_in_milliseconds');
 const messages = require('./resources/messages');
-const { ping: sgPing } = require('./helpers/systemGateway');
+const systemGateway = require('./helpers/systemGateway');
 const logger = require('./helpers/logger');
 const { interpolate, toHumanDuration } = require('./helpers/format');
 const { getTimeDetails } = require('./helpers/date');
@@ -20,7 +25,12 @@ const readFilePromisified = util.promisify(fs.readFile);
 /**
  * @private
  */
-async function serverSSHTest(host, port, username, privateKey) {
+async function serverSSHTest(
+  host: string,
+  port: number,
+  username: string,
+  privateKey: string,
+): Promise<boolean> {
   try {
     await ssh.connect({
       host,
@@ -29,10 +39,10 @@ async function serverSSHTest(host, port, username, privateKey) {
       privateKey,
     });
     logger.log('info', '(ping) SSH connection OK');
-    return Promise.resolve(true);
+    return true;
   } catch (err) {
     logger.error(`(ping) SSH connection KO: ${err}`);
-    return Promise.resolve(false);
+    return false;
   } finally {
     ssh.dispose();
   }
@@ -42,7 +52,7 @@ async function serverSSHTest(host, port, username, privateKey) {
  * @private
  * @return duration in human readable format
  */
-function computeDuration(from, to) {
+function computeDuration(from: Date, to: Date): string {
   const diff = differenceInMilliseconds(to, from);
   return toHumanDuration(getTimeDetails(diff));
 }
@@ -50,7 +60,7 @@ function computeDuration(from, to) {
 /**
  * Returns diagnostics with status message
  */
-async function ping(req, res, appState) {
+async function ping(req: $Request, res: $Response, appState: AppState) {
   const {
     isScheduleEnabled, startedAt, serverStartedAt, serverStoppedAt,
   } = appState;
@@ -76,7 +86,7 @@ async function ping(req, res, appState) {
   const privateKey = config.get('server.keyPath');
 
   const [isPingSuccess, isSSHSuccess] = await Promise.all([
-    sgPing(host),
+    systemGateway.ping(host),
     serverSSHTest(host, port, username, privateKey),
   ]);
   const pingStatus = isPingSuccess ? statusMessages.okay : statusMessages.kayo;
@@ -84,7 +94,7 @@ async function ping(req, res, appState) {
 
   // Uptime app calculation
   const now = new Date(Date.now());
-  const uptime = computeDuration(startedAt, now);
+  const uptime = computeDuration(startedAt || now, now);
 
   // Uptime/Downtime server calculation
   const time = computeDuration(serverStartedAt || serverStoppedAt || now, now);
@@ -109,14 +119,12 @@ async function ping(req, res, appState) {
 <h2>${pingMessages.configurationTitle}</h2>
 <pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>
 `);
-
-  return Promise.resolve();
 }
 
 /**
  * Handles ON request
  */
-function on(req, res, appState) {
+function on(req?: $Request, res?: $Response, appState: AppState) {
   const currentState = appState;
   const macAddress = config.get('server.macAddress');
   const broadcastAddress = config.get('server.broadcastAddress');
@@ -144,7 +152,7 @@ function on(req, res, appState) {
 /**
  * Handles OFF request
  */
-async function off(req, res, appState) {
+async function off(req?: $Request, res?: $Response, appState: AppState) {
   const currentState = appState;
   const host = config.get('server.hostname');
   const port = config.get('server.sshPort');
@@ -187,7 +195,7 @@ async function off(req, res, appState) {
 /**
  * Handles ENABLE SCHEDULE request
  */
-function enableSchedule(req, res, appState) {
+function enableSchedule(req?: $Request, res: $Response, appState: AppState) {
   const state = appState;
   state.isScheduleEnabled = true;
   state.onJob.start();
@@ -199,7 +207,7 @@ function enableSchedule(req, res, appState) {
 /**
  * Handles DISABLE SCHEDULE request
  */
-function disableSchedule(req, res, appState) {
+function disableSchedule(req?: $Request, res: $Response, appState: AppState) {
   const state = appState;
   state.isScheduleEnabled = false;
   state.onJob.stop();
@@ -211,7 +219,7 @@ function disableSchedule(req, res, appState) {
 /**
  * Handles LOGS request
  */
-async function logs(req, res) {
+async function logs(req?: $Request, res: $Response) {
   try {
     const logsContents = await readFilePromisified(path.join(appRootDir.get(), 'logs', 'app.log'));
 

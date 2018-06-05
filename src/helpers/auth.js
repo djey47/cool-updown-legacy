@@ -11,7 +11,7 @@ const AUTH_REALM = 'NyDGMFeptk';
 /**
  * Basic HTTP authentication
  */
-function initBasicAuth(app, isEnabled, userName, password) {
+function initBasicAuth(app: any, isEnabled: boolean, userName: string, password: string) {
   if (!isEnabled) return;
 
   app.use(basicAuth({

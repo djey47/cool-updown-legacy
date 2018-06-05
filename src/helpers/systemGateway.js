@@ -1,3 +1,5 @@
+/* @flow */
+
 const childProcess = require('child_process');
 const logger = require('./logger');
 
@@ -9,7 +11,7 @@ const logger = require('./logger');
  * ICMP Ping command wrapper
  * @returns Promise
  */
-async function ping(host) {
+async function ping(host: string) {
   return new Promise((resolve) => {
     childProcess.exec(`ping -c 2 ${host}`, (err, stdout, stderr) => {
       const isPingSuccess = !err;

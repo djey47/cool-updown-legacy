@@ -1,0 +1,14 @@
+[ignore]
+.*/lib/.*
+.*/src/.*\.spec\.js
+
+[include]
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+
+[strict]

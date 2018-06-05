@@ -2,7 +2,7 @@
   "name": "cool-updown",
   "version": "0.0.2",
   "description": "Script to enable scheduled server start/stop",
-  "main": "src/coolupdown",
+  "main": "lib/coolupdown",
   "dependencies": {
     "app-root-dir": "^1.0.2",
     "config": "^1.30.0",
@@ -17,21 +17,29 @@
     "winston": "^2.4.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.2.3",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-flow": "^6.23.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-flowtype": "^2.49.3",
     "eslint-plugin-import": "^2.12.0",
+    "flow-bin": "^0.73.0",
     "jest": "^22.4.4"
   },
   "scripts": {
-    "start": "node src/coolupdown.js",
+    "start": "npm run build && node lib/coolupdown.js",
     "start:service": "nohup npm start >/dev/null 2>&1 &",
     "start:service-debug": "mkdir -p ./logs && nohup npm start >>./logs/debug.log 2>&1 &",
     "stop": "pkill --signal SIGINT cool-updown",
     "logs": "tail -500f logs/app.log",
     "logs:all": "less logs/app.log",
-    "lint": "eslint ./src",
+    "lint": "eslint ./src && flow",
+    "flow:defs": "flow-typed install -f 0.73 --overwrite",
     "test": "export NODE_ENV=test && jest",
-    "jest:watch": "export NODE_ENV=test && jest --watch src"
+    "jest:watch": "export NODE_ENV=test && jest --watch src",
+    "build": "babel src/ -d lib/"
   },
   "repository": {
     "type": "git",
@@ -40,7 +48,9 @@
   "keywords": [
     "nodejs",
     "updown",
-    "cron"
+    "cron",
+    "wol",
+    "ssh"
   ],
   "author": "djey",
   "license": "MIT",
@@ -49,8 +59,6 @@
   },
   "homepage": "https://github.com/djey47/cool-updown#readme",
   "jest": {
-    "setupFiles": [
-      "<rootDir>/config/jest/globalMocks.js"
-    ]
+    "setupFiles": []
   }
 }

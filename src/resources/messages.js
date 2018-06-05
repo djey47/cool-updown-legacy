@@ -1,3 +1,5 @@
+/* @flow */
+
 const messages = {
   intro: 'coolupdown server is starting, please wait...',
   outro: 'See you soon!',

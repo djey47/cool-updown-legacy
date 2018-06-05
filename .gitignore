@@ -68,3 +68,6 @@ wake_on_lan
 
 # Test env
 !test/logs/app.log
+
+# Babel ES output
+lib/

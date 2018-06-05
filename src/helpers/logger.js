@@ -1,3 +1,5 @@
+/* @flow */
+
 const winston = require('winston');
 const shell = require('shelljs');
 const appRootDir = require('app-root-dir');

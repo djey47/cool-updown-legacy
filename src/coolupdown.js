@@ -1,3 +1,8 @@
+/* @flow */
+
+import type { $Request, $Response } from 'express';
+import type { AppState } from './constants/types';
+
 const app = require('express')();
 const config = require('config');
 const messages = require('./resources/messages');
@@ -13,7 +18,11 @@ const logger = require('./helpers/logger');
 /**
  * @private
  */
-const stateWrapper = (callback, state, message) => (req, res) => {
+const stateWrapper = (
+  callback: Function,
+  state: AppState,
+  message: string,
+) => (req: $Request, res: $Response) => {
   if (message) logger.log('info', `=>(...${message}...)`);
   callback(req, res, state);
 };
@@ -23,9 +32,11 @@ const stateWrapper = (callback, state, message) => (req, res) => {
  */
 const initAppState = () => {
   const isScheduleEnabled = config.get('schedule.enabled');
-  const appState = {
+  const appState: AppState = {
     isScheduleEnabled,
     startedAt: new Date(Date.now()),
+    onJob: undefined,
+    offJob: undefined,
   };
   appState.onJob = createOnJob(config.get('schedule.on'), isScheduleEnabled, appState);
   appState.offJob = createOffJob(config.get('schedule.off'), isScheduleEnabled, appState);
@@ -45,7 +56,7 @@ const initAuth = () => {
 /**
  * Main entry point for HTTP server
  */
-function serverMain() {
+function serverMain(): any {
   logger.log('info', messages.intro);
 
   const port = config.get('app.port');
