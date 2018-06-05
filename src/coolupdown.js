@@ -2,7 +2,7 @@ const app = require('express')();
 const config = require('config');
 const messages = require('./resources/messages');
 const {
-  ping, on, off, enableSchedule, disableSchedule,
+  ping, on, off, enableSchedule, disableSchedule, logs,
 } = require('./services');
 const {
   createOnJob, createOffJob,
@@ -42,6 +42,8 @@ function serverMain() {
 
   // Request mapping
   app.get('/', stateWrapper(ping, appState, 'ping'));
+
+  app.get('/logs', stateWrapper(logs, appState, 'logs'));
 
   app.get('/on', stateWrapper(on, appState, 'on'));
 

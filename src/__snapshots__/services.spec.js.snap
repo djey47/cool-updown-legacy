@@ -4,6 +4,8 @@ exports[`services functions disableSchedule function should set jobs state corre
 
 exports[`services functions enableSchedule function should set jobs state correctly and generate correct response 1`] = `"ok"`;
 
+exports[`services functions logs function should generate correct response with log file 1`] = `"<pre>These are logs contents<pre>"`;
+
 exports[`services functions off function should invoke SSH and generate correct response on command failure 1`] = `"ko"`;
 
 exports[`services functions off function should invoke SSH and generate correct response on connect failure 1`] = `"ko"`;
@@ -25,7 +27,7 @@ exports[`services functions ping function should perform diagnosis and send appr
 <li>Ping test: OK</li>
 <li>SSH test: OK </li>
 </ul>
-<p>See logs for details.</p>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
   \\"app\\": {
@@ -64,7 +66,7 @@ exports[`services functions ping function should send appropriate response when 
 <li>Ping test: OK</li>
 <li>SSH test: OK </li>
 </ul>
-<p>See logs for details.</p>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
   \\"app\\": {
@@ -103,7 +105,7 @@ exports[`services functions ping function should send appropriate response when 
 <li>Ping test: KO</li>
 <li>SSH test: KO </li>
 </ul>
-<p>See logs for details.</p>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
   \\"app\\": {
@@ -142,7 +144,7 @@ exports[`services functions ping function should send appropriate response when 
 <li>Ping test: OK</li>
 <li>SSH test: KO </li>
 </ul>
-<p>See logs for details.</p>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
   \\"app\\": {
@@ -181,7 +183,7 @@ exports[`services functions ping function should send appropriate response when 
 <li>Ping test: KO</li>
 <li>SSH test: OK </li>
 </ul>
-<p>See logs for details.</p>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
   \\"app\\": {

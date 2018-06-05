@@ -140,6 +140,10 @@ Configuration
 }
 ```
 
+#### LOGS: display raw logs ####
+
+Path: `/logs`
+
 #### ON: manually turns server ON
 
 Path: `/on`

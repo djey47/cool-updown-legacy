@@ -15,7 +15,7 @@ const messages = {
     serverTitle: 'Server',
     pingItem: 'Ping test:',
     sshItem: 'SSH test:',
-    instructions: 'See logs for details.',
+    instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
     offline: 'Server is likely to be OFFLINE!',
   },
 };
