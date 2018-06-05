@@ -4,6 +4,7 @@ const {
   off,
   enableSchedule,
   disableSchedule,
+  logs,
 } = require('./services');
 
 const mockSend = jest.fn();
@@ -17,6 +18,7 @@ const mockOnJobStart = jest.fn();
 const mockOffJobStart = jest.fn();
 const mockOnJobStop = jest.fn();
 const mockOffJobStop = jest.fn();
+const mockAppRootDirGet = jest.fn();
 
 jest.mock('wake_on_lan', () => ({
   wake: (a, o, f) => mockWOLWake(a, o, f),
@@ -30,6 +32,10 @@ jest.mock('node-ssh', () => jest.fn(() => ({
 
 jest.mock('./helpers/systemGateway', () => ({
   ping: h => mockGatewayPing(h),
+}));
+
+jest.mock('app-root-dir', () => ({
+  get: () => mockAppRootDirGet(),
 }));
 
 const res = {
@@ -50,6 +56,7 @@ describe('services functions', () => {
     mockOffJobStart.mockReset();
     mockOnJobStop.mockReset();
     mockOffJobStop.mockReset();
+    mockAppRootDirGet.mockReset();
 
     // Ping OK
     mockGatewayPing.mockImplementation(() => Promise.resolve(true));
@@ -62,6 +69,8 @@ describe('services functions', () => {
     mockStatus.mockImplementation(() => res);
 
     mockSSHExecCommand.mockImplementation(() => Promise.resolve({ stdout: '', stderr: '', code: 0 }));
+
+    mockAppRootDirGet.mockImplementation(() => '/foo/bar');
   });
 
   const appState = {
@@ -309,6 +318,29 @@ describe('services functions', () => {
       expect(state.isScheduleEnabled).toEqual(false);
       expect(mockSend).toHaveBeenCalled();
       expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+    });
+  });
+
+  describe('logs function', () => {
+    it('should return 204 if no log file', (done) => {
+      // given-when-then
+      logs(undefined, res).then(() => {
+        expect(mockStatus).toHaveBeenCalledWith(204);
+        expect(mockSend).toHaveBeenCalledWith(undefined);
+        done();
+      });
+    });
+
+    it('should generate correct response with log file', (done) => {
+      // given
+      mockAppRootDirGet.mockImplementation(() => './test');
+
+      // given-when-then
+      logs(undefined, res).then(() => {
+        expect(mockSend).toHaveBeenCalled();
+        expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        done();
+      });
     });
   });
 });

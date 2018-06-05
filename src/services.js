@@ -1,13 +1,18 @@
 const NodeSSH = require('node-ssh');
 const wol = require('wake_on_lan');
 const config = require('config');
+const fs = require('fs');
+const util = require('util');
 const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
+const appRootDir = require('app-root-dir');
+const path = require('path');
 const messages = require('./resources/messages');
 const { ping: sgPing } = require('./helpers/systemGateway');
 const logger = require('./helpers/logger');
 
 const ssh = new NodeSSH();
+const readFilePromisified = util.promisify(fs.readFile);
 
 /**
  * @private
@@ -157,10 +162,26 @@ function disableSchedule(req, res, appState) {
   res.send('ok');
 }
 
+/**
+ * Handles LOGS request
+ */
+async function logs(req, res) {
+  try {
+    const logsContents = await readFilePromisified(path.join(appRootDir.get(), 'logs', 'app.log'));
+
+    res.send(`<pre>${logsContents}<pre>`);
+  } catch (error) {
+    logger.error(`(logs) ${error}`);
+
+    res.status(204).send();
+  }
+}
+
 module.exports = {
   ping,
   on,
   off,
   enableSchedule,
   disableSchedule,
+  logs,
 };

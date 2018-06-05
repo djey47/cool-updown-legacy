@@ -65,3 +65,6 @@ typings/
 config/local.json
 cron
 wake_on_lan
+
+# Test env
+!test/logs/app.log
