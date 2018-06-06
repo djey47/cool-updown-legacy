@@ -2,7 +2,6 @@ const cron = require('cron');
 const {
   on, off,
 } = require('../services');
-const messages = require('../resources/messages');
 const logger = require('./logger');
 
 const { CronJob } = cron;
@@ -10,8 +9,8 @@ const { CronJob } = cron;
 /**
  * @private
  */
-const cronWrapper = (callback, message) => () => {
-  if (message) logger.log('info', `=>(...${message}...)`);
+const cronWrapper = (callback, action) => () => {
+  if (action) logger.log('info', `=>(...cron:${action}...)`);
   callback();
 };
 
@@ -27,8 +26,8 @@ function toCronSyntax({ at }) {
 /**
  * @private
  */
-function createJobAndStart(callBack, message, schedule, isEnabled) {
-  const job = new CronJob(toCronSyntax(schedule), cronWrapper(callBack, message));
+function createJobAndStart(callBack, action, schedule, isEnabled) {
+  const job = new CronJob(toCronSyntax(schedule), cronWrapper(callBack, action));
   if (isEnabled) job.start();
   return job;
 }
@@ -37,14 +36,14 @@ function createJobAndStart(callBack, message, schedule, isEnabled) {
  * Creates ON job and starts it if enabled
  */
 function createOnJob(schedule, isEnabled) {
-  return createJobAndStart(on, messages.onCron, schedule, isEnabled);
+  return createJobAndStart(on, 'on', schedule, isEnabled);
 }
 
 /**
  * Creates OFF job and starts it if enabled
  */
 function createOffJob(schedule, isEnabled) {
-  return createJobAndStart(off, messages.offCron, schedule, isEnabled);
+  return createJobAndStart(off, 'off', schedule, isEnabled);
 }
 
 module.exports = {

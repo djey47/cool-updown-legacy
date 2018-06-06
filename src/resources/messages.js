@@ -2,8 +2,6 @@ const messages = {
   intro: 'coolupdown server is starting, please wait...',
   ready: 'Ready!',
   exitNotice: '- CTRL+C (or npm stop) to stop server -',
-  onCron: 'Up\'ed with CRON Job!',
-  offCron: 'Down\'ed with CRON Job!',
   wakeOK: 'WOL packets sent!',
   wakeKO: 'Could not send WOL packets!',
   sshOK: 'Connected to host via SSH!',
