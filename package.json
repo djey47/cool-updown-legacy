@@ -11,6 +11,7 @@
     "express-basic-auth": "^1.1.5",
     "lodash": "^4.17.10",
     "node-ssh": "^5.1.1",
+    "shelljs": "^0.8.2",
     "wake_on_lan": "^1.0.0",
     "winston": "^2.4.2"
   },
@@ -22,9 +23,10 @@
   },
   "scripts": {
     "start": "node src/coolupdown.js",
-    "start:service": "mkdir -p logs && nohup npm start >> logs/app.log 2>&1 &",
+    "start:service": "nohup npm start >/dev/null 2>&1 &",
     "stop": "pkill --signal SIGINT cool-updown",
-    "logs": "tail -f logs/app.log",
+    "logs": "tail -500f logs/app.log",
+    "logs:all": "less logs/app.log",
     "lint": "eslint ./src",
     "test": "export NODE_ENV=test && jest",
     "jest:watch": "export NODE_ENV=test && jest --watch src"

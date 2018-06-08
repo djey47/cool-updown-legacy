@@ -7,11 +7,14 @@ NodeJS script to enable scheduled server start/stop. Runs as a HTTP server.
 
 ### Requirements
 - *Client*:
-  - LAN
+  - Linux / Windows 10 + WSL
+  - LAN properly configured
   - NodeJS 8+
   - Yarn (optionally)
 - *Remote server*:
-  - LAN, SSH service running, WOL enabled
+  - Linux
+  - WOL enabled
+  - LAN properly configured, SSH service running
   - User with root privileges (sudoer)
 
 ### Steps
@@ -85,15 +88,20 @@ OFF command does require a correct communication via SSH; you should check both 
 ### Run
 Simply with `npm start` or `yarn start`.
 
-Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service`.
-
-While running in background, logs are written to `logs/app.log` file; to display logs current command will help you: `npm run logs` or `yarn logs`.
+Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background.
 
 To stop application, hit CTRL+C when launched in foreground, otherwise `npm stop` or `yarn stop`.
 
+#### Logs
+In foreground execution, logs are written to both console and `logs/app.log` file.
+
+While running in background, logs are written to above file only; to display 500 last logs events, following commands will help you: `npm run logs` or `yarn logs`.
+
+Full logs will be displayed with `npm run logs:all` or `yarn logs:all` commands.
+
 ### Web-based usage
 
-With your favourite web browser, head to URL: http://machine:4600 (4600 being default port, can be changed in configuration).
+With your favourite web browser, head to URL: http://client.name.or.ip:4600 (4600 being default port, can be changed in configuration).
 
 Append to this URL value of `path` below.
 
