@@ -1,15 +1,13 @@
+const { expressBasicAuthMock } = require('../../config/jest/globalMocks');
 const { initBasicAuth } = require('./auth');
 
-const mockBasicAuthPlugin = jest.fn();
 const mockApp = {
   use: plugin => (plugin),
 };
-jest.mock('express-basic-auth', () =>
-  settings => mockBasicAuthPlugin(settings));
 
 describe('authentication helper functions', () => {
   beforeEach(() => {
-    mockBasicAuthPlugin.mockReset();
+    expressBasicAuthMock.mockReset();
   });
 
   describe('initBasicAuth function', () => {
@@ -18,7 +16,7 @@ describe('authentication helper functions', () => {
       initBasicAuth(mockApp, false);
 
       // then
-      expect(mockBasicAuthPlugin).not.toHaveBeenCalled();
+      expect(expressBasicAuthMock).not.toHaveBeenCalled();
     });
 
     it('should invoke plugin when enabled', () => {
@@ -26,7 +24,7 @@ describe('authentication helper functions', () => {
       initBasicAuth(mockApp, true, 'user', 'password');
 
       // then
-      expect(mockBasicAuthPlugin).toHaveBeenCalledWith({
+      expect(expressBasicAuthMock).toHaveBeenCalledWith({
         users: {
           user: 'password',
         },

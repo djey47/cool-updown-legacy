@@ -1,3 +1,4 @@
+const { appRootDirMock, nodesshMock, wakeonlanMock } = require('../config/jest/globalMocks');
 const {
   ping,
   on,
@@ -10,32 +11,13 @@ const {
 const mockSend = jest.fn();
 const mockStatus = jest.fn();
 const mockGatewayPing = jest.fn();
-const mockSSHConnect = jest.fn();
-const mockSSHExecCommand = jest.fn();
-const mockSSHDispose = jest.fn();
-const mockWOLWake = jest.fn();
 const mockOnJobStart = jest.fn();
 const mockOffJobStart = jest.fn();
 const mockOnJobStop = jest.fn();
 const mockOffJobStop = jest.fn();
-const mockAppRootDirGet = jest.fn();
-
-jest.mock('wake_on_lan', () => ({
-  wake: (a, o, f) => mockWOLWake(a, o, f),
-}));
-
-jest.mock('node-ssh', () => jest.fn(() => ({
-  connect: o => mockSSHConnect(o),
-  execCommand: c => mockSSHExecCommand(c),
-  dispose: () => mockSSHDispose(),
-})));
 
 jest.mock('./helpers/systemGateway', () => ({
   ping: h => mockGatewayPing(h),
-}));
-
-jest.mock('app-root-dir', () => ({
-  get: () => mockAppRootDirGet(),
 }));
 
 const res = {
@@ -47,30 +29,28 @@ describe('services functions', () => {
   beforeEach(() => {
     mockSend.mockReset();
     mockStatus.mockReset();
+    // appRootDirMock.get.mockReset();
     mockGatewayPing.mockReset();
-    mockSSHConnect.mockReset();
-    mockSSHExecCommand.mockReset();
-    mockSSHDispose.mockReset();
-    mockWOLWake.mockReset();
+    nodesshMock.connect.mockReset();
+    nodesshMock.execCommand.mockReset();
+    nodesshMock.dispose.mockReset();
+    wakeonlanMock.wake.mockReset();
     mockOnJobStart.mockReset();
     mockOffJobStart.mockReset();
     mockOnJobStop.mockReset();
     mockOffJobStop.mockReset();
-    mockAppRootDirGet.mockReset();
 
     // Ping OK
     mockGatewayPing.mockImplementation(() => Promise.resolve(true));
 
     // WOL OK
-    mockWOLWake.mockImplementation((a, o, f) => {
+    wakeonlanMock.wake.mockImplementation((a, o, f) => {
       f();
     });
 
     mockStatus.mockImplementation(() => res);
 
-    mockSSHExecCommand.mockImplementation(() => Promise.resolve({ stdout: '', stderr: '', code: 0 }));
-
-    mockAppRootDirGet.mockImplementation(() => '/foo/bar');
+    nodesshMock.execCommand.mockImplementation(() => Promise.resolve({ stdout: '', stderr: '', code: 0 }));
   });
 
   const appState = {
@@ -99,13 +79,13 @@ describe('services functions', () => {
       ping({}, res, state).then(() => {
         expect(mockGatewayPing).toHaveBeenCalled();
         expect(mockGatewayPing.mock.calls[0][0]).toEqual('Host Name');
-        expect(mockSSHConnect).toHaveBeenCalledWith({
+        expect(nodesshMock.connect).toHaveBeenCalledWith({
           host: 'Host Name',
           port: 22,
           privateKey: 'Key Path',
           username: 'User',
         });
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -124,8 +104,8 @@ describe('services functions', () => {
       // when-then
       ping({}, res, state).then(() => {
         expect(mockGatewayPing).toHaveBeenCalled();
-        expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.connect).toHaveBeenCalled();
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -138,13 +118,13 @@ describe('services functions', () => {
         ...appState,
       };
       // SSH KO
-      mockSSHConnect.mockImplementation(() => Promise.reject());
+      nodesshMock.connect.mockImplementation(() => Promise.reject());
 
       // when-then
       ping({}, res, state).then(() => {
         expect(mockGatewayPing).toHaveBeenCalled();
-        expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.connect).toHaveBeenCalled();
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -159,7 +139,7 @@ describe('services functions', () => {
       // Ping KO
       mockGatewayPing.mockImplementation(() => Promise.resolve(false));
       // SSH KO
-      mockSSHConnect.mockImplementation(() => Promise.reject());
+      nodesshMock.connect.mockImplementation(() => Promise.reject());
 
       // when-then
       ping({}, res, state).then(() => {
@@ -190,16 +170,16 @@ describe('services functions', () => {
       on(undefined, res);
 
       // then
-      expect(mockWOLWake).toHaveBeenCalled();
-      expect(mockWOLWake.mock.calls[0][0]).toEqual('FF:FF:FF:FF:FF:FF:FF:FF');
-      expect(mockWOLWake.mock.calls[0][1]).toEqual({ address: '255.255.255.255' });
+      expect(wakeonlanMock.wake).toHaveBeenCalled();
+      expect(wakeonlanMock.wake.mock.calls[0][0]).toEqual('FF:FF:FF:FF:FF:FF:FF:FF');
+      expect(wakeonlanMock.wake.mock.calls[0][1]).toEqual({ address: '255.255.255.255' });
       expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('should invoke wol and generate correct response on failure', () => {
       // given
       // WOL KO
-      mockWOLWake.mockImplementation((a, o, f) => {
+      wakeonlanMock.wake.mockImplementation((a, o, f) => {
         f({});
       });
 
@@ -207,7 +187,7 @@ describe('services functions', () => {
       on(undefined, res);
 
       // then
-      expect(mockWOLWake).toHaveBeenCalled();
+      expect(wakeonlanMock.wake).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(500);
       expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
     });
@@ -217,14 +197,14 @@ describe('services functions', () => {
     it('should invoke SSH and generate correct response on success', (done) => {
       // given-when-then
       off(undefined, res).then(() => {
-        expect(mockSSHConnect).toHaveBeenCalledWith({
+        expect(nodesshMock.connect).toHaveBeenCalledWith({
           host: 'Host Name',
           port: 22,
           privateKey: 'Key Path',
           username: 'User',
         });
-        expect(mockSSHExecCommand).toHaveBeenCalledWith('OFF Command');
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.execCommand).toHaveBeenCalledWith('OFF Command');
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
       });
@@ -233,13 +213,13 @@ describe('services functions', () => {
     it('should invoke SSH and generate correct response on failure (promise rejection)', (done) => {
       // given
       // ExecCommand KO (rejection)
-      mockSSHExecCommand.mockImplementation(() => Promise.reject());
+      nodesshMock.execCommand.mockImplementation(() => Promise.reject());
 
       // when-then
       off(undefined, res).then(() => {
-        expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHExecCommand).toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.connect).toHaveBeenCalled();
+        expect(nodesshMock.execCommand).toHaveBeenCalled();
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockStatus).toHaveBeenCalledWith(500);
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -249,13 +229,13 @@ describe('services functions', () => {
     it('should invoke SSH and generate correct response on command failure', (done) => {
       // given
       // ExecCommand KO (non 0 exit code)
-      mockSSHExecCommand.mockImplementation(() => Promise.resolve({ stdin: '', stdout: '', code: 1 }));
+      nodesshMock.execCommand.mockImplementation(() => Promise.resolve({ stdin: '', stdout: '', code: 1 }));
 
       // when-then
       off(undefined, res).then(() => {
-        expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHExecCommand).toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.connect).toHaveBeenCalled();
+        expect(nodesshMock.execCommand).toHaveBeenCalled();
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockStatus).toHaveBeenCalledWith(500);
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -265,13 +245,13 @@ describe('services functions', () => {
     it('should invoke SSH and generate correct response on connect failure', (done) => {
       // given
       // Connect KO
-      mockSSHConnect.mockImplementation(() => Promise.reject());
+      nodesshMock.connect.mockImplementation(() => Promise.reject());
 
       // when-then
       off(undefined, res).then(() => {
-        expect(mockSSHConnect).toHaveBeenCalled();
-        expect(mockSSHExecCommand).not.toHaveBeenCalled();
-        expect(mockSSHDispose).toHaveBeenCalled();
+        expect(nodesshMock.connect).toHaveBeenCalled();
+        expect(nodesshMock.execCommand).not.toHaveBeenCalled();
+        expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockStatus).toHaveBeenCalledWith(500);
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -323,7 +303,10 @@ describe('services functions', () => {
 
   describe('logs function', () => {
     it('should return 204 if no log file', (done) => {
-      // given-when-then
+      // given
+      appRootDirMock.get.mockImplementationOnce(() => '/foo/bar');
+
+      // when-then
       logs(undefined, res).then(() => {
         expect(mockStatus).toHaveBeenCalledWith(204);
         expect(mockSend).toHaveBeenCalledWith(undefined);
@@ -332,9 +315,6 @@ describe('services functions', () => {
     });
 
     it('should generate correct response with log file', (done) => {
-      // given
-      mockAppRootDirGet.mockImplementation(() => './test');
-
       // given-when-then
       logs(undefined, res).then(() => {
         expect(mockSend).toHaveBeenCalled();

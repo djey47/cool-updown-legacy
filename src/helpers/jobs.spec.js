@@ -1,16 +1,9 @@
+const { cronMock } = require('../../config/jest/globalMocks');
 const { createOnJob, createOffJob, toCronSyntax } = require('./jobs');
-
-const mockStart = jest.fn();
-
-jest.mock('cron', () => ({
-  CronJob: jest.fn(() => ({
-    start: () => mockStart(),
-  })),
-}));
 
 describe('jobs helper functions', () => {
   beforeEach(() => {
-    mockStart.mockReset();
+    cronMock.start.mockReset();
   });
 
   const schedule = {
@@ -25,7 +18,7 @@ describe('jobs helper functions', () => {
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
-      expect(mockStart).toHaveBeenCalled();
+      expect(cronMock.start).toHaveBeenCalled();
     });
 
     it('should create disabled job', () => {
@@ -35,7 +28,7 @@ describe('jobs helper functions', () => {
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
-      expect(mockStart).not.toHaveBeenCalled();
+      expect(cronMock.start).not.toHaveBeenCalled();
     });
   });
 
@@ -47,7 +40,7 @@ describe('jobs helper functions', () => {
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
-      expect(mockStart).toHaveBeenCalled();
+      expect(cronMock.start).toHaveBeenCalled();
     });
 
     it('should create disabled job', () => {
@@ -57,7 +50,7 @@ describe('jobs helper functions', () => {
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
-      expect(mockStart).not.toHaveBeenCalled();
+      expect(cronMock.start).not.toHaveBeenCalled();
     });
   });
 
