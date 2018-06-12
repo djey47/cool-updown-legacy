@@ -57,8 +57,20 @@ function serverMain() {
   logger.log('info', `${messages.ready} http://localhost:${port}`);
   logger.log('info', messages.exitNotice);
 
-  app.listen(port);
+  return app.listen(port);
 }
 
 process.title = 'cool-updown';
-serverMain();
+
+const server = serverMain();
+
+// Exits properly on SIGINT
+process.on('SIGINT', () => {
+  logger.log('warn', messages.interrupt);
+
+  server.close(() => {
+    logger.log('info', messages.outro);
+
+    process.exit(0);
+  });
+});

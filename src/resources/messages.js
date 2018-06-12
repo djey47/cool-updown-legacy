@@ -1,7 +1,9 @@
 const messages = {
   intro: 'coolupdown server is starting, please wait...',
+  outro: 'See you soon!',
   ready: 'Ready!',
   exitNotice: '- CTRL+C (or npm stop) to stop server -',
+  interrupt: '/!\\ SIGINT message received! coolupdown server will close /!\\',
   wakeOK: 'WOL packets sent!',
   wakeKO: 'Could not send WOL packets!',
   sshOK: 'Connected to host via SSH!',
