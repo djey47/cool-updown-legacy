@@ -55,6 +55,7 @@ describe('services functions', () => {
 
   const appState = {
     isScheduleEnabled: true,
+    startedAt: new Date('June 12, 2018 13:14:00'),
   };
 
   const mockJobs = {
