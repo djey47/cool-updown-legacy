@@ -32,6 +32,7 @@ function serverMain() {
     isScheduleEnabled,
     onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled),
     offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled),
+    startedAt: new Date(Date.now()),
   };
 
   // Auth support

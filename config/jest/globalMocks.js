@@ -1,3 +1,8 @@
+// JS API //
+const mockDateNow = jest.fn(() => new Date('June 12, 2018 14:14:00'));
+Date.now = mockDateNow;
+
+// NODE MODULES //
 // app-root-dir
 const mockAppRootDirGet = jest.fn(() => './test');
 jest.mock('app-root-dir', () => ({
@@ -54,6 +59,9 @@ jest.mock('winston', () => ({
 }));
 
 module.exports = {
+  dateMock: {
+    now: mockDateNow,
+  },
   appRootDirMock: {
     get: mockAppRootDirGet,
   },

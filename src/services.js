@@ -7,9 +7,11 @@ const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
 const appRootDir = require('app-root-dir');
 const path = require('path');
+const differenceInMinutes = require('date-fns/difference_in_minutes');
 const messages = require('./resources/messages');
 const { ping: sgPing } = require('./helpers/systemGateway');
 const logger = require('./helpers/logger');
+const { interpolate } = require('./helpers/format');
 
 const ssh = new NodeSSH();
 const readFilePromisified = util.promisify(fs.readFile);
@@ -39,9 +41,10 @@ async function serverSSHTest(host, port, username, privateKey) {
  * Returns diagnostics with status message
  */
 async function ping(req, res, appState) {
+  const { isScheduleEnabled, startedAt } = appState;
   const { ping: pingMessages } = messages;
   let statusMessage;
-  if (appState.isScheduleEnabled) {
+  if (isScheduleEnabled) {
     statusMessage = pingMessages.statusTitle;
   } else {
     statusMessage = pingMessages.statusTitleNoSchedule;
@@ -63,8 +66,13 @@ async function ping(req, res, appState) {
     serverSSHTest(host, port, username, privateKey),
   ]);
 
+  // Uptime calculation
+  const uptime = `${differenceInMinutes(new Date(Date.now()), startedAt)}`;
+
+  // TODO use interpolation
   res.send(`
 <h1>${statusMessage}</h1>
+<p><em>${interpolate(messages.ping.appUptime, { uptime })}</em></p>
 <h2>${pingMessages.serverTitle}</h2>
 <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
 <ul>
