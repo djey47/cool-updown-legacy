@@ -1,27 +1,9 @@
-const mockWinstonLogger = jest.fn();
-const mockWinstonTransport = jest.fn();
-jest.mock('winston', () => ({
-  Logger: mockWinstonLogger,
-  transports: {
-    Console: mockWinstonTransport,
-    File: mockWinstonTransport,
-  },
-}));
-
-// TODO set global mock
-jest.mock('app-root-dir', () => ({
-  get: () => './test',
-}));
-
-const mockShellMkdir = jest.fn();
-jest.mock('shelljs', () => ({
-  mkdir: (o, p) => mockShellMkdir(o, p),
-}));
+const { winstonMock, shelljsMock } = require('../../config/jest/globalMocks');
 
 beforeEach(() => {
-  mockShellMkdir.mockReset();
-  mockWinstonLogger.mockReset();
-  mockWinstonTransport.mockClear();
+  shelljsMock.mkdir.mockReset();
+  winstonMock.Logger.mockReset();
+  winstonMock.Transport.mockClear();
 });
 
 describe('default logger', () => {
@@ -30,16 +12,16 @@ describe('default logger', () => {
     require('./logger'); // eslint-disable-line
 
     // then
-    expect(mockShellMkdir).toHaveBeenCalledWith('-p', 'test/logs');
+    expect(shelljsMock.mkdir).toHaveBeenCalledWith('-p', 'test/logs');
 
-    expect(mockWinstonLogger).toHaveBeenCalledWith({
+    expect(winstonMock.Logger).toHaveBeenCalledWith({
       handleExceptions: false,
       level: 'info',
       transports: [{}, {}],
     });
 
-    expect(mockWinstonTransport).toHaveBeenCalledTimes(2);
-    expect(mockWinstonTransport).toHaveBeenCalledWith({ timestamp: true });
-    expect(mockWinstonTransport).toHaveBeenCalledWith({ filename: 'test/logs/app.log', json: false });
+    expect(winstonMock.Transport).toHaveBeenCalledTimes(2);
+    expect(winstonMock.Transport).toHaveBeenCalledWith({ timestamp: true });
+    expect(winstonMock.Transport).toHaveBeenCalledWith({ filename: 'test/logs/app.log', json: false });
   });
 });
