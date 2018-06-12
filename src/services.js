@@ -68,8 +68,8 @@ async function ping(req, res, appState) {
 <h2>${pingMessages.serverTitle}</h2>
 <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
 <ul>
-<li>${pingMessages.pingItem} ${isPingSuccess ? 'OK' : 'KO'}</li>
-<li>${pingMessages.sshItem} ${isSSHSuccess ? 'OK' : 'KO'} </li>
+<li>${pingMessages.pingItem} ${isPingSuccess ? messages.status.okay : messages.status.kayo}</li>
+<li>${pingMessages.sshItem} ${isSSHSuccess ? messages.status.okay : messages.status.kayo} </li>
 </ul>
 <p>${pingMessages.instructions}</p>
 <h2>${pingMessages.configurationTitle}</h2>
@@ -92,11 +92,11 @@ function on(req, res) {
     if (error) {
       logger.error(`(on) ${messages.wakeKO} - ${JSON.stringify(error, null, '  ')}`);
 
-      if (res) res.status(500).send('ko');
+      if (res) res.status(500).send(messages.status.kayo);
     } else {
       logger.log('info', `(on) ${messages.wakeOK}`);
 
-      if (res) res.send('ok');
+      if (res) res.send(messages.status.okay);
     }
   });
 }
@@ -128,11 +128,11 @@ async function off(req, res) {
 
     if (code !== 0) throw stderr;
 
-    if (res) res.send('ok');
+    if (res) res.send(messages.status.okay);
   } catch (err) {
     logger.error(`(off) ${messages.sshKO} - ${JSON.stringify(err, null, '  ')}`);
 
-    if (res) res.status(500).send('ko');
+    if (res) res.status(500).send(messages.status.kayo);
   } finally {
     ssh.dispose();
   }
@@ -147,7 +147,7 @@ function enableSchedule(req, res, appState) {
   state.onJob.start();
   state.offJob.start();
 
-  res.send('ok');
+  res.send(messages.status.okay);
 }
 
 /**
@@ -159,7 +159,7 @@ function disableSchedule(req, res, appState) {
   state.onJob.stop();
   state.offJob.stop();
 
-  res.send('ok');
+  res.send(messages.status.okay);
 }
 
 /**
