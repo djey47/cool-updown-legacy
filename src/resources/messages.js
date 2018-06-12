@@ -18,6 +18,10 @@ const messages = {
     instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
     offline: 'Server is likely to be OFFLINE!',
   },
+  status: {
+    okay: 'OK',
+    kayo: 'KO',
+  },
 };
 
 module.exports = messages;
