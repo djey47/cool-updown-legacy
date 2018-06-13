@@ -7,11 +7,12 @@ const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
 const appRootDir = require('app-root-dir');
 const path = require('path');
-const differenceInMinutes = require('date-fns/difference_in_minutes');
+const differenceInMilliseconds = require('date-fns/difference_in_milliseconds');
 const messages = require('./resources/messages');
 const { ping: sgPing } = require('./helpers/systemGateway');
 const logger = require('./helpers/logger');
-const { interpolate } = require('./helpers/format');
+const { interpolate, toHumanDuration } = require('./helpers/format');
+const { getTimeDetails } = require('./helpers/date');
 
 const ssh = new NodeSSH();
 const readFilePromisified = util.promisify(fs.readFile);
@@ -67,7 +68,8 @@ async function ping(req, res, appState) {
   ]);
 
   // Uptime calculation
-  const uptime = `${differenceInMinutes(new Date(Date.now()), startedAt)}`;
+  const diff = differenceInMilliseconds(new Date(Date.now()), startedAt);
+  const uptime = toHumanDuration(getTimeDetails(diff));
 
   // TODO use interpolation
   res.send(`

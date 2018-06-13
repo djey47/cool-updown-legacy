@@ -17,7 +17,7 @@ const messages = {
     sshItem: 'SSH test:',
     instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
     offline: 'Server is likely to be OFFLINE!',
-    appUptime: 'Running for {uptime} minutes.',
+    appUptime: 'Running for {uptime}.',
   },
   status: {
     okay: 'OK',
