@@ -21,7 +21,7 @@ exports[`services functions on function should invoke wol and generate correct r
 exports[`services functions ping function should perform diagnosis and send appropriate response when schedule enabled 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 60 minutes.</em></p>
+<p><em>Running for 1 hour(s).</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
@@ -61,7 +61,7 @@ exports[`services functions ping function should perform diagnosis and send appr
 exports[`services functions ping function should send appropriate response when schedule disabled 1`] = `
 "
 <h1>coolupdown alive but schedule is disabled!</h1>
-<p><em>Running for 60 minutes.</em></p>
+<p><em>Running for 1 hour(s).</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
@@ -101,7 +101,7 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when server OFFLINE 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 60 minutes.</em></p>
+<p><em>Running for 1 hour(s).</em></p>
 <h2>Server</h2>
 <p>Server is likely to be OFFLINE!</p>
 <ul>
@@ -141,7 +141,7 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when server SSH KO 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 60 minutes.</em></p>
+<p><em>Running for 1 hour(s).</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
@@ -181,7 +181,7 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when server ping KO 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 60 minutes.</em></p>
+<p><em>Running for 1 hour(s).</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
