@@ -1,5 +1,5 @@
 // JS API //
-const mockDateNow = jest.fn(() => new Date('June 12, 2018 14:14:00'));
+const mockDateNow = jest.fn(() => new Date('June 12, 2018 14:14:00Z'));
 Date.now = mockDateNow;
 
 // NODE MODULES //
