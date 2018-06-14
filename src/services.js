@@ -39,10 +39,21 @@ async function serverSSHTest(host, port, username, privateKey) {
 }
 
 /**
+ * @private
+ * @return duration in human readable format
+ */
+function computeDuration(from, to) {
+  const diff = differenceInMilliseconds(to, from);
+  return toHumanDuration(getTimeDetails(diff));
+}
+
+/**
  * Returns diagnostics with status message
  */
 async function ping(req, res, appState) {
-  const { isScheduleEnabled, startedAt } = appState;
+  const {
+    isScheduleEnabled, startedAt, serverStartedAt, serverStoppedAt,
+  } = appState;
   const { ping: pingMessages } = messages;
   let statusMessage;
   if (isScheduleEnabled) {
@@ -67,9 +78,18 @@ async function ping(req, res, appState) {
     serverSSHTest(host, port, username, privateKey),
   ]);
 
-  // Uptime calculation
-  const diff = differenceInMilliseconds(new Date(Date.now()), startedAt);
-  const uptime = toHumanDuration(getTimeDetails(diff));
+  // Uptime app calculation
+  const now = new Date(Date.now());
+  const uptime = computeDuration(startedAt, now);
+
+  // Uptime/Downtime server calculation
+  const time = computeDuration(serverStartedAt || serverStoppedAt || now, now);
+  let serverUpDownTimeMessage = messages.ping.serverUndefinedTime;
+  if (serverStartedAt) {
+    serverUpDownTimeMessage = interpolate(messages.ping.serverUptime, { time });
+  } else if (serverStoppedAt) {
+    serverUpDownTimeMessage = interpolate(messages.ping.serverDowntime, { time });
+  }
 
   // TODO use interpolation
   res.send(`
@@ -78,6 +98,7 @@ async function ping(req, res, appState) {
 <h2>${pingMessages.serverTitle}</h2>
 <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
 <ul>
+<li>${serverUpDownTimeMessage}</li>
 <li>${pingMessages.pingItem} ${isPingSuccess ? messages.status.okay : messages.status.kayo}</li>
 <li>${pingMessages.sshItem} ${isSSHSuccess ? messages.status.okay : messages.status.kayo} </li>
 </ul>
@@ -92,7 +113,8 @@ async function ping(req, res, appState) {
 /**
  * Handles ON request
  */
-function on(req, res) {
+function on(req, res, appState) {
+  const currentState = appState;
   const macAddress = config.get('server.macAddress');
   const broadcastAddress = config.get('server.broadcastAddress');
   const options = {
@@ -106,6 +128,11 @@ function on(req, res) {
     } else {
       logger.log('info', `(on) ${messages.wakeOK}`);
 
+      if (!appState.serverStartedAt) {
+        currentState.serverStartedAt = new Date(Date.now());
+        currentState.serverStoppedAt = undefined;
+      }
+
       if (res) res.send(messages.status.okay);
     }
   });
@@ -114,7 +141,8 @@ function on(req, res) {
 /**
  * Handles OFF request
  */
-async function off(req, res) {
+async function off(req, res, appState) {
+  const currentState = appState;
   const host = config.get('server.hostname');
   const port = config.get('server.sshPort');
   const username = config.get('server.user');
@@ -137,6 +165,11 @@ async function off(req, res) {
     logger.log('debug', `(off) STDERR: ${stderr}`);
 
     if (code !== 0) throw stderr;
+
+    if (!appState.serverStoppedAt) {
+      currentState.serverStartedAt = undefined;
+      currentState.serverStoppedAt = new Date(Date.now());
+    }
 
     if (res) res.send(messages.status.okay);
   } catch (err) {

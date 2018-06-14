@@ -29,7 +29,6 @@ describe('services functions', () => {
   beforeEach(() => {
     mockSend.mockReset();
     mockStatus.mockReset();
-    // appRootDirMock.get.mockReset();
     mockGatewayPing.mockReset();
     nodesshMock.connect.mockReset();
     nodesshMock.execCommand.mockReset();
@@ -55,7 +54,7 @@ describe('services functions', () => {
 
   const appState = {
     isScheduleEnabled: true,
-    startedAt: new Date('June 12, 2018 13:14:00'),
+    startedAt: new Date('June 12, 2018 13:14:00Z'),
   };
 
   const mockJobs = {
@@ -87,6 +86,36 @@ describe('services functions', () => {
           username: 'User',
         });
         expect(nodesshMock.dispose).toHaveBeenCalled();
+        expect(mockSend).toHaveBeenCalled();
+        expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        done();
+      });
+    });
+
+    it('should send appropriate response when serverStartedAt defined', (done) => {
+      // given
+      const state = {
+        ...appState,
+        serverStartedAt: new Date(Date.now()),
+      };
+
+      // when-then
+      ping({}, res, state).then(() => {
+        expect(mockSend).toHaveBeenCalled();
+        expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        done();
+      });
+    });
+
+    it('should send appropriate response when serverStoppedAt defined', (done) => {
+      // given
+      const state = {
+        ...appState,
+        serverStoppedAt: new Date(Date.now()),
+      };
+
+      // when-then
+      ping({}, res, state).then(() => {
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -167,14 +196,37 @@ describe('services functions', () => {
 
   describe('on function', () => {
     it('should invoke wol and generate correct response on success', () => {
-      // given-when
-      on(undefined, res);
+      // given
+      const appStateWithServerStopTime = {
+        ...appState,
+        serverStoppedAt: new Date(),
+      };
+
+      // when
+      on(undefined, res, appStateWithServerStopTime);
 
       // then
       expect(wakeonlanMock.wake).toHaveBeenCalled();
       expect(wakeonlanMock.wake.mock.calls[0][0]).toEqual('FF:FF:FF:FF:FF:FF:FF:FF');
       expect(wakeonlanMock.wake.mock.calls[0][1]).toEqual({ address: '255.255.255.255' });
       expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+      expect(appStateWithServerStopTime.serverStartedAt.getTime()).toEqual(1528812840000);
+      expect(appStateWithServerStopTime.serverStoppedAt).toBeUndefined();
+    });
+
+    it('should not alter server start time when already defined', () => {
+      // given
+      const appStateWithServerStartTime = {
+        ...appState,
+        serverStartedAt: new Date(),
+      };
+
+      // when
+      on(undefined, res, appStateWithServerStartTime);
+
+      // then
+      expect(appStateWithServerStartTime.serverStartedAt).toBeDefined();
+      expect(appStateWithServerStartTime.serverStartedAt.getTime()).not.toEqual(1528812840000);
     });
 
     it('should invoke wol and generate correct response on failure', () => {
@@ -183,21 +235,33 @@ describe('services functions', () => {
       wakeonlanMock.wake.mockImplementation((a, o, f) => {
         f({});
       });
+      const appStateWithServerStopTime = {
+        ...appState,
+        serverStoppedAt: new Date(),
+      };
 
       // when
-      on(undefined, res);
+      on(undefined, res, appStateWithServerStopTime);
 
       // then
       expect(wakeonlanMock.wake).toHaveBeenCalled();
       expect(mockStatus).toHaveBeenCalledWith(500);
       expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+      expect(appStateWithServerStopTime.serverStartedAt).toBeUndefined();
+      expect(appStateWithServerStopTime.serverStoppedAt).not.toBeUndefined();
     });
   });
 
   describe('off function', () => {
     it('should invoke SSH and generate correct response on success', (done) => {
-      // given-when-then
-      off(undefined, res).then(() => {
+      // given
+      const appStateWithServerStartTime = {
+        ...appState,
+        serverStartedAt: new Date(),
+      };
+
+      // when-then
+      off(undefined, res, appStateWithServerStartTime).then(() => {
         expect(nodesshMock.connect).toHaveBeenCalledWith({
           host: 'Host Name',
           port: 22,
@@ -207,6 +271,23 @@ describe('services functions', () => {
         expect(nodesshMock.execCommand).toHaveBeenCalledWith('OFF Command');
         expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        expect(appStateWithServerStartTime.serverStartedAt).toBeUndefined();
+        expect(appStateWithServerStartTime.serverStoppedAt.getTime()).toEqual(1528812840000);
+        done();
+      });
+    });
+
+    it('should not alter server stop time when already defined', (done) => {
+      // given
+      const appStateWithServerStopTime = {
+        ...appState,
+        serverStoppedAt: new Date(),
+      };
+
+      // when-then
+      off(undefined, res, appStateWithServerStopTime).then(() => {
+        expect(appStateWithServerStopTime.serverStoppedAt).toBeDefined();
+        expect(appStateWithServerStopTime.serverStoppedAt.getTime()).not.toEqual(1528812840000);
         done();
       });
     });
@@ -215,14 +296,20 @@ describe('services functions', () => {
       // given
       // ExecCommand KO (rejection)
       nodesshMock.execCommand.mockImplementation(() => Promise.reject());
+      const appStateWithServerStartTime = {
+        ...appState,
+        serverStartedAt: new Date(),
+      };
 
       // when-then
-      off(undefined, res).then(() => {
+      off(undefined, res, appStateWithServerStartTime).then(() => {
         expect(nodesshMock.connect).toHaveBeenCalled();
         expect(nodesshMock.execCommand).toHaveBeenCalled();
         expect(nodesshMock.dispose).toHaveBeenCalled();
         expect(mockStatus).toHaveBeenCalledWith(500);
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        expect(appStateWithServerStartTime.serverStartedAt).not.toBeUndefined();
+        expect(appStateWithServerStartTime.serverStoppedAt).toBeUndefined();
         done();
       });
     });
@@ -233,7 +320,7 @@ describe('services functions', () => {
       nodesshMock.execCommand.mockImplementation(() => Promise.resolve({ stdin: '', stdout: '', code: 1 }));
 
       // when-then
-      off(undefined, res).then(() => {
+      off(undefined, res, appState).then(() => {
         expect(nodesshMock.connect).toHaveBeenCalled();
         expect(nodesshMock.execCommand).toHaveBeenCalled();
         expect(nodesshMock.dispose).toHaveBeenCalled();
@@ -249,7 +336,7 @@ describe('services functions', () => {
       nodesshMock.connect.mockImplementation(() => Promise.reject());
 
       // when-then
-      off(undefined, res).then(() => {
+      off(undefined, res, appState).then(() => {
         expect(nodesshMock.connect).toHaveBeenCalled();
         expect(nodesshMock.execCommand).not.toHaveBeenCalled();
         expect(nodesshMock.dispose).toHaveBeenCalled();

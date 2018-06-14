@@ -21,10 +21,11 @@ exports[`services functions on function should invoke wol and generate correct r
 exports[`services functions ping function should perform diagnosis and send appropriate response when schedule enabled 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 1 hour(s).</em></p>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
+<li>Last start/stop attempt: <b>N/A</b></li>
 <li>Ping test: OK</li>
 <li>SSH test: OK </li>
 </ul>
@@ -61,10 +62,11 @@ exports[`services functions ping function should perform diagnosis and send appr
 exports[`services functions ping function should send appropriate response when schedule disabled 1`] = `
 "
 <h1>coolupdown alive but schedule is disabled!</h1>
-<p><em>Running for 1 hour(s).</em></p>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
+<li>Last start/stop attempt: <b>N/A</b></li>
 <li>Ping test: OK</li>
 <li>SSH test: OK </li>
 </ul>
@@ -101,10 +103,11 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when server OFFLINE 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 1 hour(s).</em></p>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
 <h2>Server</h2>
 <p>Server is likely to be OFFLINE!</p>
 <ul>
+<li>Last start/stop attempt: <b>N/A</b></li>
 <li>Ping test: KO</li>
 <li>SSH test: KO </li>
 </ul>
@@ -141,10 +144,11 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when server SSH KO 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 1 hour(s).</em></p>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
+<li>Last start/stop attempt: <b>N/A</b></li>
 <li>Ping test: OK</li>
 <li>SSH test: KO </li>
 </ul>
@@ -181,11 +185,94 @@ exports[`services functions ping function should send appropriate response when 
 exports[`services functions ping function should send appropriate response when server ping KO 1`] = `
 "
 <h1>coolupdown alive and running!</h1>
-<p><em>Running for 1 hour(s).</em></p>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
 <h2>Server</h2>
 <p></p>
 <ul>
+<li>Last start/stop attempt: <b>N/A</b></li>
 <li>Ping test: KO</li>
+<li>SSH test: OK </li>
+</ul>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<h2>Configuration</h2>
+<pre>{
+  \\"app\\": {
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"00:00\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"01:00\\"
+    }
+  }
+}</pre>
+"
+`;
+
+exports[`services functions ping function should send appropriate response when serverStartedAt defined 1`] = `
+"
+<h1>coolupdown alive and running!</h1>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
+<h2>Server</h2>
+<p></p>
+<ul>
+<li>Last start attempt: <b>less than one minute ago</b>.</li>
+<li>Ping test: OK</li>
+<li>SSH test: OK </li>
+</ul>
+<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<h2>Configuration</h2>
+<pre>{
+  \\"app\\": {
+    \\"port\\": 4600,
+    \\"authEnabled\\": true
+  },
+  \\"server\\": {
+    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
+    \\"broadcastAddress\\": \\"255.255.255.255\\",
+    \\"hostname\\": \\"Host Name\\",
+    \\"user\\": \\"User\\",
+    \\"password\\": \\"********\\",
+    \\"offCommand\\": \\"OFF Command\\",
+    \\"sshPort\\": 22,
+    \\"keyPath\\": \\"Key Path\\"
+  },
+  \\"schedule\\": {
+    \\"enabled\\": true,
+    \\"on\\": {
+      \\"at\\": \\"00:00\\"
+    },
+    \\"off\\": {
+      \\"at\\": \\"01:00\\"
+    }
+  }
+}</pre>
+"
+`;
+
+exports[`services functions ping function should send appropriate response when serverStoppedAt defined 1`] = `
+"
+<h1>coolupdown alive and running!</h1>
+<p><em>Running for <b>1 hour(s)</b>.</em></p>
+<h2>Server</h2>
+<p></p>
+<ul>
+<li>Last stop attempt: <b>less than one minute ago</b>.</li>
+<li>Ping test: OK</li>
 <li>SSH test: OK </li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
