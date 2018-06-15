@@ -26,8 +26,8 @@ exports[`services functions ping function should perform diagnosis and send appr
 <p></p>
 <ul>
 <li>Last start/stop attempt: <b>N/A</b></li>
-<li>Ping test: OK</li>
-<li>SSH test: OK </li>
+<li>Ping test: <b>OK</b></li>
+<li>SSH test: <b>OK</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
@@ -67,8 +67,8 @@ exports[`services functions ping function should send appropriate response when 
 <p></p>
 <ul>
 <li>Last start/stop attempt: <b>N/A</b></li>
-<li>Ping test: OK</li>
-<li>SSH test: OK </li>
+<li>Ping test: <b>OK</b></li>
+<li>SSH test: <b>OK</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
@@ -108,8 +108,8 @@ exports[`services functions ping function should send appropriate response when 
 <p>Server is likely to be OFFLINE!</p>
 <ul>
 <li>Last start/stop attempt: <b>N/A</b></li>
-<li>Ping test: KO</li>
-<li>SSH test: KO </li>
+<li>Ping test: <b>KO</b></li>
+<li>SSH test: <b>KO</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
@@ -149,8 +149,8 @@ exports[`services functions ping function should send appropriate response when 
 <p></p>
 <ul>
 <li>Last start/stop attempt: <b>N/A</b></li>
-<li>Ping test: OK</li>
-<li>SSH test: KO </li>
+<li>Ping test: <b>OK</b></li>
+<li>SSH test: <b>KO</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
@@ -190,8 +190,8 @@ exports[`services functions ping function should send appropriate response when 
 <p></p>
 <ul>
 <li>Last start/stop attempt: <b>N/A</b></li>
-<li>Ping test: KO</li>
-<li>SSH test: OK </li>
+<li>Ping test: <b>KO</b></li>
+<li>SSH test: <b>OK</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
@@ -231,8 +231,8 @@ exports[`services functions ping function should send appropriate response when 
 <p></p>
 <ul>
 <li>Last start attempt: <b>less than one minute ago</b>.</li>
-<li>Ping test: OK</li>
-<li>SSH test: OK </li>
+<li>Ping test: <b>OK</b></li>
+<li>SSH test: <b>OK</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
@@ -272,8 +272,8 @@ exports[`services functions ping function should send appropriate response when 
 <p></p>
 <ul>
 <li>Last stop attempt: <b>less than one minute ago</b>.</li>
-<li>Ping test: OK</li>
-<li>SSH test: OK </li>
+<li>Ping test: <b>OK</b></li>
+<li>SSH test: <b>OK</b></li>
 </ul>
 <p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
 <h2>Configuration</h2>
