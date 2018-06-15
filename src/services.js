@@ -54,7 +54,10 @@ async function ping(req, res, appState) {
   const {
     isScheduleEnabled, startedAt, serverStartedAt, serverStoppedAt,
   } = appState;
-  const { ping: pingMessages } = messages;
+  const {
+    ping: pingMessages, status: statusMessages,
+  } = messages;
+
   let statusMessage;
   if (isScheduleEnabled) {
     statusMessage = pingMessages.statusTitle;
@@ -62,9 +65,8 @@ async function ping(req, res, appState) {
     statusMessage = pingMessages.statusTitleNoSchedule;
   }
 
-  const displayedConfig = loCloneDeep(config);
-
   // Server password setting is obfuscated
+  const displayedConfig = loCloneDeep(config);
   if (loGet(displayedConfig, 'server.password')) displayedConfig.server.password = '********';
 
   // Diagnostics
@@ -77,6 +79,8 @@ async function ping(req, res, appState) {
     sgPing(host),
     serverSSHTest(host, port, username, privateKey),
   ]);
+  const pingStatus = isPingSuccess ? statusMessages.okay : statusMessages.kayo;
+  const sshStatus = isSSHSuccess ? statusMessages.okay : statusMessages.kayo;
 
   // Uptime app calculation
   const now = new Date(Date.now());
@@ -84,23 +88,22 @@ async function ping(req, res, appState) {
 
   // Uptime/Downtime server calculation
   const time = computeDuration(serverStartedAt || serverStoppedAt || now, now);
-  let serverUpDownTimeMessage = messages.ping.serverUndefinedTime;
+  let serverUpDownTimeMessage = pingMessages.serverUndefinedTime;
   if (serverStartedAt) {
-    serverUpDownTimeMessage = interpolate(messages.ping.serverUptime, { time });
+    serverUpDownTimeMessage = interpolate(pingMessages.serverUptime, { time });
   } else if (serverStoppedAt) {
-    serverUpDownTimeMessage = interpolate(messages.ping.serverDowntime, { time });
+    serverUpDownTimeMessage = interpolate(pingMessages.serverDowntime, { time });
   }
 
-  // TODO use interpolation
   res.send(`
 <h1>${statusMessage}</h1>
-<p><em>${interpolate(messages.ping.appUptime, { uptime })}</em></p>
+<p><em>${interpolate(pingMessages.appUptime, { uptime })}</em></p>
 <h2>${pingMessages.serverTitle}</h2>
 <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
 <ul>
 <li>${serverUpDownTimeMessage}</li>
-<li>${pingMessages.pingItem} ${isPingSuccess ? messages.status.okay : messages.status.kayo}</li>
-<li>${pingMessages.sshItem} ${isSSHSuccess ? messages.status.okay : messages.status.kayo} </li>
+<li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
+<li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
 </ul>
 <p>${pingMessages.instructions}</p>
 <h2>${pingMessages.configurationTitle}</h2>
