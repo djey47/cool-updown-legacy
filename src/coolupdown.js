@@ -19,27 +19,42 @@ const stateWrapper = (callback, state, message) => (req, res) => {
 };
 
 /**
+ * @private
+ */
+const initAppState = () => {
+  const isScheduleEnabled = config.get('schedule.enabled');
+  const appState = {
+    isScheduleEnabled,
+    startedAt: new Date(Date.now()),
+  };
+  appState.onJob = createOnJob(config.get('schedule.on'), isScheduleEnabled, appState);
+  appState.offJob = createOffJob(config.get('schedule.off'), isScheduleEnabled, appState);
+  return appState;
+};
+
+/**
+ * @private
+ */
+const initAuth = () => {
+  const isAuthEnabled = config.get('app.authEnabled');
+  const userName = config.get('server.user');
+  const password = config.get('server.password');
+  initBasicAuth(app, isAuthEnabled, userName, password);
+};
+
+/**
  * Main entry point for HTTP server
  */
 function serverMain() {
   logger.log('info', messages.intro);
 
   const port = config.get('app.port');
-  const isScheduleEnabled = config.get('schedule.enabled');
 
   // Initial context
-  const appState = {
-    isScheduleEnabled,
-    onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled),
-    offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled),
-    startedAt: new Date(Date.now()),
-  };
+  const appState = initAppState();
 
-  // Auth support
-  const isAuthEnabled = config.get('app.authEnabled');
-  const userName = config.get('server.user');
-  const password = config.get('server.password');
-  initBasicAuth(app, isAuthEnabled, userName, password);
+  // Authentication support
+  initAuth();
 
   // Request mapping
   app.get('/', stateWrapper(ping, appState, 'ping'));
