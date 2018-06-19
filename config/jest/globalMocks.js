@@ -11,10 +11,11 @@ jest.mock('app-root-dir', () => ({
 
 // cron
 const mockCronStart = jest.fn();
+const mockCronJob = jest.fn(() => ({
+  start: () => mockCronStart(),
+}));
 jest.mock('cron', () => ({
-  CronJob: jest.fn(() => ({
-    start: () => mockCronStart(),
-  })),
+  CronJob: mockCronJob,
 }));
 
 // express-basic-auth
@@ -66,6 +67,7 @@ module.exports = {
     get: mockAppRootDirGet,
   },
   cronMock: {
+    Job: mockCronJob,
     start: mockCronStart,
   },
   expressBasicAuthMock: mockBasicAuthPlugin,

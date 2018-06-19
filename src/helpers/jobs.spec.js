@@ -3,31 +3,36 @@ const { createOnJob, createOffJob, toCronSyntax } = require('./jobs');
 
 describe('jobs helper functions', () => {
   beforeEach(() => {
-    cronMock.start.mockReset();
+    cronMock.Job.mockClear();
+    cronMock.start.mockClear();
   });
 
   const schedule = {
     at: '10:42',
   };
 
+  const appState = {};
+
   describe('createOnJob function', () => {
     it('should create enabled job', () => {
       // given-when
-      const actual = createOnJob(schedule, true);
+      const actual = createOnJob(schedule, true, appState);
 
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
+      expect(cronMock.Job).toHaveBeenCalled();
       expect(cronMock.start).toHaveBeenCalled();
     });
 
     it('should create disabled job', () => {
       // given-when
-      const actual = createOnJob(schedule, false);
+      const actual = createOnJob(schedule, false, appState);
 
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
+      expect(cronMock.Job).toHaveBeenCalled();
       expect(cronMock.start).not.toHaveBeenCalled();
     });
   });
@@ -35,21 +40,23 @@ describe('jobs helper functions', () => {
   describe('createOffJob function', () => {
     it('should create enabled job', () => {
       // given-when
-      const actual = createOffJob(schedule, true);
+      const actual = createOffJob(schedule, true, appState);
 
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
+      expect(cronMock.Job).toHaveBeenCalled();
       expect(cronMock.start).toHaveBeenCalled();
     });
 
     it('should create disabled job', () => {
       // given-when
-      const actual = createOffJob(schedule, false);
+      const actual = createOffJob(schedule, false, appState);
 
       // then
       expect(actual).not.toBeNull();
       expect(actual).not.toBeUndefined();
+      expect(cronMock.Job).toHaveBeenCalled();
       expect(cronMock.start).not.toHaveBeenCalled();
     });
   });

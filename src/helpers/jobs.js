@@ -26,8 +26,13 @@ function toCronSyntax({ at }) {
 /**
  * @private
  */
-function createJobAndStart(callBack, action, schedule, isEnabled) {
-  const job = new CronJob(toCronSyntax(schedule), cronWrapper(callBack, action));
+function createJobAndStart(callBack, action, schedule, isEnabled, appState) {
+  if (!appState) throw new Error('Error: createJobAndStart: appState argument is not mandatory');
+
+  const enhancedCallBack = () => {
+    callBack(undefined, undefined, appState);
+  };
+  const job = new CronJob(toCronSyntax(schedule), cronWrapper(enhancedCallBack, action));
   if (isEnabled) job.start();
   return job;
 }
@@ -35,15 +40,15 @@ function createJobAndStart(callBack, action, schedule, isEnabled) {
 /**
  * Creates ON job and starts it if enabled
  */
-function createOnJob(schedule, isEnabled) {
-  return createJobAndStart(on, 'on', schedule, isEnabled);
+function createOnJob(schedule, isEnabled, appState) {
+  return createJobAndStart(on, 'on', schedule, isEnabled, appState);
 }
 
 /**
  * Creates OFF job and starts it if enabled
  */
-function createOffJob(schedule, isEnabled) {
-  return createJobAndStart(off, 'off', schedule, isEnabled);
+function createOffJob(schedule, isEnabled, appState) {
+  return createJobAndStart(off, 'off', schedule, isEnabled, appState);
 }
 
 module.exports = {
