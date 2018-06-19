@@ -25,6 +25,7 @@
   "scripts": {
     "start": "node src/coolupdown.js",
     "start:service": "nohup npm start >/dev/null 2>&1 &",
+    "start:service-debug": "mkdir -p ./logs && nohup npm start >>./logs/debug.log 2>&1 &",
     "stop": "pkill --signal SIGINT cool-updown",
     "logs": "tail -500f logs/app.log",
     "logs:all": "less logs/app.log",
