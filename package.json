@@ -55,6 +55,7 @@
     "setupFiles": [
       "<rootDir>/config/jest/globalMocks.js"
     ],
-    "testURL": "http://localhost"
+    "testURL": "http://localhost",
+    "testEnvironment": "node"
   }
 }
