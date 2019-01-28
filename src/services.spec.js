@@ -1,4 +1,9 @@
-const { appRootDirMock, nodesshMock, wakeonlanMock } = require('../config/jest/globalMocks');
+const {
+  appRootDirMock,
+  axiosMock,
+  nodesshMock,
+  wakeonlanMock,
+} = require('../config/jest/globalMocks');
 const {
   ping,
   on,
@@ -47,6 +52,9 @@ describe('services functions', () => {
       f();
     });
 
+    // HTTP OK
+    axiosMock.get.mockImplementation(() => Promise.resolve());
+
     mockStatus.mockImplementation(() => res);
 
     nodesshMock.execCommand.mockImplementation(() => Promise.resolve({ stdout: '', stderr: '', code: 0 }));
@@ -86,6 +94,7 @@ describe('services functions', () => {
           username: 'User',
         });
         expect(nodesshMock.dispose).toHaveBeenCalled();
+        expect(axiosMock.get).toHaveBeenCalledWith('http://localhost');
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -136,6 +145,7 @@ describe('services functions', () => {
         expect(mockGatewayPing).toHaveBeenCalled();
         expect(nodesshMock.connect).toHaveBeenCalled();
         expect(nodesshMock.dispose).toHaveBeenCalled();
+        expect(axiosMock.get).toHaveBeenCalled();
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -155,6 +165,26 @@ describe('services functions', () => {
         expect(mockGatewayPing).toHaveBeenCalled();
         expect(nodesshMock.connect).toHaveBeenCalled();
         expect(nodesshMock.dispose).toHaveBeenCalled();
+        expect(axiosMock.get).toHaveBeenCalled();
+        expect(mockSend).toHaveBeenCalled();
+        expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
+        done();
+      });
+    });
+
+    it('should send appropriate response when server HTTP KO', (done) => {
+      // given
+      const state = {
+        ...appState,
+      };
+      // SSH KO
+      axiosMock.get.mockImplementation(() => Promise.reject());
+
+      // when-then
+      ping({}, res, state).then(() => {
+        expect(mockGatewayPing).toHaveBeenCalled();
+        expect(nodesshMock.connect).toHaveBeenCalled();
+        expect(axiosMock.get).toHaveBeenCalledWith('http://localhost');
         expect(mockSend).toHaveBeenCalled();
         expect(mockSend.mock.calls[0][0]).toMatchSnapshot();
         done();
@@ -170,6 +200,8 @@ describe('services functions', () => {
       mockGatewayPing.mockImplementation(() => Promise.resolve(false));
       // SSH KO
       nodesshMock.connect.mockImplementation(() => Promise.reject());
+      // HTTP KO
+      axiosMock.get.mockImplementation(() => Promise.reject());
 
       // when-then
       ping({}, res, state).then(() => {

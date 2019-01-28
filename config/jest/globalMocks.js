@@ -9,6 +9,14 @@ jest.mock('app-root-dir', () => ({
   get: () => mockAppRootDirGet(),
 }));
 
+// axios
+const mockAxiosGet = jest.fn();
+jest.mock('axios', () => ({
+  default: {
+    get: url => mockAxiosGet(url),
+  },
+}));
+
 // cron
 const mockCronStart = jest.fn();
 const mockCronJob = jest.fn(() => ({
@@ -65,6 +73,9 @@ module.exports = {
   },
   appRootDirMock: {
     get: mockAppRootDirGet,
+  },
+  axiosMock: {
+    get: mockAxiosGet,
   },
   cronMock: {
     Job: mockCronJob,

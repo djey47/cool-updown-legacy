@@ -11,7 +11,8 @@
     "password": "alice",
     "offCommand": "sudo -S shutdown -h 1",
     "sshPort": 22,
-    "keyPath": "/home/user/.ssh/id_rsa"
+    "keyPath": "/home/user/.ssh/id_rsa",
+    "url": "https//homepage"
   },
   "schedule": {
     "enabled": true,

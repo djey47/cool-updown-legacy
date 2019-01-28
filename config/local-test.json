@@ -11,7 +11,8 @@
     "password": "Password",
     "offCommand": "OFF Command",
     "sshPort": 22,
-    "keyPath": "Key Path"
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
   "schedule": {
     "enabled": true,
