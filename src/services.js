@@ -8,6 +8,8 @@ const loGet = require('lodash/get');
 const appRootDir = require('app-root-dir');
 const path = require('path');
 const differenceInMilliseconds = require('date-fns/difference_in_milliseconds');
+const axios = require('axios');
+const https = require('https');
 const messages = require('./resources/messages');
 const { ping: sgPing } = require('./helpers/systemGateway');
 const logger = require('./helpers/logger');
@@ -35,6 +37,23 @@ async function serverSSHTest(host, port, username, privateKey) {
     return Promise.resolve(false);
   } finally {
     ssh.dispose();
+  }
+}
+
+/**
+ * @private
+ */
+async function serverHTTPTest(url) {
+  try {
+    const httpsAgent = new https.Agent({
+      rejectUnauthorized: false,
+    });
+    await axios.default.get(url, { httpsAgent });
+    logger.log('info', '(ping) HTTP connection OK');
+    return Promise.resolve(true);
+  } catch (err) {
+    logger.error(`(ping) HTTP connection KO: ${err}`);
+    return Promise.resolve(false);
   }
 }
 
@@ -74,13 +93,16 @@ async function ping(req, res, appState) {
   const port = config.get('server.sshPort');
   const username = config.get('server.user');
   const privateKey = config.get('server.keyPath');
+  const url = config.get('server.url');
 
-  const [isPingSuccess, isSSHSuccess] = await Promise.all([
+  const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
     sgPing(host),
     serverSSHTest(host, port, username, privateKey),
+    url ? serverHTTPTest(url) : Promise.resolve(false),
   ]);
   const pingStatus = isPingSuccess ? statusMessages.okay : statusMessages.kayo;
   const sshStatus = isSSHSuccess ? statusMessages.okay : statusMessages.kayo;
+  const httpStatus = isHTTPSuccess ? statusMessages.okay : statusMessages.kayo;
 
   // Uptime app calculation
   const now = new Date(Date.now());
@@ -101,9 +123,10 @@ async function ping(req, res, appState) {
 <h2>${pingMessages.serverTitle}</h2>
 <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
 <ul>
-<li>${serverUpDownTimeMessage}</li>
-<li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
-<li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
+  <li>${serverUpDownTimeMessage}</li>
+  <li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
+  <li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
+  <li>${interpolate(pingMessages.httpItem, { httpStatus, url })}</li>
 </ul>
 <p>${pingMessages.instructions}</p>
 <h2>${pingMessages.configurationTitle}</h2>

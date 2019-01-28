@@ -15,6 +15,7 @@ const messages = {
     serverTitle: 'Server',
     pingItem: 'Ping test: <b>{pingStatus}</b>',
     sshItem: 'SSH test: <b>{sshStatus}</b>',
+    httpItem: 'HTTP test: <b>{httpStatus}</b> <a href="{url}" target="_blank">URL</a>',
     instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
     offline: 'Server is likely to be OFFLINE!',
     appUptime: 'Running for <b>{uptime}</b>.',

@@ -1,6 +1,8 @@
 # cool-updown
 NodeJS script to enable scheduled server start/stop. Runs as a HTTP server.
 
+It also pings monitored server (ICMP, SSH, HTTP) and display result.
+
 [ ![Codeship Status for djey47/cool-updown](https://app.codeship.com/projects/73f40680-44c8-0136-0fea-7ae0ce2de283/status?branch=master)](https://app.codeship.com/projects/291823)
 
 ## Install
@@ -38,7 +40,8 @@ Default configuration is given as example in `config/default.json` file.
     "password": "alice",
     "offCommand": "sudo -S shutdown -h 1",
     "sshPort": 22,
-    "keyPath": "/home/user/.ssh/id_rsa"
+    "keyPath": "/home/user/.ssh/id_rsa",
+    "url": "http://localhost"
   },
   "schedule": {
     "enabled": true,
@@ -69,13 +72,14 @@ Note: `config/local-test.json` is used for testing during development only!
 | `server.offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
 | `server.password`| password for user above | alice (**change it**) |
 | `server.sshPort`| TCP port to join your server via SSH | 22 |
+| `server.url` | location to test server access via HTTP | http://localhost (**optional**) |
 | `server.user`| user name to join your server via SSH (sudoer) | bob (**change it**) |
 | `schedule.enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
 | `schedule.on.at`, `schedule.off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
 
 ### SSH Configuration
 
-OFF command does require a correct communication via SSH; you should check both parts below:
+OFF command does require a working communication via SSH; you should check both parts below:
 
 #### Client side
 - Get or generate RSA key pairs
@@ -121,6 +125,7 @@ Server is likely to be OFFLINE!
 
 - Ping test: KO
 - SSH test: KO
+- HTTP test: KO URL
 
 See logs for details.
 
@@ -166,6 +171,6 @@ Path: `/off`
 
 Path: `/enable`
 
-#### SCHEDULE DISABLE: will NOT automatically turns server ON/OFF at given hours
+#### SCHEDULE DISABLE: will stop turning server ON/OFF at given hours
 
 Path: `/disable`
