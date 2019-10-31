@@ -41,7 +41,9 @@
   "keywords": [
     "nodejs",
     "updown",
-    "cron"
+    "cron",
+    "wol",
+    "ssh"
   ],
   "author": "djey",
   "license": "MIT",
