@@ -9,10 +9,11 @@ beforeEach(() => {
 describe('default logger', () => {
   it('should create logs directory and Winston Logger instance', () => {
     // given-when
-    require('./logger'); // eslint-disable-line
+    require('./logger'); // eslint-disable-line global-require
 
     // then
-    expect(shelljsMock.mkdir).toHaveBeenCalledWith('-p', 'test/logs');
+    expect(shelljsMock.mkdir.mock.calls[0][0]).toEqual('-p');
+    expect(shelljsMock.mkdir.mock.calls[0][1].replace('\\', '/')).toEqual('test/logs');
 
     expect(winstonMock.Logger).toHaveBeenCalledWith({
       handleExceptions: false,
@@ -22,6 +23,8 @@ describe('default logger', () => {
 
     expect(winstonMock.Transport).toHaveBeenCalledTimes(2);
     expect(winstonMock.Transport).toHaveBeenCalledWith({ timestamp: true });
-    expect(winstonMock.Transport).toHaveBeenCalledWith({ filename: 'test/logs/app.log', json: false });
+    const [, [{ filename, json }]] = winstonMock.Transport.mock.calls;
+    expect(filename.replace(/\\/g, '/')).toEqual('test/logs/app.log');
+    expect(json).toBe(false);
   });
 });
