@@ -11,7 +11,7 @@ const differenceInMilliseconds = require('date-fns/difference_in_milliseconds');
 const axios = require('axios');
 const https = require('https');
 const messages = require('./resources/messages');
-const { ping: sgPing } = require('./helpers/systemGateway');
+const systemGateway = require('./helpers/systemGateway');
 const logger = require('./helpers/logger');
 const { interpolate, toHumanDuration } = require('./helpers/format');
 const { getTimeDetails } = require('./helpers/date');
@@ -31,10 +31,10 @@ async function serverSSHTest(host, port, username, privateKey) {
       privateKey,
     });
     logger.log('info', '(ping) SSH connection OK');
-    return Promise.resolve(true);
+    return true;
   } catch (err) {
     logger.error(`(ping) SSH connection KO: ${err}`);
-    return Promise.resolve(false);
+    return false;
   } finally {
     ssh.dispose();
   }
@@ -96,7 +96,7 @@ async function ping(req, res, appState) {
   const url = config.get('server.url');
 
   const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
-    sgPing(host),
+    systemGateway.ping(host),
     serverSSHTest(host, port, username, privateKey),
     url ? serverHTTPTest(url) : Promise.resolve(false),
   ]);
@@ -106,7 +106,7 @@ async function ping(req, res, appState) {
 
   // Uptime app calculation
   const now = new Date(Date.now());
-  const uptime = computeDuration(startedAt, now);
+  const uptime = computeDuration(startedAt || now, now);
 
   // Uptime/Downtime server calculation
   const time = computeDuration(serverStartedAt || serverStoppedAt || now, now);
@@ -132,8 +132,6 @@ async function ping(req, res, appState) {
 <h2>${pingMessages.configurationTitle}</h2>
 <pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>
 `);
-
-  return Promise.resolve();
 }
 
 /**

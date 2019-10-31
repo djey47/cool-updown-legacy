@@ -28,8 +28,7 @@ jest.mock('cron', () => ({
 
 // express-basic-auth
 const mockBasicAuthPlugin = jest.fn();
-jest.mock('express-basic-auth', () =>
-  settings => mockBasicAuthPlugin(settings));
+jest.mock('express-basic-auth', () => settings => mockBasicAuthPlugin(settings));
 
 // node-ssh
 const mockSSHConnect = jest.fn();
@@ -67,6 +66,17 @@ jest.mock('winston', () => ({
   },
 }));
 
+// PROJECT SPECIFIC //
+const mockExpressResponseStatus = jest.fn();
+const mockExpressResponseSend = jest.fn();
+
+const mockOnJobStart = jest.fn();
+const mockOffJobStart = jest.fn();
+const mockOnJobStop = jest.fn();
+const mockOffJobStop = jest.fn();
+
+const mockGatewayPing = jest.fn();
+
 module.exports = {
   dateMock: {
     now: mockDateNow,
@@ -96,5 +106,21 @@ module.exports = {
   },
   wakeonlanMock: {
     wake: mockWOLWake,
+  },
+  expressResponseMock: {
+    statusMock: mockExpressResponseStatus,
+    sendMock: mockExpressResponseSend,
+    status: c => mockExpressResponseStatus(c),
+    send: msg => mockExpressResponseSend(msg),
+  },
+  jobsMock: {
+    onJobStart: mockOnJobStart,
+    offJobStart: mockOffJobStart,
+    onJobStop: mockOnJobStop,
+    offJobStop: mockOffJobStop,
+  },
+  systemGatewayMock: {
+    ping: h => mockGatewayPing(h),
+    pingMock: mockGatewayPing,
   },
 };
