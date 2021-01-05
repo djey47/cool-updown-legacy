@@ -5,7 +5,7 @@
   "main": "src/coolupdown",
   "dependencies": {
     "app-root-dir": "^1.0.2",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "config": "^3.1.0",
     "cron": "^1.7.1",
     "date-fns": "^1.30.1",
