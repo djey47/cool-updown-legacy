@@ -13,7 +13,7 @@
     "express-basic-auth": "^1.2.0",
     "lodash": "^4.17.21",
     "node-ssh": "^6.0.0",
-    "shelljs": "^0.8.3",
+    "shelljs": "^0.8.5",
     "wake_on_lan": "^1.0.0",
     "winston": "^2.4.4"
   },
