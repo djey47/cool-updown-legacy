@@ -1,4 +1,4 @@
-const NodeSSH = require('node-ssh');
+const { NodeSSH } = require('node-ssh');
 const wol = require('wake_on_lan');
 const config = require('config');
 const fs = require('fs');
