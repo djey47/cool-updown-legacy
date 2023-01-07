@@ -34,11 +34,13 @@ jest.mock('express-basic-auth', () => settings => mockBasicAuthPlugin(settings))
 const mockSSHConnect = jest.fn();
 const mockSSHExecCommand = jest.fn();
 const mockSSHDispose = jest.fn();
-jest.mock('node-ssh', () => jest.fn(() => ({
-  connect: o => mockSSHConnect(o),
-  execCommand: c => mockSSHExecCommand(c),
-  dispose: () => mockSSHDispose(),
-})));
+jest.mock('node-ssh', () => ({
+  NodeSSH: jest.fn(() => ({
+    connect: o => mockSSHConnect(o),
+    execCommand: c => mockSSHExecCommand(c),
+    dispose: () => mockSSHDispose(),
+  })),
+}));
 
 // shelljs
 const mockShellMkdir = jest.fn();
