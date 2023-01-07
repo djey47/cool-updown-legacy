@@ -28,33 +28,33 @@ exports[`services functions ping function should perform diagnosis and send appr
   <li>Last start/stop attempt: <b>N/A</b></li>
   <li>Ping test: <b>OK</b></li>
   <li>SSH test: <b>OK</b></li>
-  <li>HTTP test: <b>OK</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -71,33 +71,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last start/stop attempt: <b>N/A</b></li>
   <li>Ping test: <b>OK</b></li>
   <li>SSH test: <b>OK</b></li>
-  <li>HTTP test: <b>OK</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -114,33 +114,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last start/stop attempt: <b>N/A</b></li>
   <li>Ping test: <b>OK</b></li>
   <li>SSH test: <b>OK</b></li>
-  <li>HTTP test: <b>KO</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>KO</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -157,33 +157,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last start/stop attempt: <b>N/A</b></li>
   <li>Ping test: <b>KO</b></li>
   <li>SSH test: <b>KO</b></li>
-  <li>HTTP test: <b>KO</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>KO</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -200,33 +200,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last start/stop attempt: <b>N/A</b></li>
   <li>Ping test: <b>OK</b></li>
   <li>SSH test: <b>KO</b></li>
-  <li>HTTP test: <b>OK</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -243,33 +243,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last start/stop attempt: <b>N/A</b></li>
   <li>Ping test: <b>KO</b></li>
   <li>SSH test: <b>OK</b></li>
-  <li>HTTP test: <b>OK</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -286,33 +286,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last start attempt: <b>less than one minute ago</b>.</li>
   <li>Ping test: <b>OK</b></li>
   <li>SSH test: <b>OK</b></li>
-  <li>HTTP test: <b>OK</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>
@@ -329,33 +329,33 @@ exports[`services functions ping function should send appropriate response when 
   <li>Last stop attempt: <b>less than one minute ago</b>.</li>
   <li>Ping test: <b>OK</b></li>
   <li>SSH test: <b>OK</b></li>
-  <li>HTTP test: <b>OK</b> <a href=\\"http://localhost\\" target=\\"_blank\\">URL</a></li>
+  <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
 </ul>
-<p>See <a href=\\"/logs\\" target=\\"_blank\\">logs</a> for details.</p>
+<p>See <a href="/logs" target="_blank">logs</a> for details.</p>
 <h2>Configuration</h2>
 <pre>{
-  \\"app\\": {
-    \\"port\\": 4600,
-    \\"authEnabled\\": true
+  "app": {
+    "port": 4600,
+    "authEnabled": true
   },
-  \\"server\\": {
-    \\"macAddress\\": \\"FF:FF:FF:FF:FF:FF:FF:FF\\",
-    \\"broadcastAddress\\": \\"255.255.255.255\\",
-    \\"hostname\\": \\"Host Name\\",
-    \\"user\\": \\"User\\",
-    \\"password\\": \\"********\\",
-    \\"offCommand\\": \\"OFF Command\\",
-    \\"sshPort\\": 22,
-    \\"keyPath\\": \\"Key Path\\",
-    \\"url\\": \\"http://localhost\\"
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
   },
-  \\"schedule\\": {
-    \\"enabled\\": true,
-    \\"on\\": {
-      \\"at\\": \\"00:00\\"
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
     },
-    \\"off\\": {
-      \\"at\\": \\"01:00\\"
+    "off": {
+      "at": "01:00"
     }
   }
 }</pre>

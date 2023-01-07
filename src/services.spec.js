@@ -71,7 +71,7 @@ describe('services functions', () => {
   };
 
   describe('ping function', () => {
-    it('should perform diagnosis and send appropriate response when schedule enabled', async (done) => {
+    it('should perform diagnosis and send appropriate response when schedule enabled', async () => {
       // given
       const state = {
         ...appState,
@@ -92,10 +92,9 @@ describe('services functions', () => {
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when serverStartedAt defined', async (done) => {
+    it('should send appropriate response when serverStartedAt defined', async () => {
       // given
       const state = {
         ...appState,
@@ -108,10 +107,9 @@ describe('services functions', () => {
       // then
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when serverStoppedAt defined', async (done) => {
+    it('should send appropriate response when serverStoppedAt defined', async () => {
       // given
       const state = {
         ...appState,
@@ -124,10 +122,9 @@ describe('services functions', () => {
       // then
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when server ping KO', async (done) => {
+    it('should send appropriate response when server ping KO', async () => {
       // given
       const state = {
         ...appState,
@@ -144,10 +141,9 @@ describe('services functions', () => {
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when server SSH KO', async (done) => {
+    it('should send appropriate response when server SSH KO', async () => {
       // given
       const state = {
         ...appState,
@@ -164,10 +160,9 @@ describe('services functions', () => {
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when server HTTP KO', async (done) => {
+    it('should send appropriate response when server HTTP KO', async () => {
       // given
       const state = {
         ...appState,
@@ -184,10 +179,9 @@ describe('services functions', () => {
       expect(axiosMock.get).toHaveBeenCalledWith('http://localhost');
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when server OFFLINE', async (done) => {
+    it('should send appropriate response when server OFFLINE', async () => {
       // given
       const state = {
         ...appState,
@@ -205,10 +199,9 @@ describe('services functions', () => {
       // then
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should send appropriate response when schedule disabled', async (done) => {
+    it('should send appropriate response when schedule disabled', async () => {
       // given
       const state = {
         ...appState,
@@ -221,7 +214,6 @@ describe('services functions', () => {
       // then
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
   });
 
@@ -284,7 +276,7 @@ describe('services functions', () => {
   });
 
   describe('off function', () => {
-    it('should invoke SSH and generate correct response on success', async (done) => {
+    it('should invoke SSH and generate correct response on success', async () => {
       // given
       const appStateWithServerStartTime = {
         ...appState,
@@ -306,10 +298,9 @@ describe('services functions', () => {
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
       expect(appStateWithServerStartTime.serverStartedAt).toBeUndefined();
       expect(appStateWithServerStartTime.serverStoppedAt.getTime()).toEqual(1528812840000);
-      done();
     });
 
-    it('should not alter server stop time when already defined', async (done) => {
+    it('should not alter server stop time when already defined', async () => {
       // given
       const appStateWithServerStopTime = {
         ...appState,
@@ -322,10 +313,9 @@ describe('services functions', () => {
       // then
       expect(appStateWithServerStopTime.serverStoppedAt).toBeDefined();
       expect(appStateWithServerStopTime.serverStoppedAt.getTime()).not.toEqual(1528812840000);
-      done();
     });
 
-    it('should invoke SSH and generate correct response on failure (promise rejection)', async (done) => {
+    it('should invoke SSH and generate correct response on failure (promise rejection)', async () => {
       // given
       // ExecCommand KO (rejection)
       nodesshMock.execCommand.mockImplementation(() => Promise.reject());
@@ -345,10 +335,9 @@ describe('services functions', () => {
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
       expect(appStateWithServerStartTime.serverStartedAt).not.toBeUndefined();
       expect(appStateWithServerStartTime.serverStoppedAt).toBeUndefined();
-      done();
     });
 
-    it('should invoke SSH and generate correct response on command failure', async (done) => {
+    it('should invoke SSH and generate correct response on command failure', async () => {
       // given
       // ExecCommand KO (non 0 exit code)
       nodesshMock.execCommand.mockImplementation(() => Promise.resolve({ stdin: '', stdout: '', code: 1 }));
@@ -362,10 +351,9 @@ describe('services functions', () => {
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.statusMock).toHaveBeenCalledWith(500);
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
 
-    it('should invoke SSH and generate correct response on connect failure', async (done) => {
+    it('should invoke SSH and generate correct response on connect failure', async () => {
       // given
       // Connect KO
       nodesshMock.connect.mockImplementation(() => Promise.reject());
@@ -379,7 +367,6 @@ describe('services functions', () => {
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.statusMock).toHaveBeenCalledWith(500);
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
     });
   });
 
@@ -426,7 +413,7 @@ describe('services functions', () => {
   });
 
   describe('logs function', () => {
-    it('should return 204 if no log file', async (done) => {
+    it('should return 204 if no log file', async () => {
       // given
       appRootDirMock.get.mockImplementationOnce(() => '/foo/bar');
 
@@ -436,17 +423,16 @@ describe('services functions', () => {
       // then
       expect(expressResponseMock.statusMock).toHaveBeenCalledWith(204);
       expect(expressResponseMock.sendMock).toHaveBeenCalledWith(undefined);
-      done();
     });
 
-    it('should generate correct response with log file', async (done) => {
+    it('should generate correct response with log file', async () => {
       // given-when
       await logs(undefined, res);
 
       // then
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      done();
+      // done();
     });
   });
 });
