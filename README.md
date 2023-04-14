@@ -10,9 +10,9 @@ It also pings monitored server (ICMP, SSH, HTTP) and display result.
 
 ### Requirements
 - *Client*:
-  - Linux / Windows 10 + WSL
+  - Linux / Windows + WSL
   - LAN properly configured
-  - NodeJS v14+
+  - NodeJS v18
   - Yarn (optionally)
 - *Remote server*:
   - Linux
