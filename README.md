@@ -93,7 +93,7 @@ OFF command does require a working communication via SSH; you should check both 
 ### Run
 Simply with `npm start` or `yarn start`.
 
-Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background.
+Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background; you may also use [PM2](https://pm2.keymetrics.io/) to manage running it as a service.
 
 For debugging purposes, commands are also available `npm run start:service-debug` or `yarn start:service-debug`: a `logs/debug.log` file will be created with all console output including fatal errors.
 
