@@ -130,7 +130,7 @@ async function ping(req, res, appState) {
 </ul>
 <p>${pingMessages.instructions}</p>
 <h2>${pingMessages.configurationTitle}</h2>
-<pre>${JSON.stringify(displayedConfig, null, '  ')}</pre>
+<pre>${JSON.stringify(displayedConfig, null, 2)}</pre>
 `);
 }
 
