@@ -1,8 +1,7 @@
 const { NodeSSH } = require('node-ssh');
 const wol = require('wake_on_lan');
 const config = require('config');
-const fs = require('fs');
-const util = require('util');
+const fs = require('fs/promises');
 const loCloneDeep = require('lodash/cloneDeep');
 const loGet = require('lodash/get');
 const appRootDir = require('app-root-dir');
@@ -17,12 +16,26 @@ const { interpolate, toHumanDuration } = require('./helpers/format');
 const { getTimeDetails } = require('./helpers/date');
 
 const ssh = new NodeSSH();
-const readFilePromisified = util.promisify(fs.readFile);
+
+/**
+ * @private
+ * @return Promise which resolves to String,
+ * with the contents of SSH private key as per provided keyPath in configuration
+ */
+async function readPrivateKey() {
+  const privateKeyPath = config.get('server.keyPath');
+  const privateKey = await fs.readFile(privateKeyPath, 'utf-8');
+
+  // console.log('services::getPrivateKey', { privateKeyPath, privateKey });
+
+  return privateKey;
+}
 
 /**
  * @private
  */
-async function serverSSHTest(host, port, username, privateKey) {
+async function serverSSHTest(host, port, username) {
+  const privateKey = await readPrivateKey();
   try {
     await ssh.connect({
       host,
@@ -92,12 +105,11 @@ async function ping(req, res, appState) {
   const host = config.get('server.hostname');
   const port = config.get('server.sshPort');
   const username = config.get('server.user');
-  const privateKey = config.get('server.keyPath');
   const url = config.get('server.url');
 
   const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
     systemGateway.ping(host),
-    serverSSHTest(host, port, username, privateKey),
+    serverSSHTest(host, port, username),
     url ? serverHTTPTest(url) : Promise.resolve(false),
   ]);
   const pingStatus = isPingSuccess ? statusMessages.okay : statusMessages.kayo;
@@ -165,16 +177,16 @@ function on(req, res, appState) {
 /**
  * Handles OFF request
  */
-async function off(req, res, appState) {
+async function off(_req, res, appState) {
   const currentState = appState;
   const host = config.get('server.hostname');
   const port = config.get('server.sshPort');
   const username = config.get('server.user');
   const password = config.get('server.password');
-  const privateKey = config.get('server.keyPath');
   const command = config.get('server.offCommand');
 
   try {
+    const privateKey = await readPrivateKey();
     await ssh.connect({
       host,
       port,
@@ -232,9 +244,9 @@ function disableSchedule(req, res, appState) {
 /**
  * Handles LOGS request
  */
-async function logs(req, res) {
+async function logs(_req, res) {
   try {
-    const logsContents = await readFilePromisified(path.join(appRootDir.get(), 'logs', 'app.log'));
+    const logsContents = await fs.readFile(path.join(appRootDir.get(), 'logs', 'app.log'));
 
     res.send(`<pre>${logsContents}<pre>`);
   } catch (error) {

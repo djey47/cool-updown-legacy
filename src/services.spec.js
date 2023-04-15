@@ -1,6 +1,7 @@
 const {
   appRootDirMock,
   axiosMock,
+  nodeFSMock,
   nodesshMock,
   wakeonlanMock,
   expressResponseMock,
@@ -37,6 +38,7 @@ describe('services functions', () => {
     jobsMock.offJobStart.mockReset();
     jobsMock.onJobStop.mockReset();
     jobsMock.offJobStop.mockReset();
+    nodeFSMock.readFile.mockReset();
 
     // Ping OK
     mockSystemGateway.pingMock.mockResolvedValue(true);
@@ -71,6 +73,10 @@ describe('services functions', () => {
   };
 
   describe('ping function', () => {
+    beforeEach(() => {
+      nodeFSMock.readFile.mockResolvedValue('=== PRIVATE KEY ===');
+    });
+
     it('should perform diagnosis and send appropriate response when schedule enabled', async () => {
       // given
       const state = {
@@ -86,7 +92,7 @@ describe('services functions', () => {
       expect(nodesshMock.connect).toHaveBeenCalledWith({
         host: 'Host Name',
         port: 22,
-        privateKey: 'Key Path',
+        privateKey: '=== PRIVATE KEY ===',
         username: 'User',
       });
       expect(nodesshMock.dispose).toHaveBeenCalled();
@@ -276,6 +282,10 @@ describe('services functions', () => {
   });
 
   describe('off function', () => {
+    beforeEach(() => {
+      nodeFSMock.readFile.mockResolvedValue('=== PRIVATE KEY ===');
+    });
+
     it('should invoke SSH and generate correct response on success', async () => {
       // given
       const appStateWithServerStartTime = {
@@ -290,7 +300,7 @@ describe('services functions', () => {
       expect(nodesshMock.connect).toHaveBeenCalledWith({
         host: 'Host Name',
         port: 22,
-        privateKey: 'Key Path',
+        privateKey: '=== PRIVATE KEY ===',
         username: 'User',
       });
       expect(nodesshMock.execCommand).toHaveBeenCalledWith('OFF Command');
@@ -413,8 +423,13 @@ describe('services functions', () => {
   });
 
   describe('logs function', () => {
+    beforeEach(() => {
+      nodeFSMock.readFile.mockResolvedValue('These are logs contents');
+    });
+
     it('should return 204 if no log file', async () => {
       // given
+      nodeFSMock.readFile.mockRejectedValue('file not found');
       appRootDirMock.get.mockImplementationOnce(() => '/foo/bar');
 
       // when

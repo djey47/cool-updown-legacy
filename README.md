@@ -68,7 +68,7 @@ Note: `config/local-test.json` is used for testing during development only!
 | `app.port`| TCP port to be used by the service | 4600 |
 | `server.broadcastAddress`| useful to fix wake on lan on Windows systems, eventually | 255.255.255.255 |
 | `server.hostName`| name or IP address to join your server via SSH | myserver (**change it**) |
-| `server.keyPath`| location of your private key to be used for SSH | /home/user/.ssh/id_rsa (**change it**) |
+| `server.keyPath`| location of your private key to be used for SSH (PEM format, RSA only supported) | /home/user/.ssh/id_rsa (**change it**) |
 | `server.macAddress`| used to wake the server up | FF:FF:FF:FF:FF:FF:FF:FF (**change it**) |
 | `server.offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
 | `server.password`| password for user above | alice (**change it**) |

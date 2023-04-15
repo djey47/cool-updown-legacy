@@ -2,6 +2,13 @@
 const mockDateNow = jest.fn(() => new Date('June 12, 2018 14:14:00Z'));
 Date.now = mockDateNow;
 
+// NODE API //
+// fs
+const mockFSReadFile = jest.fn();
+jest.mock('fs/promises', () => ({
+  readFile: async (p, e) => mockFSReadFile(p, e),
+}));
+
 // NODE MODULES //
 // app-root-dir
 const mockAppRootDirGet = jest.fn(() => './test');
@@ -124,5 +131,8 @@ module.exports = {
   systemGatewayMock: {
     ping: h => mockGatewayPing(h),
     pingMock: mockGatewayPing,
+  },
+  nodeFSMock: {
+    readFile: mockFSReadFile,
   },
 };
