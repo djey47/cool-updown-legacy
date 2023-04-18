@@ -1,5 +1,5 @@
-const childProcess = require('child_process');
-const logger = require('./logger');
+import childProcess from 'child_process';
+import logger from './logger.mjs';
 
 /*
  * Mockable system gateway for command line calls
@@ -9,7 +9,8 @@ const logger = require('./logger');
  * ICMP Ping command wrapper
  * @returns Promise
  */
-async function ping(host) {
+// eslint-disable-next-line import/prefer-default-export
+export async function ping(host) {
   return new Promise((resolve) => {
     childProcess.exec(`ping -c 2 ${host}`, (err, stdout, stderr) => {
       const isPingSuccess = !err;
@@ -23,7 +24,3 @@ async function ping(host) {
     });
   });
 }
-
-module.exports = {
-  ping,
-};

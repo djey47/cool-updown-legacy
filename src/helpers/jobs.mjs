@@ -1,8 +1,6 @@
-const cron = require('cron');
-const {
-  on, off,
-} = require('../services');
-const logger = require('./logger');
+import cron from 'cron';
+import { on, off } from '../services/power.mjs';
+import logger from './logger.mjs';
 
 const { CronJob } = cron;
 
@@ -15,9 +13,9 @@ const cronWrapper = (callback, action) => () => {
 };
 
 /**
- * @private
+ * @private exported for testing purposes
  */
-function toCronSyntax({ at }) {
+export function toCronSyntax({ at }) {
   if (!at) return '* * * * * *';
   const [hr, mn] = at.split(':');
   return `00 ${mn || '00'} ${hr || '00'} * * *`;
@@ -40,19 +38,13 @@ function createJobAndStart(callBack, action, schedule, isEnabled, appState) {
 /**
  * Creates ON job and starts it if enabled
  */
-function createOnJob(schedule, isEnabled, appState) {
+export function createOnJob(schedule, isEnabled, appState) {
   return createJobAndStart(on, 'on', schedule, isEnabled, appState);
 }
 
 /**
  * Creates OFF job and starts it if enabled
  */
-function createOffJob(schedule, isEnabled, appState) {
+export function createOffJob(schedule, isEnabled, appState) {
   return createJobAndStart(off, 'off', schedule, isEnabled, appState);
 }
-
-module.exports = {
-  createOnJob,
-  createOffJob,
-  toCronSyntax, // For testing
-};

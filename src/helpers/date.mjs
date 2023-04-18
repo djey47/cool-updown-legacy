@@ -1,12 +1,15 @@
+/* eslint-disable import/prefer-default-export */
+
 const MS_IN_1_S = 1000;
 const MS_IN_1_M = MS_IN_1_S * 60;
 const MS_IN_1_H = MS_IN_1_M * 60;
 const MS_IN_1_D = MS_IN_1_H * 24;
 
 /**
+ * @param durationMs {number}
  * @returns Object with fields days, hours, minutes, seconds, milliseconds
  */
-function getTimeDetails(durationMs) {
+export function getTimeDetails(durationMs) {
   let milliseconds = durationMs;
 
   const days = Math.floor(milliseconds / MS_IN_1_D);
@@ -29,7 +32,3 @@ function getTimeDetails(durationMs) {
     days,
   };
 }
-
-module.exports = {
-  getTimeDetails,
-};

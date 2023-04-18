@@ -1,14 +1,15 @@
-const app = require('express')();
-const config = require('config');
-const messages = require('./resources/messages');
-const {
-  ping, on, off, enableSchedule, disableSchedule, logs,
-} = require('./services');
-const {
-  createOnJob, createOffJob,
-} = require('./helpers/jobs');
-const { initBasicAuth } = require('./helpers/auth');
-const logger = require('./helpers/logger');
+import config from 'config';
+import express from 'express';
+import logs from './services/logs.mjs';
+import ping from './services/ping.mjs';
+import { on, off } from './services/power.mjs';
+import messages from './resources/messages.mjs';
+import { enable, disable } from './services/schedule.mjs';
+import { createOffJob, createOnJob } from './helpers/jobs.mjs';
+import { initBasicAuth } from './helpers/auth.mjs';
+import logger from './helpers/logger.mjs';
+
+const app = express();
 
 /**
  * @private
@@ -65,9 +66,9 @@ function serverMain() {
 
   app.get('/off', stateWrapper(off, appState, 'off'));
 
-  app.get('/enable', stateWrapper(enableSchedule, appState, 'enable'));
+  app.get('/enable', stateWrapper(enable, appState, 'enable'));
 
-  app.get('/disable', stateWrapper(disableSchedule, appState, 'disable'));
+  app.get('/disable', stateWrapper(disable, appState, 'disable'));
 
   // Starting
   logger.log('info', `${messages.ready} http://localhost:${port}`);

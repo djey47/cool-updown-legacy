@@ -1,4 +1,4 @@
-const messages = {
+export default {
   intro: 'coolupdown server is starting, please wait...',
   outro: 'See you soon!',
   ready: 'Ready!',
@@ -28,5 +28,3 @@ const messages = {
     kayo: 'KO',
   },
 };
-
-module.exports = messages;
