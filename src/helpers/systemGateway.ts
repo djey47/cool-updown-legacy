@@ -1,5 +1,5 @@
 import childProcess from 'child_process';
-import logger from './logger.mjs';
+import logger from './logger';
 
 /*
  * Mockable system gateway for command line calls

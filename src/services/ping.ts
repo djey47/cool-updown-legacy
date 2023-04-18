@@ -4,12 +4,12 @@ import lodash from 'lodash';
 import { NodeSSH } from 'node-ssh';
 import dateFns from 'date-fns';
 import https from 'https';
-import messages from '../resources/messages.mjs';
-import { ping as gatewayPing } from '../helpers/systemGateway.mjs';
-import logger from '../helpers/logger.mjs';
-import { interpolate, toHumanDuration } from '../helpers/format.mjs';
-import { getTimeDetails } from '../helpers/date.mjs';
-import { readPrivateKey } from '../helpers/auth.mjs';
+import messages from '../resources/messages';
+import { ping as gatewayPing } from '../helpers/systemGateway';
+import logger from '../helpers/logger';
+import { interpolate, toHumanDuration } from '../helpers/format';
+import { getTimeDetails } from '../helpers/date';
+import { readPrivateKey } from '../helpers/auth';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep, get: loGet } = lodash;
@@ -54,7 +54,7 @@ async function serverHTTPTest(url) {
     const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
     });
-    await axios.default.get(url, { httpsAgent });
+    await axios.get(url, { httpsAgent });
     logger.log('info', '(ping) HTTP connection OK');
     return Promise.resolve(true);
   } catch (err) {

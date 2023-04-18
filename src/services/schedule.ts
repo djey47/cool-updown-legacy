@@ -1,4 +1,4 @@
-import messages from '../resources/messages.mjs';
+import messages from '../resources/messages';
 
 /**
  * Handles ENABLE SCHEDULE request

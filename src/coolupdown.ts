@@ -1,13 +1,13 @@
 import config from 'config';
 import express from 'express';
-import logs from './services/logs.mjs';
-import ping from './services/ping.mjs';
-import { on, off } from './services/power.mjs';
-import messages from './resources/messages.mjs';
-import { enable, disable } from './services/schedule.mjs';
-import { createOffJob, createOnJob } from './helpers/jobs.mjs';
-import { initBasicAuth } from './helpers/auth.mjs';
-import logger from './helpers/logger.mjs';
+import logs from './services/logs';
+import ping from './services/ping';
+import { on, off } from './services/power';
+import messages from './resources/messages';
+import { enable, disable } from './services/schedule';
+import { createOffJob, createOnJob } from './helpers/jobs';
+import { initBasicAuth } from './helpers/auth';
+import logger from './helpers/logger';
 
 const app = express();
 
@@ -26,10 +26,10 @@ const initAppState = () => {
   const isScheduleEnabled = config.get('schedule.enabled');
   const appState = {
     isScheduleEnabled,
+    onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled, this),
+    offJob: createOnJob(config.get('schedule.off'), isScheduleEnabled, this),
     startedAt: new Date(Date.now()),
   };
-  appState.onJob = createOnJob(config.get('schedule.on'), isScheduleEnabled, appState);
-  appState.offJob = createOffJob(config.get('schedule.off'), isScheduleEnabled, appState);
   return appState;
 };
 

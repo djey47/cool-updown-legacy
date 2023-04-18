@@ -1,7 +1,7 @@
 import appRootDir from 'app-root-dir';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import logger from '../helpers/logger.mjs';
+import logger from '../helpers/logger';
 
 /**
  * Handles LOGS request
