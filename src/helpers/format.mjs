@@ -1,12 +1,10 @@
-/* eslint-disable import/prefer-default-export */
-
 const REGEX_TEMPLATE = /{([\s\S]+?)}/g;
 
 /**
  * Template interpolation helper
  * @return string with replaced {item} by corresponding value in templateContext
  */
-function interpolate(template, templateContext) {
+export function interpolate(template, templateContext) {
   return template.replace(
     REGEX_TEMPLATE,
     (match, submatch) => ({}.hasOwnProperty.call(templateContext, submatch)
@@ -24,7 +22,7 @@ function toDurationUnit(timeDetail, unitLabel) {
 /**
  * @return string with readable time (till minutes)
  */
-function toHumanDuration(timeDetails) {
+export function toHumanDuration(timeDetails) {
   if (!timeDetails) return '';
 
   const { days, hours, minutes } = timeDetails;
@@ -34,8 +32,3 @@ function toHumanDuration(timeDetails) {
   return duration.length
     ? duration : 'less than one minute';
 }
-
-module.exports = {
-  interpolate,
-  toHumanDuration,
-};

@@ -1,7 +1,7 @@
-const winston = require('winston');
-const shell = require('shelljs');
-const appRootDir = require('app-root-dir');
-const path = require('path');
+import winston from 'winston';
+import shell from 'shelljs';
+import appRootDir from 'app-root-dir';
+import path from 'path';
 
 /* DEFAULT LOGGER: appends to console and app.log file */
 
@@ -10,7 +10,7 @@ shell.mkdir('-p', logsDirectory);
 
 const logsFile = path.join(logsDirectory, 'app.log');
 
-const Logger = new winston.Logger({
+export default new winston.Logger({
   level: 'info',
   handleExceptions: false,
   transports: [
@@ -23,5 +23,3 @@ const Logger = new winston.Logger({
     }),
   ],
 });
-
-module.exports = Logger;
