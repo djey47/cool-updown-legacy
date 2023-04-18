@@ -1,6 +1,6 @@
 import cron from 'cron';
-import { on, off } from '../services/power.mjs';
-import logger from './logger.mjs';
+import { on, off } from '../services/power';
+import logger from './logger';
 
 const { CronJob } = cron;
 

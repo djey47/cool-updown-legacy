@@ -1,9 +1,9 @@
 import config from 'config';
 import { NodeSSH } from 'node-ssh';
 import wol from 'wake_on_lan';
-import logger from '../helpers/logger.mjs';
-import messages from '../resources/messages.mjs';
-import { readPrivateKey } from '../helpers/auth.mjs';
+import logger from '../helpers/logger';
+import messages from '../resources/messages';
+import { readPrivateKey } from '../helpers/auth';
 
 const ssh = new NodeSSH();
 

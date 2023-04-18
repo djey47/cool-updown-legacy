@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 // JS API //
 const mockDateNow = jest.fn(() => new Date('June 12, 2018 14:14:00Z'));
 Date.now = mockDateNow;
@@ -86,7 +88,7 @@ const mockOffJobStop = jest.fn();
 
 const mockGatewayPing = jest.fn();
 
-module.exports = {
+export default {
   dateMock: {
     now: mockDateNow,
   },
