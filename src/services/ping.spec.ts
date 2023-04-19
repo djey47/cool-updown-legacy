@@ -1,4 +1,5 @@
 import globalMocks from '../../config/jest/globalMocks';
+import resetMocks from '../../config/jest/resetMocks';
 import ping from './ping';
 
 jest.mock('../helpers/systemGateway', () => globalMocks.systemGatewayMock);
@@ -19,14 +20,7 @@ const res = {
 
 describe('ping service', () => {
   beforeEach(() => {
-    axiosMock.get.mockReset();
-    expressResponseMock.sendMock.mockReset();
-    expressResponseMock.statusMock.mockReset();
-    nodeFSMock.readFile.mockReset();
-    mockSystemGateway.pingMock.mockReset();
-    nodesshMock.connect.mockReset();
-    nodesshMock.dispose.mockReset();
-    nodesshMock.execCommand.mockReset();
+    resetMocks();
 
     // Ping OK
     mockSystemGateway.pingMock.mockResolvedValue(true);
