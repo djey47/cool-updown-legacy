@@ -1,0 +1,345 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ping service should perform diagnosis and send appropriate response when schedule enabled 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last start/stop attempt: <b>N/A</b></li>
+    <li>Ping test: <b>OK</b></li>
+    <li>SSH test: <b>OK</b></li>
+    <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when schedule disabled 1`] = `
+"
+  <h1>coolupdown alive but schedule is disabled!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last start/stop attempt: <b>N/A</b></li>
+    <li>Ping test: <b>OK</b></li>
+    <li>SSH test: <b>OK</b></li>
+    <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when server HTTP KO 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last start/stop attempt: <b>N/A</b></li>
+    <li>Ping test: <b>OK</b></li>
+    <li>SSH test: <b>OK</b></li>
+    <li>HTTP test: <b>KO</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when server OFFLINE 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p>Server is likely to be OFFLINE!</p>
+  <ul>
+    <li>Last start/stop attempt: <b>N/A</b></li>
+    <li>Ping test: <b>KO</b></li>
+    <li>SSH test: <b>KO</b></li>
+    <li>HTTP test: <b>KO</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when server SSH KO 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last start/stop attempt: <b>N/A</b></li>
+    <li>Ping test: <b>OK</b></li>
+    <li>SSH test: <b>KO</b></li>
+    <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when server ping KO 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last start/stop attempt: <b>N/A</b></li>
+    <li>Ping test: <b>KO</b></li>
+    <li>SSH test: <b>OK</b></li>
+    <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when serverStartedAt defined 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last start attempt: <b>less than one minute ago</b>.</li>
+    <li>Ping test: <b>OK</b></li>
+    <li>SSH test: <b>OK</b></li>
+    <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
+
+exports[`ping service should send appropriate response when serverStoppedAt defined 1`] = `
+"
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <h2>Server</h2>
+  <p></p>
+  <ul>
+    <li>Last stop attempt: <b>less than one minute ago</b>.</li>
+    <li>Ping test: <b>OK</b></li>
+    <li>SSH test: <b>OK</b></li>
+    <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "port": 4600,
+    "authEnabled": true
+  },
+  "server": {
+    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+    "broadcastAddress": "255.255.255.255",
+    "hostname": "Host Name",
+    "user": "User",
+    "password": "********",
+    "offCommand": "OFF Command",
+    "sshPort": 22,
+    "keyPath": "Key Path",
+    "url": "http://localhost"
+  },
+  "schedule": {
+    "enabled": true,
+    "on": {
+      "at": "00:00"
+    },
+    "off": {
+      "at": "01:00"
+    }
+  }
+}</pre>
+  "
+`;
