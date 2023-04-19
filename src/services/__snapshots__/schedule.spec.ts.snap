@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`schedule services disable service should set jobs state correctly and generate correct response 1`] = `"OK"`;
+
+exports[`schedule services enable service should set jobs state correctly and generate correct response 1`] = `"OK"`;
