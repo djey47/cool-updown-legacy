@@ -1,8 +1,6 @@
-import { jest } from '@jest/globals';
-
 // JS API //
 const mockDateNow = jest.fn(() => new Date('June 12, 2018 14:14:00Z'));
-Date.now = mockDateNow;
+Date.now = mockDateNow as unknown as () => number;
 
 // NODE API //
 // fs
@@ -21,9 +19,7 @@ jest.mock('app-root-dir', () => ({
 // axios
 const mockAxiosGet = jest.fn();
 jest.mock('axios', () => ({
-  default: {
-    get: url => mockAxiosGet(url),
-  },
+  get: url => mockAxiosGet(url),
 }));
 
 // cron
