@@ -76,6 +76,7 @@ jest.mock('winston', () => ({
 // PROJECT SPECIFIC //
 const mockExpressResponseStatus = jest.fn();
 const mockExpressResponseSend = jest.fn();
+const mockExpressResponseJson = jest.fn();
 
 const mockOnJobStart = jest.fn();
 const mockOffJobStart = jest.fn();
@@ -117,8 +118,10 @@ export default {
   expressResponseMock: {
     statusMock: mockExpressResponseStatus,
     sendMock: mockExpressResponseSend,
+    jsonMock: mockExpressResponseJson,
     status: c => mockExpressResponseStatus(c),
     send: msg => mockExpressResponseSend(msg),
+    json: () => mockExpressResponseJson(),
   },
   jobsMock: {
     onJobStart: mockOnJobStart,

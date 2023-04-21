@@ -1,15 +1,13 @@
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
+import { generateDefaultResponse } from '../helpers/testing';
 import logs from './logs';
 
 const {
   appRootDirMock, expressResponseMock, nodeFSMock,
 } = globalMocks;
 
-const res = {
-  status: c => expressResponseMock.statusMock(c),
-  send: msg => expressResponseMock.sendMock(msg),
-};
+const res = generateDefaultResponse(expressResponseMock);
 
 describe('logs service', () => {
   beforeEach(() => {

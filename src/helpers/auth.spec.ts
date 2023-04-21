@@ -1,5 +1,7 @@
-const { expressBasicAuthMock } = require('../../config/jest/globalMocks');
-const { initBasicAuth } = require('./auth');
+import globalMocks from '../../config/jest/globalMocks';
+import { initBasicAuth } from './auth';
+
+const { expressBasicAuthMock } = globalMocks;
 
 const mockApp = {
   use: plugin => (plugin),
@@ -13,7 +15,7 @@ describe('authentication helper functions', () => {
   describe('initBasicAuth function', () => {
     it('should do nothing when disabled', () => {
       // given-when
-      initBasicAuth(mockApp, false);
+      initBasicAuth(mockApp, false, 'user', 'password');
 
       // then
       expect(expressBasicAuthMock).not.toHaveBeenCalled();

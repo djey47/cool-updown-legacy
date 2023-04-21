@@ -8,13 +8,14 @@ import { enable, disable } from './services/schedule';
 import { createOffJob, createOnJob } from './helpers/jobs';
 import { initBasicAuth } from './helpers/auth';
 import logger from './helpers/logger';
+import { AppState } from './model/models';
 
 const app = express();
 
 /**
  * @private
  */
-const stateWrapper = (callback, state, message) => (req, res) => {
+const stateWrapper = (callback, state: AppState, message: string) => (req, res) => {
   if (message) logger.log('info', `=>(...${message}...)`);
   callback(req, res, state);
 };
@@ -23,7 +24,7 @@ const stateWrapper = (callback, state, message) => (req, res) => {
  * @private
  */
 const initAppState = () => {
-  const isScheduleEnabled = config.get('schedule.enabled');
+  const isScheduleEnabled = config.get('schedule.enabled') as boolean;
   const appState = {
     isScheduleEnabled,
     onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled, this),
@@ -37,9 +38,9 @@ const initAppState = () => {
  * @private
  */
 const initAuth = () => {
-  const isAuthEnabled = config.get('app.authEnabled');
-  const userName = config.get('server.user');
-  const password = config.get('server.password');
+  const isAuthEnabled = config.get('app.authEnabled') as boolean;
+  const userName = config.get('server.user') as string;
+  const password = config.get('server.password') as string;
   initBasicAuth(app, isAuthEnabled, userName, password);
 };
 

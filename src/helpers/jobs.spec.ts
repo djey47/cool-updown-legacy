@@ -1,5 +1,7 @@
-const { cronMock } = require('../../config/jest/globalMocks');
-const { createOnJob, createOffJob, toCronSyntax } = require('./jobs');
+import globalMocks from '../../config/jest/globalMocks';
+import { createOnJob, createOffJob, toCronSyntax } from './jobs';
+
+const { cronMock } = globalMocks;
 
 describe('jobs helper functions', () => {
   beforeEach(() => {

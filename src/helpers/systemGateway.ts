@@ -10,7 +10,7 @@ import logger from './logger';
  * @returns Promise
  */
 // eslint-disable-next-line import/prefer-default-export
-export async function ping(host) {
+export async function ping(host: string): Promise<boolean> {
   return new Promise((resolve) => {
     childProcess.exec(`ping -c 2 ${host}`, (err, stdout, stderr) => {
       const isPingSuccess = !err;

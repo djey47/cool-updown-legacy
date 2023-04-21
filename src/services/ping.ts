@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import config from 'config';
 import lodash from 'lodash';
 import { NodeSSH } from 'node-ssh';
@@ -10,6 +10,8 @@ import logger from '../helpers/logger';
 import { interpolate, toHumanDuration } from '../helpers/format';
 import { getTimeDetails } from '../helpers/date';
 import { readPrivateKey } from '../helpers/auth';
+import { AppConfig, AppState } from '../model/models';
+import { TypedResponse } from '../model/express';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep, get: loGet } = lodash;
@@ -19,7 +21,7 @@ const { differenceInMilliseconds } = dateFns;
  * @private
  * @return duration in human readable format
  */
-function computeDuration(from, to) {
+function computeDuration(from: Date, to: Date) {
   const diff = differenceInMilliseconds(to, from);
   return toHumanDuration(getTimeDetails(diff));
 }
@@ -27,7 +29,7 @@ function computeDuration(from, to) {
 /**
  * @private
  */
-async function serverSSHTest(host, port, username) {
+async function serverSSHTest(host: string, port: number, username: string) {
   const privateKey = await readPrivateKey();
   try {
     await ssh.connect({
@@ -49,7 +51,7 @@ async function serverSSHTest(host, port, username) {
 /**
  * @private
  */
-async function serverHTTPTest(url) {
+async function serverHTTPTest(url: string) {
   try {
     const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
@@ -57,7 +59,7 @@ async function serverHTTPTest(url) {
     await axios.get(url, { httpsAgent });
     logger.log('info', '(ping) HTTP connection OK');
     return Promise.resolve(true);
-  } catch (err) {
+  } catch (err: unknown) {
     logger.error(`(ping) HTTP connection KO: ${err}`);
     return Promise.resolve(false);
   }
@@ -66,7 +68,7 @@ async function serverHTTPTest(url) {
 /**
  * Returns diagnostics with status message
  */
-export default async function ping(req, res, appState) {
+export default async function ping(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const {
     isScheduleEnabled, startedAt, serverStartedAt, serverStoppedAt,
   } = appState;
@@ -74,7 +76,7 @@ export default async function ping(req, res, appState) {
     ping: pingMessages, status: statusMessages,
   } = messages;
 
-  let statusMessage;
+  let statusMessage: string;
   if (isScheduleEnabled) {
     statusMessage = pingMessages.statusTitle;
   } else {
@@ -82,14 +84,14 @@ export default async function ping(req, res, appState) {
   }
 
   // Server password setting is obfuscated
-  const displayedConfig = loCloneDeep(config);
+  const displayedConfig = loCloneDeep(config) as AppConfig;
   if (loGet(displayedConfig, 'server.password')) displayedConfig.server.password = '********';
 
   // Diagnostics
-  const host = config.get('server.hostname');
-  const port = config.get('server.sshPort');
-  const username = config.get('server.user');
-  const url = config.get('server.url');
+  const host = config.get('server.hostname') as string;
+  const port = config.get('server.sshPort') as number;
+  const username = config.get('server.user') as string;
+  const url = config.get('server.url') as string;
 
   const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
     gatewayPing(host),
