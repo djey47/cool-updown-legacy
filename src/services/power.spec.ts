@@ -1,15 +1,11 @@
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
-import { generateDefaultResponse } from '../helpers/testing';
+import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
 import { off, on } from './power';
 
 const { expressResponseMock, nodeFSMock, nodesshMock, wakeonlanMock } = globalMocks;
 
-const appState = {
-  isScheduleEnabled: true,
-  startedAt: new Date('June 12, 2018 13:14:00Z'),
-};
-
+const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
 
 describe('power services', () => {
