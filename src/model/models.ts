@@ -8,8 +8,25 @@ export interface AppState {
 }
 
 export interface AppConfig {
+  app?: {
+    port?: number;
+    authEnabled?: boolean;
+  };  
   server?: {
+    macAddress?: string;
+    broadcastAddress?: string;
+    hostname?: string;
+    user?: string;
     password?: string;
+    offCommand?: string;
+    sshPort?: number;
+    keyPath?: string;
+    url?: string;
+  };
+  schedule?: {
+    enabled?: boolean;
+    on?: Schedule;
+    off?: Schedule; 
   }
 }
 
