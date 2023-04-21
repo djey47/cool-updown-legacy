@@ -43,7 +43,7 @@
     "logs:all": "less logs/app.log",
     "lint": "eslint ./src",
     "test": "export NODE_ENV=test && jest",
-    "jest:watch": "export NODE_ENV=test && jest --watch src"
+    "test:watch": "export NODE_ENV=test && jest --watch src"
   },
   "repository": {
     "type": "git",
