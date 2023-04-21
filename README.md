@@ -2,7 +2,7 @@
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](http://choosealicense.com/licenses/mit)
 ![Build status](https://github.com/djey47/cool-updown/actions/workflows/node.js.yml/badge.svg?branch=master&event=push)
 
-NodeJS script to enable scheduled server start/stop. Runs as a HTTP server.
+NodeJS script, written in Typescript, to enable scheduled server start/stop. Runs as a HTTP server.
 
 It also pings monitored server (ICMP, SSH, HTTP) and display result.
 
