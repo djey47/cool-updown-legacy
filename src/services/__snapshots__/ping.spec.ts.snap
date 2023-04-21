@@ -40,6 +40,8 @@ exports[`ping service should perform diagnosis and send appropriate response whe
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -83,6 +85,8 @@ exports[`ping service should send appropriate response when schedule disabled 1`
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -126,6 +130,8 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -169,6 +175,8 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -212,6 +220,8 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -255,6 +265,8 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -298,6 +310,8 @@ exports[`ping service should send appropriate response when serverStartedAt defi
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;
 
@@ -341,5 +355,7 @@ exports[`ping service should send appropriate response when serverStoppedAt defi
     }
   }
 }</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
   "
 `;

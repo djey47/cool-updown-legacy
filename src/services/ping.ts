@@ -12,6 +12,7 @@ import { getTimeDetails } from '../helpers/date';
 import { readPrivateKey } from '../helpers/auth';
 import { AppConfig, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
+import { readPackageConfiguration } from '../helpers/project';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep, get: loGet } = lodash;
@@ -115,6 +116,9 @@ export default async function ping(req: Express.Request, res: TypedResponse<stri
     serverUpDownTimeMessage = interpolate(pingMessages.serverDowntime, { time });
   }
 
+  // Package configuration
+  const packageConfig = await readPackageConfiguration();
+
   res.send(`
   <h1>${statusMessage}</h1>
   <p><em>${interpolate(pingMessages.appUptime, { uptime })}</em></p>
@@ -129,5 +133,7 @@ export default async function ping(req: Express.Request, res: TypedResponse<stri
   <p>${pingMessages.instructions}</p>
   <h2>${pingMessages.configurationTitle}</h2>
   <pre>${JSON.stringify(displayedConfig, null, 2)}</pre>
+  <hr/>
+  <section><p><em>${packageConfig.name}, v${packageConfig.version}</em></p></section>
   `);
 }
