@@ -1,4 +1,4 @@
-const { interpolate, toHumanDuration } = require('./format');
+import { interpolate, toHumanDuration } from './format';
 
 describe('formatting helper functions', () => {
   describe('interpolate function', () => {

@@ -1,10 +1,16 @@
+import messages from '../resources/messages';
+
 const REGEX_TEMPLATE = /{([\s\S]+?)}/g;
+
+type TemplateContext = {
+  [k: string]: any;
+};
 
 /**
  * Template interpolation helper
  * @return string with replaced {item} by corresponding value in templateContext
  */
-export function interpolate(template, templateContext) {
+export function interpolate(template: string, templateContext?: TemplateContext ) {
   return template.replace(
     REGEX_TEMPLATE,
     (match, submatch) => ({}.hasOwnProperty.call(templateContext, submatch)
@@ -15,20 +21,29 @@ export function interpolate(template, templateContext) {
 /**
  * @private
  */
-function toDurationUnit(timeDetail, unitLabel) {
+function toDurationUnit(unitLabel: string, timeDetail?: number) {
   return timeDetail ? `${timeDetail} ${unitLabel}` : '';
+}
+
+interface TimeDetails {
+  days?: number;
+  hours?: number;
+  minutes?: number;
+  seconds?: number;
+  milliseconds?: number;
 }
 
 /**
  * @return string with readable time (till minutes)
  */
-export function toHumanDuration(timeDetails) {
+export function toHumanDuration(timeDetails?: TimeDetails) {
   if (!timeDetails) return '';
 
   const { days, hours, minutes } = timeDetails;
-  const duration = `${toDurationUnit(days, 'day(s)')} ${toDurationUnit(hours, 'hour(s)')} ${toDurationUnit(minutes, 'minute(s)')}`
+  const { dates: datesMessages } = messages;
+  const duration = `${toDurationUnit(datesMessages.days, days)} ${toDurationUnit(datesMessages.hours, hours)} ${toDurationUnit(datesMessages.minutes, minutes)}`
     .trim();
 
   return duration.length
-    ? duration : 'less than one minute';
+    ? duration : datesMessages.lessThanOneMinute;
 }

@@ -27,4 +27,10 @@ export default {
     okay: 'OK',
     kayo: 'KO',
   },
+  dates: {
+    days: 'day(s)',
+    hours: 'hour(s)',
+    minutes: 'minute(s)',
+    lessThanOneMinute: 'less than one minute',
+  },
 };

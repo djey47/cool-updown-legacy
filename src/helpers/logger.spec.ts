@@ -1,4 +1,5 @@
-const { winstonMock, shelljsMock } = require('../../config/jest/globalMocks');
+import globalMocks from '../../config/jest/globalMocks';
+const { winstonMock, shelljsMock } = globalMocks;
 
 beforeEach(() => {
   shelljsMock.mkdir.mockReset();

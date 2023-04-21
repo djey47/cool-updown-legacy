@@ -4,16 +4,18 @@ import wol from 'wake_on_lan';
 import logger from '../helpers/logger';
 import messages from '../resources/messages';
 import { readPrivateKey } from '../helpers/auth';
+import { AppState } from '../model/models';
+import { TypedResponse } from '../model/express';
 
 const ssh = new NodeSSH();
 
 /**
  * Handles ON request
  */
-export function on(req, res, appState) {
+export function on(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const currentState = appState;
-  const macAddress = config.get('server.macAddress');
-  const broadcastAddress = config.get('server.broadcastAddress');
+  const macAddress = config.get('server.macAddress') as string;
+  const broadcastAddress = config.get('server.broadcastAddress') as string;
   const options = {
     address: broadcastAddress,
   };
@@ -38,13 +40,13 @@ export function on(req, res, appState) {
 /**
  * Handles OFF request
  */
-export async function off(_req, res, appState) {
+export async function off(_req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const currentState = appState;
-  const host = config.get('server.hostname');
-  const port = config.get('server.sshPort');
-  const username = config.get('server.user');
-  const password = config.get('server.password');
-  const command = config.get('server.offCommand');
+  const host = config.get('server.hostname') as string;
+  const port = config.get('server.sshPort') as number;
+  const username = config.get('server.user') as string;
+  const password = config.get('server.password') as string;
+  const command = config.get('server.offCommand') as string;
 
   try {
     const privateKey = await readPrivateKey();

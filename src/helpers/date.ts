@@ -9,7 +9,7 @@ const MS_IN_1_D = MS_IN_1_H * 24;
  * @param durationMs {number}
  * @returns Object with fields days, hours, minutes, seconds, milliseconds
  */
-export function getTimeDetails(durationMs) {
+export function getTimeDetails(durationMs: number) {
   let milliseconds = durationMs;
 
   const days = Math.floor(milliseconds / MS_IN_1_D);

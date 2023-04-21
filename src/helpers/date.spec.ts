@@ -1,4 +1,4 @@
-const { getTimeDetails } = require('./date');
+import { getTimeDetails } from './date';
 
 describe('date/time helper functions', () => {
   describe('getTimeDetails function', () => {

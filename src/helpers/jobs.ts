@@ -1,21 +1,22 @@
 import cron from 'cron';
 import { on, off } from '../services/power';
 import logger from './logger';
+import { AppState, HandlerCallback, Schedule } from '../model/models';
 
 const { CronJob } = cron;
 
 /**
  * @private
  */
-const cronWrapper = (callback, action) => () => {
-  if (action) logger.log('info', `=>(...cron:${action}...)`);
+const cronWrapper = (callback: () => void, action: string) => () => {
+  logger.log('info', `=>(...cron:${action}...)`);
   callback();
 };
 
 /**
  * @private exported for testing purposes
  */
-export function toCronSyntax({ at }) {
+export function toCronSyntax({ at }: Schedule) {
   if (!at) return '* * * * * *';
   const [hr, mn] = at.split(':');
   return `00 ${mn || '00'} ${hr || '00'} * * *`;
@@ -24,7 +25,7 @@ export function toCronSyntax({ at }) {
 /**
  * @private
  */
-function createJobAndStart(callBack, action, schedule, isEnabled, appState) {
+function createJobAndStart(callBack: HandlerCallback, action: string, schedule: Schedule, isEnabled: boolean, appState: AppState) {
   if (!appState) throw new Error('Error: createJobAndStart: appState argument is not mandatory');
 
   const enhancedCallBack = () => {
@@ -38,13 +39,13 @@ function createJobAndStart(callBack, action, schedule, isEnabled, appState) {
 /**
  * Creates ON job and starts it if enabled
  */
-export function createOnJob(schedule, isEnabled, appState) {
+export function createOnJob(schedule: Schedule, isEnabled: boolean, appState: AppState) {
   return createJobAndStart(on, 'on', schedule, isEnabled, appState);
 }
 
 /**
  * Creates OFF job and starts it if enabled
  */
-export function createOffJob(schedule, isEnabled, appState) {
+export function createOffJob(schedule: Schedule, isEnabled: boolean, appState: AppState) {
   return createJobAndStart(off, 'off', schedule, isEnabled, appState);
 }
