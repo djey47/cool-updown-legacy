@@ -11,3 +11,11 @@ export const generateDefaultResponse = (expressResponseMock) => ({
   send: msg => expressResponseMock.sendMock(msg),
   json: ()  => expressResponseMock.jsonMock(),
 });    
+
+/**
+ * @returns default app state for unit tests
+ */
+export const generateDefaultAppState = () => ({
+  isScheduleEnabled: true,
+  startedAt: new Date('June 12, 2018 13:14:00Z'),
+});
