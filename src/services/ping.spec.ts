@@ -1,24 +1,27 @@
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
-import { generateDefaultResponse } from '../helpers/testing';
+import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
 import ping from './ping';
+import { readPackageConfiguration } from '../helpers/project';
 
 jest.mock('../helpers/systemGateway', () => globalMocks.systemGatewayMock);
+jest.mock('../helpers/project', () => ({
+  readPackageConfiguration: jest.fn(),
+}));
 
 const {
   axiosMock, expressResponseMock, nodeFSMock, systemGatewayMock: mockSystemGateway, nodesshMock,
 } = globalMocks;
 
-const appState = {
-  isScheduleEnabled: true,
-  startedAt: new Date('June 12, 2018 13:14:00Z'),
-};
+const readPackageConfigurationMock = readPackageConfiguration as jest.Mock;
 
+const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
 
 describe('ping service', () => {
   beforeEach(() => {
     resetMocks();
+    readPackageConfigurationMock.mockReset();
 
     // Ping OK
     mockSystemGateway.pingMock.mockResolvedValue(true);
@@ -28,6 +31,9 @@ describe('ping service', () => {
 
     // Async file reader OK with private key contents
     nodeFSMock.readFile.mockResolvedValue('=== PRIVATE KEY ===');
+
+    // Package config utility
+    readPackageConfigurationMock.mockResolvedValue({name: 'cud', version: 'test'});
   });
 
   it('should perform diagnosis and send appropriate response when schedule enabled', async () => {
