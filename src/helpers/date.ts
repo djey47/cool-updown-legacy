@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 const MS_IN_1_S = 1000;
 const MS_IN_1_M = MS_IN_1_S * 60;
 const MS_IN_1_H = MS_IN_1_M * 60;

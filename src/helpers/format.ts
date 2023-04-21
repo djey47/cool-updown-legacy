@@ -3,7 +3,7 @@ import messages from '../resources/messages';
 const REGEX_TEMPLATE = /{([\s\S]+?)}/g;
 
 type TemplateContext = {
-  [k: string]: any;
+  [k: string]: string | number;
 };
 
 /**
@@ -13,8 +13,10 @@ type TemplateContext = {
 export function interpolate(template: string, templateContext?: TemplateContext ) {
   return template.replace(
     REGEX_TEMPLATE,
-    (match, submatch) => ({}.hasOwnProperty.call(templateContext, submatch)
-      ? templateContext[submatch] : `{?${submatch}?}`),
+    (match, submatch) => {
+      const contextItem = submatch as string;
+      return {}.hasOwnProperty.call(templateContext, contextItem) ? templateContext[contextItem] as string : `{?${contextItem}?}`;
+    }
   );
 }
 

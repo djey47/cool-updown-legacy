@@ -28,7 +28,7 @@ const initAppState = () => {
   const appState = {
     isScheduleEnabled,
     onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled, this),
-    offJob: createOnJob(config.get('schedule.off'), isScheduleEnabled, this),
+    offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled, this),
     startedAt: new Date(Date.now()),
   };
   return appState;
