@@ -22,7 +22,7 @@ It also pings monitored server (ICMP, SSH, HTTP) and display result.
 
 ### Steps
 - Clone this repository with git or extract source archive to a directory
-- Head to directory then type `npm install` or `yarn`, according to your preferences.
+- Head to directory then type `npm install` or `yarn`, according to your preferences; a 'ready to start' bundle will be generated automatically.
 
 ## Configure
 Default configuration is given as example in `config/default.json` file.
@@ -91,13 +91,21 @@ OFF command does require a working communication via SSH; you should check both 
 - Add client public key in `.ssh/authorized_keys` file for the user you wanna connect with.
 
 ### Run
-Simply with `npm start` or `yarn start`.
+Assuming install part above went well, and a `build/coolupdown.js` script has been generated:
+
+simply execute `npm start` or `yarn start`.
 
 Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background; you may also use [PM2](https://pm2.keymetrics.io/) to manage running it as a service.
 
 For debugging purposes, commands are also available `npm run start:service-debug` or `yarn start:service-debug`: a `logs/debug.log` file will be created with all console output including fatal errors.
 
 To stop application, hit CTRL+C when launched in foreground, otherwise `npm stop` or `yarn stop`.
+
+#### Development notice
+
+During development, application can run from typescript sources, without build phase, using `npm run start:dev` command.
+
+While working, this is not recommended in production, especially under limited performance devices as Raspberry PIs.
 
 #### Logs
 In foreground execution, logs are written to both console and `logs/app.log` file.
