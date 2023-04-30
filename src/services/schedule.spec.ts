@@ -1,6 +1,8 @@
+import { CronJob } from 'cron';
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
+import { AppState } from '../model/models';
 import { disable, enable } from './schedule';
 
 const { expressResponseMock, jobsMock } = globalMocks;
@@ -9,14 +11,8 @@ const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
 
 const mockJobs = {
-  onJob: {
-    start: () => jobsMock.onJobStart(),
-    stop: () => jobsMock.onJobStop(),
-  },
-  offJob: {
-    start: () => jobsMock.offJobStart(),
-    stop: () => jobsMock.offJobStop(),
-  },
+  onJob: createJobMock(jobsMock.onJobStart, jobsMock.onJobStop),
+  offJob: createJobMock(jobsMock.offJobStart, jobsMock.offJobStop),
 };
 
 describe('schedule services', () => {
@@ -27,7 +23,7 @@ describe('schedule services', () => {
 
     it('should set jobs state correctly and generate correct response', () => {
       // given
-      const state = {
+      const state: AppState = {
         ...appState,
         ...mockJobs,
         isScheduleEnabled: false,
@@ -70,3 +66,17 @@ describe('schedule services', () => {
     });
   });
 });
+
+function createJobMock(startMock: jest.Mock, stopMock: jest.Mock): CronJob {
+  return {
+    addCallback: jest.fn(),
+    fireOnTick: jest.fn(),
+    lastDate: jest.fn(),
+    nextDate: jest.fn(),
+    nextDates: jest.fn(),
+    running: false,
+    setTime: jest.fn(),
+    start: () => startMock(),
+    stop: () => stopMock(),
+  };
+}
