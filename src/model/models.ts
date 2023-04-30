@@ -1,7 +1,10 @@
+import { CronJob } from 'cron';
+import { TypedResponse } from './express';
+
 export interface AppState {
   isScheduleEnabled?: boolean;
-  onJob?: typeof CronJob;
-  offJob?: typeof CronJob;
+  onJob?: CronJob;
+  offJob?: CronJob;
   startedAt?: Date;
   serverStartedAt?: Date;
   serverStoppedAt?: Date;
