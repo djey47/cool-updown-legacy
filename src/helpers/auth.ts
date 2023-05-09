@@ -1,5 +1,4 @@
 import basicAuth from 'express-basic-auth';
-import config from 'config';
 import { readFile } from 'fs/promises';
 
 interface App {
@@ -28,13 +27,15 @@ export function initBasicAuth(app: App, isEnabled: boolean, userName: string, pa
 /**
  * @private
  * @return Promise which resolves to String,
- * with the contents of SSH private key as per provided keyPath in configuration
+ * with the contents of SSH private key as per provided keyPath
  */
-export async function readPrivateKey() {
-  const privateKeyPath = config.get('server.keyPath') as string;
+export async function readPrivateKey(privateKeyPath?: string) {
+  if(!privateKeyPath) {
+    return undefined;
+  }
   const privateKey = await readFile(privateKeyPath, 'utf-8');
 
   // console.log('services::getPrivateKey', { privateKeyPath, privateKey });
 
-  return privateKey as string;
+  return privateKey;
 }

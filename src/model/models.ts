@@ -10,27 +10,35 @@ export interface AppState {
   serverStoppedAt?: Date;
 }
 
+export interface ServerConfig {
+  url?: string;
+  network?: {
+    broadcastIpAddress: string;
+    hostname: string;
+    macAddress: string;
+  };
+  ssh?: {
+    keyPath?: string;
+    offCommand: string;
+    password?: string;
+    port?: number;
+    user?: string;
+  };
+  schedule?: {
+    enabled: boolean;
+    on: Schedule;
+    off: Schedule; 
+  };
+}
+
 export interface AppConfig {
   app?: {
     port?: number;
     authEnabled?: boolean;
-  };  
-  server?: {
-    macAddress?: string;
-    broadcastAddress?: string;
-    hostname?: string;
     user?: string;
     password?: string;
-    offCommand?: string;
-    sshPort?: number;
-    keyPath?: string;
-    url?: string;
   };
-  schedule?: {
-    enabled?: boolean;
-    on?: Schedule;
-    off?: Schedule; 
-  }
+  servers: ServerConfig[];
 }
 
 export interface Schedule {

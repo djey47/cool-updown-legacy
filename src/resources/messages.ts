@@ -14,6 +14,7 @@ export default {
     configurationTitle: 'Configuration',
     serverTitle: 'Server',
     pingItem: 'Ping test: <b>{pingStatus}</b>',
+    scheduleItem: 'Schedule: <b>{scheduleStatus}</b>',
     sshItem: 'SSH test: <b>{sshStatus}</b>',
     httpItem: 'HTTP test: <b>{httpStatus}</b> <a href="{url}" target="_blank">URL</a>',
     instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
@@ -24,8 +25,10 @@ export default {
     serverUndefinedTime: 'Last start/stop attempt: <b>N/A</b>',
   },
   status: {
-    okay: 'OK',
+    disabled: 'DISABLED',
+    enabled: 'ENABLED',
     kayo: 'KO',
+    okay: 'OK',
   },
   dates: {
     days: 'day(s)',

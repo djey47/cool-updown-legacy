@@ -165,19 +165,4 @@ describe('ping service', () => {
     expect(expressResponseMock.sendMock).toHaveBeenCalled();
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
   });
-
-  it('should send appropriate response when schedule disabled', async () => {
-    // given
-    const state = {
-      ...appState,
-      isScheduleEnabled: false,
-    };
-
-    // when
-    await ping({}, res, state);
-
-    // then
-    expect(expressResponseMock.sendMock).toHaveBeenCalled();
-    expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-  });
 });

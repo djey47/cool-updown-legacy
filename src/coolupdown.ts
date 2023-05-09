@@ -39,8 +39,8 @@ const initAppState = () => {
  */
 const initAuth = () => {
   const isAuthEnabled = config.get('app.authEnabled') as boolean;
-  const userName = config.get('server.user') as string;
-  const password = config.get('server.password') as string;
+  const userName = config.get('app.user') as string;
+  const password = config.get('app.password') as string;
   initBasicAuth(app, isAuthEnabled, userName, password);
 };
 

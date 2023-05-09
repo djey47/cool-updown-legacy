@@ -49,7 +49,7 @@ export async function off(_req: Express.Request, res: TypedResponse<string>, app
   const command = config.get('server.offCommand') as string;
 
   try {
-    const privateKey = await readPrivateKey();
+    const privateKey = await readPrivateKey(privateKeyPath);
     await ssh.connect({
       host,
       port,

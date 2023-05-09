@@ -1,26 +1,31 @@
+
 {
   "app": {
     "port": 4600,
     "authEnabled": true
   },
-  "server": {
-    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
-    "broadcastAddress": "255.255.255.255",
-    "hostname": "Host Name",
-    "user": "User",
-    "password": "Password",
-    "offCommand": "OFF Command",
-    "sshPort": 22,
-    "keyPath": "Key Path",
-    "url": "http://localhost"
-  },
-  "schedule": {
-    "enabled": true,
-    "on": {
-      "at": "00:00"
+  "servers": [{
+    "url": "http://localhost",
+    "network": {
+      "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+      "broadcastIpAddress": "255.255.255.255",
+      "hostname": "Host Name"
     },
-    "off": {
-      "at": "01:00"
+    "ssh": {
+      "user": "User",
+      "password": "Password",
+      "offCommand": "OFF Command",
+      "port": 22,
+      "keyPath": "Key Path"
+    },
+    "schedule": {
+      "enabled": false,
+      "on": {
+        "at": "00:00"
+      },
+      "off": {
+        "at": "01:00"
+      }
     }
-  }
+  }]
 }
