@@ -12,7 +12,7 @@ export default {
     statusTitle: 'coolupdown alive and running!',
     statusTitleNoSchedule: 'coolupdown alive but schedule is disabled!',
     configurationTitle: 'Configuration',
-    serverTitle: 'Server',
+    serverTitle: 'Server #{serverId}',
     pingItem: 'Ping test: <b>{pingStatus}</b>',
     scheduleItem: 'Schedule: <b>{scheduleStatus}</b>',
     sshItem: 'SSH test: <b>{sshStatus}</b>',
@@ -36,4 +36,7 @@ export default {
     minutes: 'minute(s)',
     lessThanOneMinute: 'less than one minute',
   },
+  errors: {
+    invalidArg: 'Invalid argument specified!',
+  }
 };

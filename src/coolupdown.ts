@@ -2,13 +2,12 @@ import config from 'config';
 import express from 'express';
 import logs from './services/logs';
 import ping from './services/ping';
-import { on, off } from './services/power';
+import { on, off, onServer, offServer } from './services/power';
 import messages from './resources/messages';
 import { enable, disable } from './services/schedule';
-import { createOffJob, createOnJob } from './helpers/jobs';
 import { initBasicAuth } from './helpers/auth';
 import logger from './helpers/logger';
-import { AppState } from './model/models';
+import { AppState, ServerConfig, ServerState } from './model/models';
 
 const app = express();
 
@@ -24,12 +23,15 @@ const stateWrapper = (callback, state: AppState, message: string) => (req, res) 
  * @private
  */
 const initAppState = () => {
-  const isScheduleEnabled = config.get('schedule.enabled') as boolean;
+  // const isScheduleEnabled = config.get('schedule.enabled') as boolean;
+  const serversConfig = config.get('servers') as ServerConfig[];
+  const serversState: ServerState[] = serversConfig.map(() => ({}));
   const appState = {
-    isScheduleEnabled,
-    onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled, this),
-    offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled, this),
+    isScheduleEnabled: false, // TODO implement global scheduling switch
+    // onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled, this),
+    // offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled, this),
     startedAt: new Date(Date.now()),
+    servers: serversState,
   };
   return appState;
 };
@@ -62,10 +64,14 @@ function serverMain() {
   app.get('/', stateWrapper(ping, appState, 'ping'));
 
   app.get('/logs', stateWrapper(logs, appState, 'logs'));
+  
+  app.get('/:serverId/on', stateWrapper(onServer, appState, 'on-server'));
 
-  app.get('/on', stateWrapper(on, appState, 'on'));
+  app.get('/:serverId/off', stateWrapper(offServer, appState, 'off-server'));
+  
+  app.get('/on', stateWrapper(on, appState, 'on-all'));
 
-  app.get('/off', stateWrapper(off, appState, 'off'));
+  app.get('/off', stateWrapper(off, appState, 'off-server'));
 
   app.get('/enable', stateWrapper(enable, appState, 'enable'));
 

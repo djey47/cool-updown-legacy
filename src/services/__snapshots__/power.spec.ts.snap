@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`power services off service should invoke SSH and generate correct response on command failure 1`] = `"KO"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on command failure 1`] = `"KO"`;
 
-exports[`power services off service should invoke SSH and generate correct response on connect failure 1`] = `"KO"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on connect failure 1`] = `"KO"`;
 
-exports[`power services off service should invoke SSH and generate correct response on failure (promise rejection) 1`] = `"KO"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on failure (promise rejection) 1`] = `"KO"`;
 
-exports[`power services off service should invoke SSH and generate correct response on success 1`] = `"OK"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on success 1`] = `"OK"`;
 
-exports[`power services on service should invoke wol and generate correct response on failure 1`] = `"KO"`;
+exports[`power services on service for single server should invoke wol and generate correct response on failure 1`] = `"KO"`;
 
-exports[`power services on service should invoke wol and generate correct response on success 1`] = `"OK"`;
+exports[`power services on service for single server should invoke wol and generate correct response on success 1`] = `"OK"`;

@@ -8,7 +8,7 @@
   "servers": [{
     "url": "https://homepage",
     "network": {
-      "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+      "macAddress": "FF:FF:FF:FF:FF:FF",
       "broadcastIpAddress": "255.255.255.255",
       "hostname": "myserver"
     },

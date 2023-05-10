@@ -4,6 +4,8 @@
 
 NodeJS script, written in Typescript, to enable scheduled server start/stop. Runs as a HTTP server.
 
+It can manage one to many servers.
+
 It also pings monitored server (ICMP, SSH, HTTP) and display result.
 
 ## Install
@@ -30,29 +32,35 @@ Default configuration is given as example in `config/default.json` file.
 ```json
 {
   "app": {
-    "port": 4600,
     "authEnabled": false,
-  },
-  "server": {
-    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
-    "broadcastAddress": "255.255.255.255",
-    "hostname": "myserver",
+    "port": 4600,
     "user": "bob",
-    "password": "alice",
-    "offCommand": "sudo -S shutdown -h 1",
-    "sshPort": 22,
-    "keyPath": "/home/user/.ssh/id_rsa",
-    "url": "http://localhost"
+    "password": "alice"
   },
-  "schedule": {
-    "enabled": true,
-    "on": {
-      "at": "00:00"
+  "servers": [{
+    "url": "https://homepage",
+    "network": {
+      "macAddress": "FF:FF:FF:FF:FF:FF",
+      "broadcastIpAddress": "255.255.255.255",
+      "hostname": "myserver"
     },
-    "off": {
-      "at": "01:00"
-    }
-  }
+    "ssh": {
+      "offCommand": "sudo -S shutdown -h 1",
+      "port": 22,
+      "keyPath": "/home/user/.ssh/id_rsa",
+      "user": "bob",
+      "password": "alice"    
+    },
+    "schedule": {
+      "enabled": true,
+      "on": {
+        "at": "00:00"
+      },
+      "off": {
+        "at": "01:00"
+      }
+    }  
+  }]
 }
 ```
 
@@ -64,29 +72,34 @@ Note: `config/local-test.json` is used for testing during development only!
 
 | Setting | Description | Default value |
 | ------- | ----------- | ------------- |
-| `app.authEnabled`| `true` will perform basic HTTP authentication; using `server.user` and `server.password` settings below. `false` will allow public access | false (=disabled) |
-| `app.port`| TCP port to be used by the service | 4600 |
-| `server.broadcastAddress`| useful to fix wake on lan on Windows systems, eventually | 255.255.255.255 |
-| `server.hostName`| name or IP address to join your server via SSH | myserver (**change it**) |
-| `server.keyPath`| location of your private key to be used for SSH (PEM format, RSA only supported) | /home/user/.ssh/id_rsa (**change it**) |
-| `server.macAddress`| used to wake the server up | FF:FF:FF:FF:FF:FF:FF:FF (**change it**) |
-| `server.offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
-| `server.password`| password for user above | alice (**change it**) |
-| `server.sshPort`| TCP port to join your server via SSH | 22 |
-| `server.url` | location to test server access via HTTP | http://localhost (**optional**) |
-| `server.user`| user name to join your server via SSH (sudoer) | bob (**change it**) |
-| `schedule.enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
-| `schedule.on.at`, `schedule.off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
+| `app` | Set of application config items as described below | {...} |
+| `>> authEnabled`| `true` will perform basic HTTP authentication; using server.user` and `server.password` settings below. `false` will allow public` access | false (=disabled) |
+| `>> port`| TCP port to be used by the service | 4600 |
+| `servers` | Array of server config items as described below | [...] (=single server) |
+| `>> url` | location to test server access via HTTP | http://localhost (**optional**) |
+| `>> network` | Set of network related configuration as described below | {...} |
+| `... macAddress`| used to wake the server up | FF:FF:FF:FF:FF:FF (**change it**) |
+| `... broadcastIpAddress`| useful to fix wake on lan on Windows systems, eventually | 255.255.255.255 |
+| `... hostName`| name or IP address to join your server via SSH | myserver and label it in ping page (**change it**) |
+| `>> ssh` | Set of SSH access related configuration as described below | {...} |
+| `... keyPath`| location of your private key to be used for SSH (PEM format, RSA only supported) | /home/user/.ssh/id_rsa (**change it**) |
+| `... offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
+| `... user`| user name to join your server via SSH (sudoer) | bob (**change it**) |
+| `... password`| password for user above | alice (**change it**) |
+| `... port`| TCP port to join your server via SSH | 22 |
+| `>> ssh` | Set of SSH access related configuration as described below | {...} |
+| `... enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
+| `... on.at`, `off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
 
 ### SSH Configuration
 
 OFF command does require a working communication via SSH; you should check both parts below:
 
-#### Client side
+#### Client side (instance hosting cool-updown app)
 - Get or generate RSA key pairs
 - Connect manually at least once to server; to add it to known hosts.
 
-#### Server side
+#### Server side, for each of those to be managed
 - Allow public key authentication in SSH service parameters
 - Add client public key in `.ssh/authorized_keys` file for the user you wanna connect with.
 
@@ -95,7 +108,7 @@ Assuming install part above went well, and a `build/coolupdown.js` script has be
 
 simply execute `npm start` or `yarn start`.
 
-Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background; you may also use [PM2](https://pm2.keymetrics.io/) to manage running it as a service.
+Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background; you may also use [PM2](https://pm2.keymetrics.io/) to manage running it as a service (recommended).
 
 For debugging purposes, commands are also available `npm run start:service-debug` or `yarn start:service-debug`: a `logs/debug.log` file will be created with all console output including fatal errors.
 
@@ -105,7 +118,7 @@ To stop application, hit CTRL+C when launched in foreground, otherwise `npm stop
 
 During development, application can run from typescript sources, without build phase, using `npm run start:dev` command.
 
-While working, this is not recommended in production, especially under limited performance devices as Raspberry PIs.
+While totally working, this is not recommended in production, especially under limited performance devices as Raspberry PIs.
 
 #### Logs
 In foreground execution, logs are written to both console and `logs/app.log` file.
@@ -128,40 +141,20 @@ Here is a sample page output:
 ```
 coolupdown alive and running!
 
-Server
+Running for less than one minute.
 
-Server is likely to be OFFLINE!
+- Server #0: MY-SERVER
 
-- Ping test: KO
-- SSH test: KO
-- HTTP test: KO URL
+  - Schedule: ENABLED
+  - Last start/stop attempt: N/A
+  - Ping test: OK
+  - SSH test: KO
+  - HTTP test: KO URL
 
 See logs for details.
 
 Configuration
-
-{
-  "app": {
-    "port": 4600
-  },
-  "server": {
-    "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
-    "broadcastAddress": "255.255.255.255",
-    "hostname": "myserver",
-    "user": "bob",
-    "password": "********",
-    "offCommand": "sudo -S shutdown -h 1"
-  },
-  "schedule": {
-    "enabled": true,
-    "on": {
-      "at": "00:00"
-    },
-    "off": {
-      "at": "01:00"
-    }
-  }
-}
+{...}
 ```
 
 #### LOGS: display raw logs ####
@@ -170,11 +163,15 @@ Path: `/logs`
 
 #### ON: manually turns server ON
 
-Path: `/on`
+Paths: 
+- `/<id>/on` applies to a single server, where `<id>` is the server identifier (0-based index)
+- `/on` applies to all the managed servers
 
 #### OFF: manually turns server OFF
 
-Path: `/off`
+Paths: 
+- `/<id>/off` applies to a single server, where `<id>` is the server identifier (0-based index)
+- `/off` applies to all managed servers;
 
 #### SCHEDULE ENABLE: automatically turns server ON/OFF at given hours
 

@@ -1,15 +1,17 @@
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
-import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
-import { off, on } from './power';
+import { generateDefaultAppState, generateDefaultRequest, generateDefaultResponse } from '../helpers/testing';
+import { AppState } from '../model/models';
+import { offServer, onServer } from './power';
 
 const { expressResponseMock, nodeFSMock, nodesshMock, wakeonlanMock } = globalMocks;
 
 const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
+const req = generateDefaultRequest({ serverId: '0' });
 
 describe('power services', () => {
-  describe('on service', () => {
+  describe('on service for single server', () => {
     beforeEach(() => {
       resetMocks();
 
@@ -23,22 +25,24 @@ describe('power services', () => {
 
     it('should invoke wol and generate correct response on success', () => {
       // given
-      const appStateWithServerStopTime = {
+      const appStateWithServerStopTime: AppState = {
         ...appState,
-        serverStartedAt: null,
-        serverStoppedAt: new Date(),
+        servers: [{
+          startedAt: null,
+          stoppedAt: new Date(),  
+        }],
       };
 
       // when
-      on(undefined, res, appStateWithServerStopTime);
+      onServer(req, res, appStateWithServerStopTime);
 
       // then
       expect(wakeonlanMock.wake).toHaveBeenCalled();
-      expect(wakeonlanMock.wake.mock.calls[0][0]).toEqual('FF:FF:FF:FF:FF:FF:FF:FF');
+      expect(wakeonlanMock.wake.mock.calls[0][0]).toEqual('FF:FF:FF:FF:FF:FF');
       expect(wakeonlanMock.wake.mock.calls[0][1]).toEqual({ address: '255.255.255.255' });
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      expect(appStateWithServerStopTime.serverStartedAt.getTime()).toEqual(1528812840000);
-      expect(appStateWithServerStopTime.serverStoppedAt).toBeUndefined();
+      expect(appStateWithServerStopTime.servers[0].startedAt.getTime()).toEqual(1528812840000);
+      expect(appStateWithServerStopTime.servers[0].stoppedAt).toBeUndefined();
     });
 
     it('should not alter server start time when already defined', () => {
@@ -49,7 +53,7 @@ describe('power services', () => {
       };
 
       // when
-      on(undefined, res, appStateWithServerStartTime);
+      onServer(req, res, appStateWithServerStartTime);
 
       // then
       expect(appStateWithServerStartTime.serverStartedAt).toBeDefined();
@@ -69,7 +73,7 @@ describe('power services', () => {
       };
 
       // when
-      on(undefined, res, appStateWithServerStopTime);
+      onServer(req, res, appStateWithServerStopTime);
 
       // then
       expect(wakeonlanMock.wake).toHaveBeenCalled();
@@ -80,7 +84,7 @@ describe('power services', () => {
     });
   });
 
-  describe('off service', () => {
+  describe('off service for single server', () => {
     beforeEach(() => {
       resetMocks();
 
@@ -96,12 +100,14 @@ describe('power services', () => {
       // given
       const appStateWithServerStartTime = {
         ...appState,
-        serverStartedAt: new Date(),
-        serverStoppedAt: undefined,
+        servers: [{
+          startedAt: new Date(),
+          stoppedAt: undefined,
+        }],
       };
 
       // when
-      await off(undefined, res, appStateWithServerStartTime);
+      await offServer(req, res, appStateWithServerStartTime);
 
       // then
       expect(nodesshMock.connect).toHaveBeenCalledWith({
@@ -113,8 +119,8 @@ describe('power services', () => {
       expect(nodesshMock.execCommand).toHaveBeenCalledWith('OFF Command');
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      expect(appStateWithServerStartTime.serverStartedAt).toBeUndefined();
-      expect(appStateWithServerStartTime.serverStoppedAt.getTime()).toEqual(1528812840000);
+      expect(appStateWithServerStartTime.servers[0].startedAt).toBeUndefined();
+      expect(appStateWithServerStartTime.servers[0].stoppedAt.getTime()).toEqual(1528812840000);
     });
 
     it('should not alter server stop time when already defined', async () => {
@@ -125,7 +131,7 @@ describe('power services', () => {
       };
 
       // when
-      await off(undefined, res, appStateWithServerStopTime);
+      await offServer(req, res, appStateWithServerStopTime);
 
       // then
       expect(appStateWithServerStopTime.serverStoppedAt).toBeDefined();
@@ -143,7 +149,7 @@ describe('power services', () => {
       };
 
       // when
-      await off(undefined, res, appStateWithServerStartTime);
+      await offServer(req, res, appStateWithServerStartTime);
 
       // then
       expect(nodesshMock.connect).toHaveBeenCalled();
@@ -161,7 +167,7 @@ describe('power services', () => {
       nodesshMock.execCommand.mockImplementation(() => Promise.resolve({ stdin: '', stdout: '', code: 1 }));
 
       // when
-      await off(undefined, res, appState);
+      await offServer(req, res, appState);
 
       // then
       expect(nodesshMock.connect).toHaveBeenCalled();
@@ -177,7 +183,7 @@ describe('power services', () => {
       nodesshMock.connect.mockImplementation(() => Promise.reject());
 
       // when
-      await off(undefined, res, appState);
+      await offServer(req, res, appState);
 
       // then
       expect(nodesshMock.connect).toHaveBeenCalled();

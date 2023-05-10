@@ -7,7 +7,7 @@ exports[`ping service should perform diagnosis and send appropriate response whe
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
@@ -32,7 +32,7 @@ exports[`ping service should perform diagnosis and send appropriate response whe
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },
@@ -67,7 +67,7 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
@@ -92,7 +92,7 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },
@@ -127,7 +127,7 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p>Server is likely to be OFFLINE!</p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
@@ -152,7 +152,7 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },
@@ -187,7 +187,7 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
@@ -212,7 +212,7 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },
@@ -247,7 +247,7 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
@@ -272,7 +272,7 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },
@@ -307,11 +307,11 @@ exports[`ping service should send appropriate response when serverStartedAt defi
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
-          <li>Last start attempt: <b>less than one minute ago</b>.</li>
+          <li>Last start/stop attempt: <b>N/A</b></li>
           <li>Ping test: <b>OK</b></li>
           <li>SSH test: <b>OK</b></li>
           <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
@@ -332,7 +332,7 @@ exports[`ping service should send appropriate response when serverStartedAt defi
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },
@@ -367,11 +367,11 @@ exports[`ping service should send appropriate response when serverStoppedAt defi
   <ul>
   
       <li>
-        <h2>Server: Host Name</h2>
+        <h2>Server #0: Host Name</h2>
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
-          <li>Last stop attempt: <b>less than one minute ago</b>.</li>
+          <li>Last start/stop attempt: <b>N/A</b></li>
           <li>Ping test: <b>OK</b></li>
           <li>SSH test: <b>OK</b></li>
           <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
@@ -392,7 +392,7 @@ exports[`ping service should send appropriate response when serverStoppedAt defi
     {
       "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF:FF:FF",
+        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
         "hostname": "Host Name"
       },

@@ -62,6 +62,7 @@ jest.mock('wake_on_lan', () => ({
 // winston
 const mockWinstonLogger = jest.fn(() => ({
   error: () => null,
+  info: () => null,
   log: () => null,
 }));
 const mockWinstonTransport = jest.fn();

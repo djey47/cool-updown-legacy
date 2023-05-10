@@ -43,7 +43,7 @@ function computeDuration(from: Date, to: Date) {
 /**
  * @private
  */
-async function serverSSHTest(host: string, port: number, username: string, privateKeyPath?: string) {
+async function serverSSHTest(serverId: number, host: string, port: number, username: string, privateKeyPath?: string) {
   const privateKey = await readPrivateKey(privateKeyPath);
   try {
     await ssh.connect({
@@ -52,10 +52,10 @@ async function serverSSHTest(host: string, port: number, username: string, priva
       username,
       privateKey,
     });
-    logger.log('info', '(ping) SSH connection OK');
+    logger.info(`(ping:${serverId}) SSH connection OK`);
     return true;
   } catch (err) {
-    logger.error(`(ping) SSH connection KO: ${err}`);
+    logger.error(`(ping:${serverId}) SSH connection KO: ${err}`);
     return false;
   } finally {
     ssh.dispose();
@@ -65,16 +65,16 @@ async function serverSSHTest(host: string, port: number, username: string, priva
 /**
  * @private
  */
-async function serverHTTPTest(url: string) {
+async function serverHTTPTest(serverId: number, url: string) {
   try {
     const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
     });
     await axios.get(url, { httpsAgent });
-    logger.log('info', '(ping) HTTP connection OK');
+    logger.info(`(ping:${serverId}) HTTP connection OK`);
     return Promise.resolve(true);
   } catch (err: unknown) {
-    logger.error(`(ping) HTTP connection KO: ${err}`);
+    logger.error(`(ping:${serverId}) HTTP connection KO: ${err}`);
     return Promise.resolve(false);
   }
 }
@@ -100,11 +100,11 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
   const {
     ping: pingMessages, status: statusMessages,
   } = messages;
-  const {
-    serverStartedAt, serverStoppedAt,
-  } = appState;
 
-  const diagPromises = config.servers.map(async (s) => {
+  const diagPromises = config.servers.map(async (s, serverId) => {
+    const { 
+      startedAt: serverStartedAt, stoppedAt: serverStoppedAt,
+    } = appState.servers[serverId];
     const host = s.network?.hostname || undefined;
     const port = s.ssh?.port || undefined;
     const username = s.ssh?.user || undefined;
@@ -115,8 +115,8 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     
     const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
       gatewayPing(host),
-      serverSSHTest(host, port, username, privateKeyPath),
-      url ? serverHTTPTest(url) : Promise.resolve(false),
+      serverSSHTest(serverId, host, port, username, privateKeyPath),
+      url ? serverHTTPTest(serverId, url) : Promise.resolve(false),
     ]);
 
     // Uptime/Downtime server calculation
@@ -149,7 +149,7 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
 /**
  * Returns diagnostics with status message
  */
-export default async function ping(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
+export default async function ping(_req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const {
     startedAt,
   } = appState;
@@ -171,12 +171,12 @@ export default async function ping(req: Express.Request, res: TypedResponse<stri
   // Package configuration
   const packageConfig = await readPackageConfiguration();
 
-  const serverDiagnostics = diags.map((d) => {
+  const serverDiagnostics = diags.map((d, serverId) => {
     const { httpStatus, pingStatus, sshStatus, isPingSuccess, isSSHSuccess, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
 
     return `
       <li>
-        <h2>${pingMessages.serverTitle}${hostname && (': ' + hostname) || ''}</h2>
+        <h2>${interpolate(pingMessages.serverTitle, { serverId })}${hostname && (': ' + hostname) || ''}</h2>
         <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
         <ul>
           <li>${interpolate(pingMessages.scheduleItem, { scheduleStatus })}</li>
