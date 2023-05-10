@@ -165,18 +165,22 @@ Path: `/logs`
 
 Paths: 
 - `/<id>/on` applies to a single server, where `<id>` is the server identifier (0-based index)
-- `/on` applies to all the managed servers
+- `/on` applies to all the managed servers.
 
 #### OFF: manually turns server OFF
 
 Paths: 
 - `/<id>/off` applies to a single server, where `<id>` is the server identifier (0-based index)
-- `/off` applies to all managed servers;
+- `/off` applies to all managed servers.
 
 #### SCHEDULE ENABLE: automatically turns server ON/OFF at given hours
 
-Path: `/enable`
+Paths:
+- `/<id>/enable` applies to a single server, where `<id>` is the server identifier (0-based index)
+- `/enable` applies to all managed servers.
 
 #### SCHEDULE DISABLE: will stop turning server ON/OFF at given hours
 
-Path: `/disable`
+Paths:
+- `/<id>/disable` applies to a single server, where `<id>` is the server identifier (0-based index)
+- `/disable` applies to all managed servers.
