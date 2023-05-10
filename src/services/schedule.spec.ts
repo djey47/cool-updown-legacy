@@ -1,14 +1,15 @@
 import { CronJob } from 'cron';
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
-import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
+import { generateDefaultAppState, generateDefaultRequest, generateDefaultResponse } from '../helpers/testing';
 import { AppState } from '../model/models';
-import { disable, enable } from './schedule';
+import { disableServer, enableServer } from './schedule';
 
 const { expressResponseMock, jobsMock } = globalMocks;
 
 const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
+const req = generateDefaultRequest({ serverId: '0' });
 
 const mockJobs = {
   onJob: createJobMock(jobsMock.onJobStart, jobsMock.onJobStop),
@@ -16,7 +17,7 @@ const mockJobs = {
 };
 
 describe('schedule services', () => {
-  describe('enable service', () => {
+  describe('enable service for single server', () => {
     beforeEach(() => {
       resetMocks();
     });
@@ -25,23 +26,25 @@ describe('schedule services', () => {
       // given
       const state: AppState = {
         ...appState,
-        ...mockJobs,
-        isScheduleEnabled: false,
+        servers: [{
+          isScheduleEnabled: false,
+          ...mockJobs,
+        }],
       };
 
       // when
-      enable(undefined, res, state);
+      enableServer(req, res, state);
 
       // then
       expect(jobsMock.onJobStart).toHaveBeenCalled();
       expect(jobsMock.offJobStart).toHaveBeenCalled();
-      expect(state.isScheduleEnabled).toEqual(true);
+      expect(state.servers[0].isScheduleEnabled).toBe(true);
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 
-  describe('disable service', () => {
+  describe('disable service for single server', () => {
     beforeEach(() => {
       resetMocks();
     });
@@ -50,17 +53,19 @@ describe('schedule services', () => {
       // given
       const state = {
         ...appState,
-        ...mockJobs,
-        isScheduleEnabled: true,
+        servers: [{
+          isScheduleEnabled: true,
+          ...mockJobs,
+        }],
       };
 
       // when
-      disable(undefined, res, state);
+      disableServer(req, res, state);
 
       // then
       expect(jobsMock.onJobStop).toHaveBeenCalled();
       expect(jobsMock.offJobStop).toHaveBeenCalled();
-      expect(state.isScheduleEnabled).toEqual(false);
+      expect(state.servers[0].isScheduleEnabled).toBe(false);
       expect(expressResponseMock.sendMock).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
     });

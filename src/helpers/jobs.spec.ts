@@ -1,5 +1,6 @@
 import globalMocks from '../../config/jest/globalMocks';
 import { createOnJob, createOffJob, toCronSyntax } from './jobs';
+import { generateDefaultAppState } from './testing';
 
 const { cronMock } = globalMocks;
 
@@ -13,7 +14,7 @@ describe('jobs helper functions', () => {
     at: '10:42',
   };
 
-  const appState = {};
+  const appState = generateDefaultAppState();
 
   describe('createOnJob function', () => {
     it('should create enabled job', () => {

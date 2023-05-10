@@ -4,10 +4,11 @@ import logs from './services/logs';
 import ping from './services/ping';
 import { on, off, onServer, offServer } from './services/power';
 import messages from './resources/messages';
-import { enable, disable } from './services/schedule';
+import { enableServer, disableServer, disable, enable } from './services/schedule';
 import { initBasicAuth } from './helpers/auth';
 import logger from './helpers/logger';
 import { AppState, ServerConfig, ServerState } from './model/models';
+import { createOnJob } from './helpers/jobs';
 
 const app = express();
 
@@ -22,14 +23,18 @@ const stateWrapper = (callback, state: AppState, message: string) => (req, res) 
 /**
  * @private
  */
-const initAppState = () => {
-  // const isScheduleEnabled = config.get('schedule.enabled') as boolean;
+const initAppState = (): AppState => {
   const serversConfig = config.get('servers') as ServerConfig[];
-  const serversState: ServerState[] = serversConfig.map(() => ({}));
+  const serversState: ServerState[] = serversConfig.map((sc) => {
+    const isServerScheduleEnabled = sc.schedule?.enabled || false;
+    return {
+      onJob: createOnJob(sc.schedule?.on || undefined, isServerScheduleEnabled, this),
+      offJob: createOnJob(sc.schedule?.off || undefined, isServerScheduleEnabled, this),
+      isScheduleEnabled: isServerScheduleEnabled,
+    };
+  });
   const appState = {
-    isScheduleEnabled: false, // TODO implement global scheduling switch
-    // onJob: createOnJob(config.get('schedule.on'), isScheduleEnabled, this),
-    // offJob: createOffJob(config.get('schedule.off'), isScheduleEnabled, this),
+    isScheduleEnabled: false, // TODO handle global schedule
     startedAt: new Date(Date.now()),
     servers: serversState,
   };
@@ -73,13 +78,17 @@ function serverMain() {
 
   app.get('/off', stateWrapper(off, appState, 'off-server'));
 
+  app.get('/:serverId/enable', stateWrapper(enableServer, appState, 'enable-server'));
+  
   app.get('/enable', stateWrapper(enable, appState, 'enable'));
+ 
+  app.get('/:serverId/disable', stateWrapper(disableServer, appState, 'disable-server'));
 
   app.get('/disable', stateWrapper(disable, appState, 'disable'));
 
   // Starting
-  logger.log('info', `${messages.ready} http://localhost:${port}`);
-  logger.log('info', messages.exitNotice);
+  logger.info(`${messages.ready} http://localhost:${port}`);
+  logger.info(messages.exitNotice);
 
   return app.listen(port);
 }
@@ -90,10 +99,10 @@ const server = serverMain();
 
 // Exits properly on SIGINT
 process.on('SIGINT', () => {
-  logger.log('warn', messages.interrupt);
+  logger.warn(messages.interrupt);
 
   server.close(() => {
-    logger.log('info', messages.outro);
+    logger.info(messages.outro);
 
     process.exit(0);
   });

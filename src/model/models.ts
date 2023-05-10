@@ -10,6 +10,9 @@ export interface ApiRequest {
 export interface ServerState {
   startedAt?: Date;
   stoppedAt?: Date;
+  isScheduleEnabled?: boolean;
+  onJob?: CronJob;
+  offJob?: CronJob;
 }
 
 export interface AppState {

@@ -103,14 +103,14 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
 
   const diagPromises = config.servers.map(async (s, serverId) => {
     const { 
-      startedAt: serverStartedAt, stoppedAt: serverStoppedAt,
+      startedAt: serverStartedAt, stoppedAt: serverStoppedAt, isScheduleEnabled: serverScheduleEnabled
     } = appState.servers[serverId];
     const host = s.network?.hostname || undefined;
     const port = s.ssh?.port || undefined;
     const username = s.ssh?.user || undefined;
     const url = s.url || undefined;
     const hostname = s.network?.hostname || undefined;
-    const isScheduleEnabled = s.schedule?.enabled || false;
+    const isScheduleEnabled = serverScheduleEnabled || false;
     const privateKeyPath = s.ssh?.keyPath || undefined;
     
     const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([

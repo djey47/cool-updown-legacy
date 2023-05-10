@@ -1,35 +1,14 @@
-import config from 'config';
 import { NodeSSH } from 'node-ssh';
 import wol, { WakeOptions } from 'wake_on_lan';
 import logger from '../helpers/logger';
 import messages from '../resources/messages';
 import { readPrivateKey } from '../helpers/auth';
-import { ApiRequest, AppState, ServerConfig } from '../model/models';
+import { ApiRequest, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
-import { extractServerIdentifier } from '../helpers/api';
+import { validateInputParameters } from '../helpers/api';
+import { retrieveServerConfiguration } from '../helpers/config';
 
 const ssh = new NodeSSH();
-
-function validateInputParameters(req: Express.Request, res: TypedResponse<string>) {
-  const serverId = extractServerIdentifier(req as ApiRequest);
-  if (!serverId) {
-    res.status(400).send(messages.errors.invalidArg);
-  }
-  return {
-    serverId,
-  };
-}
-
-function retrieveServerConfiguration(res: TypedResponse<string>, serverId: string) {
-  const serversConfiguration = config.get('servers');
-  const serverConfiguration = serversConfiguration[serverId] as ServerConfig;
-
-  if (!serverConfiguration) {
-    res.status(400).send(messages.errors.invalidArg);
-  }
-
-  return serverConfiguration;
-}
 
 /**
  * Handles ON request for all servers
@@ -51,7 +30,7 @@ export function off(req: Express.Request, res: TypedResponse<string>, appState: 
  * Handles ON request
  */
 export function onServer(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
-  const { serverId } = validateInputParameters(req, res);
+  const { serverId } = validateInputParameters(req as ApiRequest, res);
   const serverConfiguration = retrieveServerConfiguration(res, serverId);
 
   const macAddress = serverConfiguration.network?.macAddress || undefined;
@@ -82,7 +61,7 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
  * Handles OFF request
  */
 export async function offServer(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
-  const { serverId } = validateInputParameters(req, res);
+  const { serverId } = validateInputParameters(req as ApiRequest, res);
   const serverConfiguration = retrieveServerConfiguration(res, serverId);
   
   const host = serverConfiguration.network?.hostname || undefined;
