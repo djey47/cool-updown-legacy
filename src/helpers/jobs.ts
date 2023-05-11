@@ -1,15 +1,15 @@
 import cron from 'cron';
-import { on, off } from '../services/power';
+import { onServer, offServer } from '../services/power';
 import logger from './logger';
-import { AppState, HandlerCallback, Schedule } from '../model/models';
+import { ApiRequest, AppState, HandlerCallback, Schedule } from '../model/models';
 
 const { CronJob } = cron;
 
 /**
  * @private
  */
-const cronWrapper = (callback: () => void, action: string) => () => {
-  logger.log('info', `=>(...cron:${action}...)`);
+const cronWrapper = (callback: () => void, message: string) => () => {
+  logger.log('info', `=>(...cron:${message}...)`);
   callback();
 };
 
@@ -25,27 +25,38 @@ export function toCronSyntax({ at }: Schedule) {
 /**
  * @private
  */
-function createJobAndStart(callBack: HandlerCallback, action: string, schedule: Schedule, isEnabled: boolean, appState: AppState) {
+function createJobAndStart(callBack: HandlerCallback, action: string, serverId: string, schedule: Schedule, isEnabled: boolean, appState: AppState) {
   if (!appState) throw new Error('Error: createJobAndStart: appState argument is not mandatory');
 
+  // console.log('jobs::createJobAndStart', { appState });
+
   const enhancedCallBack = () => {
-    callBack(undefined, undefined, appState);
+    const request: ApiRequest = {
+      params: {
+        serverId,
+      }
+    } 
+    callBack(request, undefined, appState);
   };
-  const job = new CronJob(toCronSyntax(schedule), cronWrapper(enhancedCallBack, action));
-  if (isEnabled) job.start();
+  const message = `${action}:${serverId}`;
+  const job = new CronJob(toCronSyntax(schedule), cronWrapper(enhancedCallBack, message));
+  if (isEnabled) {
+    job.start();
+  }
+    
   return job;
 }
 
 /**
  * Creates ON job and starts it if enabled
  */
-export function createOnJob(schedule: Schedule, isEnabled: boolean, appState: AppState) {
-  return createJobAndStart(on, 'on', schedule, isEnabled, appState);
+export function createOnJob(serverId:string, schedule: Schedule, isEnabled: boolean, appState: AppState) {
+  return createJobAndStart(onServer, 'on-server', serverId, schedule, isEnabled, appState);
 }
 
 /**
  * Creates OFF job and starts it if enabled
  */
-export function createOffJob(schedule: Schedule, isEnabled: boolean, appState: AppState) {
-  return createJobAndStart(off, 'off', schedule, isEnabled, appState);
+export function createOffJob(serverId: string, schedule: Schedule, isEnabled: boolean, appState: AppState) {
+  return createJobAndStart(offServer, 'off-server', serverId, schedule, isEnabled, appState);
 }

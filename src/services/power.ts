@@ -46,6 +46,8 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
     } else {
       logger.info(`(on-server:${serverId}) ${messages.wakeOK}`);
 
+      // console.log('onServer', { appState }, appState.servers);
+
       const serverState = appState.servers[serverId];
       if (!serverState.startedAt) {
         serverState.startedAt = new Date(Date.now());

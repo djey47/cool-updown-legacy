@@ -8,42 +8,41 @@ import { enableServer, disableServer, disable, enable } from './services/schedul
 import { initBasicAuth } from './helpers/auth';
 import logger from './helpers/logger';
 import { AppState, ServerConfig, ServerState } from './model/models';
-import { createOnJob } from './helpers/jobs';
+import { createOffJob, createOnJob } from './helpers/jobs';
 
 const app = express();
 
-/**
- * @private
- */
 const stateWrapper = (callback, state: AppState, message: string) => (req, res) => {
   if (message) logger.log('info', `=>(...${message}...)`);
   callback(req, res, state);
 };
 
-/**
- * @private
- */
-const initAppState = (): AppState => {
-  const serversConfig = config.get('servers') as ServerConfig[];
-  const serversState: ServerState[] = serversConfig.map((sc) => {
+const initServersState = (serversConfig: ServerConfig[], appState: AppState) => {
+  return serversConfig.map((sc, serverId) => {
     const isServerScheduleEnabled = sc.schedule?.enabled || false;
+    const serverIdAsString = serverId.toString();
     return {
-      onJob: createOnJob(sc.schedule?.on || undefined, isServerScheduleEnabled, this),
-      offJob: createOnJob(sc.schedule?.off || undefined, isServerScheduleEnabled, this),
+      onJob: createOnJob(serverIdAsString, sc.schedule?.on || undefined, isServerScheduleEnabled, appState),
+      offJob: createOffJob(serverIdAsString, sc.schedule?.off || undefined, isServerScheduleEnabled, appState),
       isScheduleEnabled: isServerScheduleEnabled,
     };
   });
-  const appState = {
+}
+
+const initAppState = (): AppState => {
+  const serversConfig = config.get('servers') as ServerConfig[];
+  const appState: AppState = {
     isScheduleEnabled: false, // TODO handle global schedule
     startedAt: new Date(Date.now()),
-    servers: serversState,
+    servers: [],
   };
+  appState.servers = initServersState(serversConfig, appState);
+
+  // console.log('coolupdown::initAppState', { appState }, appState.servers);
+
   return appState;
 };
 
-/**
- * @private
- */
 const initAuth = () => {
   const isAuthEnabled = config.get('app.authEnabled') as boolean;
   const userName = config.get('app.user') as string;
@@ -55,7 +54,7 @@ const initAuth = () => {
  * Main entry point for HTTP server
  */
 function serverMain() {
-  logger.log('info', messages.intro);
+  logger.info(messages.intro);
 
   const port = config.get('app.port');
 

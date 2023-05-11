@@ -19,7 +19,7 @@ describe('jobs helper functions', () => {
   describe('createOnJob function', () => {
     it('should create enabled job', () => {
       // given-when
-      const actual = createOnJob(schedule, true, appState);
+      const actual = createOnJob('0', schedule, true, appState);
 
       // then
       expect(actual).not.toBeNull();
@@ -30,7 +30,7 @@ describe('jobs helper functions', () => {
 
     it('should create disabled job', () => {
       // given-when
-      const actual = createOnJob(schedule, false, appState);
+      const actual = createOnJob('0', schedule, false, appState);
 
       // then
       expect(actual).not.toBeNull();
@@ -43,7 +43,7 @@ describe('jobs helper functions', () => {
   describe('createOffJob function', () => {
     it('should create enabled job', () => {
       // given-when
-      const actual = createOffJob(schedule, true, appState);
+      const actual = createOffJob('0', schedule, true, appState);
 
       // then
       expect(actual).not.toBeNull();
@@ -54,7 +54,7 @@ describe('jobs helper functions', () => {
 
     it('should create disabled job', () => {
       // given-when
-      const actual = createOffJob(schedule, false, appState);
+      const actual = createOffJob('0', schedule, false, appState);
 
       // then
       expect(actual).not.toBeNull();
