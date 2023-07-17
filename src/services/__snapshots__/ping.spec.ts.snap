@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ping service should perform diagnosis and send appropriate response when schedule enabled 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -53,7 +53,10 @@ exports[`ping service should perform diagnosis and send appropriate response whe
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>
@@ -61,7 +64,7 @@ exports[`ping service should perform diagnosis and send appropriate response whe
 `;
 
 exports[`ping service should send appropriate response when server HTTP KO 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -113,7 +116,10 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>
@@ -121,7 +127,7 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
 `;
 
 exports[`ping service should send appropriate response when server OFFLINE 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -173,7 +179,10 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>
@@ -181,7 +190,7 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
 `;
 
 exports[`ping service should send appropriate response when server SSH KO 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -233,7 +242,10 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>
@@ -241,7 +253,7 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
 `;
 
 exports[`ping service should send appropriate response when server ping KO 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -293,7 +305,10 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>
@@ -301,7 +316,7 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
 `;
 
 exports[`ping service should send appropriate response when serverStartedAt defined 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -353,7 +368,10 @@ exports[`ping service should send appropriate response when serverStartedAt defi
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>
@@ -361,7 +379,7 @@ exports[`ping service should send appropriate response when serverStartedAt defi
 `;
 
 exports[`ping service should send appropriate response when serverStoppedAt defined 1`] = `
-"
+"<page-shared />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b>.</em></p>
   <ul>
@@ -413,7 +431,10 @@ exports[`ping service should send appropriate response when serverStoppedAt defi
         }
       }
     }
-  ]
+  ],
+  "ui": {
+    "theme": "dark"
+  }
 }</pre>
   <hr/>
   <section><p><em>cud, vtest</em></p></section>

@@ -60,7 +60,10 @@ Default configuration is given as example in `config/default.json` file.
         "at": "01:00"
       }
     }  
-  }]
+  }],
+  "ui": {
+    "theme": "dark"
+  }
 }
 ```
 
@@ -90,6 +93,8 @@ Note: `config/local-test.json` is used for testing during development only!
 | `>> ssh` | Set of SSH access related configuration as described below | {...} |
 | `... enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
 | `... on.at`, `off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
+| `ui` | Visual settings for the web user interface | {...} |
+| `>> theme` | one of available color themes: light, dark, crimson | light | 
 
 ### SSH Configuration
 

@@ -7,6 +7,7 @@ import { ApiRequest, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { validateInputParameters } from '../helpers/api';
 import { retrieveServerConfiguration } from '../helpers/config';
+import { generatePage } from '../helpers/page';
 
 const ssh = new NodeSSH();
 
@@ -15,7 +16,7 @@ const ssh = new NodeSSH();
  */
 export function on(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   // TODO
-  res.send('Not implemented yet');
+  res.send(generatePage('Not implemented yet'));
 }
 
 /**
@@ -23,7 +24,7 @@ export function on(req: Express.Request, res: TypedResponse<string>, appState: A
  */
 export function off(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   // TODO
-  res.send('Not implemented yet');
+  res.send(generatePage('Not implemented yet'));
 }
 
 /**
@@ -54,7 +55,7 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
         serverState.stoppedAt = undefined;
       }
 
-      if (res) res.send(messages.status.okay);
+      if (res) res.send(generatePage(messages.status.okay));
     }
   });
 }
@@ -96,11 +97,11 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
       serverState.stoppedAt = new Date(Date.now());
     }
 
-    if (res) res.send(messages.status.okay);
+    if (res) res.send(generatePage(messages.status.okay));
   } catch (err) {
     logger.error(`(off-server:${serverId}) ${messages.sshKO} - ${JSON.stringify(err, null, '  ')}`);
 
-    if (res) res.status(500).send(messages.status.kayo);
+    if (res) res.status(500).send(generatePage(messages.status.kayo));
   } finally {
     ssh.dispose();
   }

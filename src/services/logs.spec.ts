@@ -3,8 +3,10 @@ import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultResponse } from '../helpers/testing';
 import logs from './logs';
 
+jest.mock('../helpers/page', () => globalMocks.pageMock);
+
 const {
-  appRootDirMock, expressResponseMock, nodeFSMock,
+  appRootDirMock, expressResponseMock, nodeFSMock, pageMock
 } = globalMocks;
 
 const res = generateDefaultResponse(expressResponseMock);
@@ -17,6 +19,9 @@ describe('logs service', () => {
     nodeFSMock.readFile.mockResolvedValue('These are logs contents');
 
     expressResponseMock.statusMock.mockImplementation(() => expressResponseMock);
+
+    // Page helper
+    pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
   });
 
   it('should return 204 if no log file', async () => {

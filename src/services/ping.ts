@@ -13,6 +13,7 @@ import { readPrivateKey } from '../helpers/auth';
 import { AppConfig, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { readPackageConfiguration } from '../helpers/project';
+import { generatePage } from '../helpers/page';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep } = lodash;
@@ -202,5 +203,5 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
   <section><p><em>${packageConfig.name}, v${packageConfig.version}</em></p></section>
   `;
 
-  res.send(htmlResult);
+  res.send(generatePage(htmlResult));
 }

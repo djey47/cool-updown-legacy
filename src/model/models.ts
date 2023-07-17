@@ -44,6 +44,12 @@ export interface ServerConfig {
   };
 }
 
+export enum ColorTheme {
+  light = 'light',
+  dark = 'dark',
+  crimson = "crimson",
+}
+
 export interface AppConfig {
   app?: {
     port?: number;
@@ -52,6 +58,9 @@ export interface AppConfig {
     password?: string;
   };
   servers: ServerConfig[];
+  ui?: {
+    theme?: ColorTheme;
+  }
 }
 
 export interface Schedule {

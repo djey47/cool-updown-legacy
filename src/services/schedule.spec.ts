@@ -5,7 +5,9 @@ import { generateDefaultAppState, generateDefaultRequest, generateDefaultRespons
 import { AppState } from '../model/models';
 import { disableServer, enableServer } from './schedule';
 
-const { expressResponseMock, jobsMock } = globalMocks;
+jest.mock('../helpers/page', () => globalMocks.pageMock);
+
+const { expressResponseMock, jobsMock, pageMock } = globalMocks;
 
 const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
@@ -20,6 +22,9 @@ describe('schedule services', () => {
   describe('enable service for single server', () => {
     beforeEach(() => {
       resetMocks();
+
+      // Page helper
+      pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
     });
 
     it('should set jobs state correctly and generate correct response', () => {
@@ -47,6 +52,9 @@ describe('schedule services', () => {
   describe('disable service for single server', () => {
     beforeEach(() => {
       resetMocks();
+
+      // Page helper
+      pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
     });
 
     it('should set jobs state correctly and generate correct response', () => {

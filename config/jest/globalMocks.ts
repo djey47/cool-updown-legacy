@@ -86,6 +86,8 @@ const mockOffJobStop = jest.fn();
 
 const mockGatewayPing = jest.fn();
 
+const mockPageGeneratePage = jest.fn();
+
 export default {
   dateMock: {
     now: mockDateNow,
@@ -136,5 +138,8 @@ export default {
   },
   nodeFSMock: {
     readFile: mockFSReadFile,
+  },
+  pageMock: {
+    generatePage: mockPageGeneratePage,
   },
 };

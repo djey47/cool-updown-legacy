@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`page helper generatePage function should include styles with provided theme 1`] = `
+"
+  
+    <style type="text/css">
+    body { 
+      font-family: math;
+      background-color: black;
+      color: white;
+    }
+    body a {
+      color: gray;
+    }
+  </style>
+    
+  <div>contents</div>
+  "
+`;

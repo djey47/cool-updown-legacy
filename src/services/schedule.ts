@@ -1,17 +1,18 @@
 import { validateInputParameters } from '../helpers/api';
 import logger from '../helpers/logger';
+import { generatePage } from '../helpers/page';
 import { TypedResponse } from '../model/express';
 import { ApiRequest, AppState, ServerState } from '../model/models';
 import messages from '../resources/messages';
 
 export function enable(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   // TODO
-  res.send('Not implemented yet!');
+  res.send(generatePage('Not implemented yet!'));
 }
 
 export function disable(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   // TODO
-  res.send('Not implemented yet!');
+  res.send(generatePage('Not implemented yet!'));
 }
 
 /**
@@ -27,7 +28,7 @@ export function enableServer(req: Express.Request, res: TypedResponse<string>, a
 
   logger.info(`(enable-server:${serverId}) schedule enabled`);
 
-  res.send(messages.status.okay);
+  res.send(generatePage(messages.status.okay));
 }
 
 /**
@@ -43,5 +44,5 @@ export function disableServer(req: Express.Request, res: TypedResponse<string>, 
 
   logger.info(`(disable-server:${serverId}) schedule disabled`);
 
-  res.send(messages.status.okay);
+  res.send(generatePage(messages.status.okay));
 }

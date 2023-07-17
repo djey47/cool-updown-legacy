@@ -8,9 +8,10 @@ jest.mock('../helpers/systemGateway', () => globalMocks.systemGatewayMock);
 jest.mock('../helpers/project', () => ({
   readPackageConfiguration: jest.fn(),
 }));
+jest.mock('../helpers/page', () => globalMocks.pageMock);
 
 const {
-  axiosMock, expressResponseMock, nodeFSMock, systemGatewayMock: mockSystemGateway, nodesshMock,
+  axiosMock, expressResponseMock, nodeFSMock, systemGatewayMock: mockSystemGateway, nodesshMock, pageMock
 } = globalMocks;
 
 const readPackageConfigurationMock = readPackageConfiguration as jest.Mock;
@@ -34,6 +35,9 @@ describe('ping service', () => {
 
     // Package config utility
     readPackageConfigurationMock.mockResolvedValue({name: 'cud', version: 'test'});
+
+    // Page helper
+    pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
   });
 
   it('should perform diagnosis and send appropriate response when schedule enabled', async () => {

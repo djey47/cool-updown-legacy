@@ -4,7 +4,9 @@ import { generateDefaultAppState, generateDefaultRequest, generateDefaultRespons
 import { AppState } from '../model/models';
 import { offServer, onServer } from './power';
 
-const { expressResponseMock, nodeFSMock, nodesshMock, wakeonlanMock } = globalMocks;
+jest.mock('../helpers/page', () => globalMocks.pageMock);
+
+const { expressResponseMock, nodeFSMock, nodesshMock, wakeonlanMock, pageMock } = globalMocks;
 
 const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
@@ -21,6 +23,9 @@ describe('power services', () => {
       });
 
       expressResponseMock.statusMock.mockImplementation(() => expressResponseMock);
+
+      // Page helper
+      pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
     });
 
     it('should invoke wol and generate correct response on success', () => {
@@ -94,6 +99,9 @@ describe('power services', () => {
       expressResponseMock.statusMock.mockImplementation(() => expressResponseMock);
 
       nodesshMock.execCommand.mockResolvedValue({ stdout: '', stderr: '', code: 0 });
+
+      // Page helper
+      pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
     });
 
     it('should invoke SSH and generate correct response on success', async () => {
