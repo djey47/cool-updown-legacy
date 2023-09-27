@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`schedule services disable service for single server should set jobs state correctly and generate correct response 1`] = `"<page-shared />OK"`;
+exports[`schedule services disable service for single server should set jobs state correctly and generate correct response 1`] = `
+"<page-shared />
+    <p class="backlink-contents">OK</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;
 
-exports[`schedule services enable service for single server should set jobs state correctly and generate correct response 1`] = `"<page-shared />OK"`;
+exports[`schedule services enable service for single server should set jobs state correctly and generate correct response 1`] = `
+"<page-shared />
+    <p class="backlink-contents">OK</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;

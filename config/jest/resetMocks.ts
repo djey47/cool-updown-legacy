@@ -9,6 +9,7 @@ export default function() {
     expressResponseMock.sendMock.mockReset();
     expressResponseMock.statusMock.mockReset();
     nodeFSMock.readFile.mockReset();
+    nodeFSMock.stat.mockReset();
     systemGatewayMock.pingMock.mockReset();
     nodesshMock.connect.mockReset();
     nodesshMock.dispose.mockReset();

@@ -15,16 +15,13 @@ describe('logs service', () => {
   beforeEach(() => {
     resetMocks();
 
-    // Async file reader OK with log contents
-    nodeFSMock.readFile.mockResolvedValue('These are logs contents');
-
     expressResponseMock.statusMock.mockImplementation(() => expressResponseMock);
 
     // Page helper
     pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
   });
 
-  it('should return 204 if no log file', async () => {
+  it('should return 500 if no log file', async () => {
     // given
     nodeFSMock.readFile.mockRejectedValue('file not found');
     appRootDirMock.get.mockImplementationOnce(() => '/foo/bar');
@@ -33,12 +30,17 @@ describe('logs service', () => {
     await logs(undefined, res);
 
     // then
-    expect(expressResponseMock.statusMock).toHaveBeenCalledWith(204);
-    expect(expressResponseMock.sendMock).toHaveBeenCalledWith(undefined);
+    expect(expressResponseMock.statusMock).toHaveBeenCalledWith(500);
+    expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('should generate correct response with log file', async () => {
-    // given-when
+    // given
+    const contents = 'These are logs contents';
+    nodeFSMock.stat.mockResolvedValue({ size: contents.length })
+    nodeFSMock.readFile.mockResolvedValue(contents);
+
+    // when
     await logs(undefined, res);
 
     // then
