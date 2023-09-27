@@ -175,6 +175,9 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
   const serverDiagnostics = diags.map((d, serverId) => {
     const { httpStatus, pingStatus, sshStatus, isPingSuccess, isSSHSuccess, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
 
+    const powerUrls = resolvePowerServiceUrls(serverId);
+    const scheduleUrls = resolveScheduleServiceUrls(serverId);
+
     return `
       <li>
         <h2>${interpolate(pingMessages.serverTitle, { serverId })}${hostname && (': ' + hostname) || ''}</h2>
@@ -185,6 +188,7 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
           <li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
           <li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
           <li>${interpolate(pingMessages.httpItem, { httpStatus, url })}</li>
+          <li>${interpolate(pingMessages.actionsItem, { ...powerUrls, ...scheduleUrls })}</li>
         </ul>
       </li>
     `;
@@ -204,4 +208,24 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
   `;
 
   res.send(generatePage(htmlResult));
+}
+
+function resolveBaseServiceUrl(serverId: number) {
+  return `/${serverId}/`; 
+}
+
+function resolvePowerServiceUrls(serverId: number) {
+  const powerUrlBase = resolveBaseServiceUrl(serverId);
+  return {
+    onUrl: `${powerUrlBase}on`,
+    offUrl: `${powerUrlBase}off`,
+  };
+}
+
+function resolveScheduleServiceUrls(serverId: number) {
+  const powerUrlBase = resolveBaseServiceUrl(serverId);
+  return {
+    enableScheduleUrl: `${powerUrlBase}enable`,
+    disableScheduleUrl: `${powerUrlBase}disable`,
+  };
 }
