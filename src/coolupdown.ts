@@ -7,7 +7,7 @@ import messages from './resources/messages';
 import { enableServer, disableServer, disable, enable } from './services/schedule';
 import { initBasicAuth } from './helpers/auth';
 import logger from './helpers/logger';
-import { AppState, ServerConfig, ServerState } from './model/models';
+import { AppState, ServerConfig } from './model/models';
 import { createOffJob, createOnJob } from './helpers/jobs';
 
 const app = express();
