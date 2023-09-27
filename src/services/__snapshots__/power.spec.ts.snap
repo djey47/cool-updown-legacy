@@ -1,13 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`power services off service for single server should invoke SSH and generate correct response on command failure 1`] = `"<page-shared />KO"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on command failure 1`] = `
+"<page-shared />
+    <p class="backlink-contents">KO</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;
 
-exports[`power services off service for single server should invoke SSH and generate correct response on connect failure 1`] = `"<page-shared />KO"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on connect failure 1`] = `
+"<page-shared />
+    <p class="backlink-contents">KO</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;
 
-exports[`power services off service for single server should invoke SSH and generate correct response on failure (promise rejection) 1`] = `"<page-shared />KO"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on failure (promise rejection) 1`] = `
+"<page-shared />
+    <p class="backlink-contents">KO</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;
 
-exports[`power services off service for single server should invoke SSH and generate correct response on success 1`] = `"<page-shared />OK"`;
+exports[`power services off service for single server should invoke SSH and generate correct response on success 1`] = `
+"<page-shared />
+    <p class="backlink-contents">OK</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;
 
-exports[`power services on service for single server should invoke wol and generate correct response on failure 1`] = `"KO"`;
+exports[`power services on service for single server should invoke wol and generate correct response on failure 1`] = `
+"
+    <p class="backlink-contents">KO</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;
 
-exports[`power services on service for single server should invoke wol and generate correct response on success 1`] = `"<page-shared />OK"`;
+exports[`power services on service for single server should invoke wol and generate correct response on success 1`] = `
+"<page-shared />
+    <p class="backlink-contents">OK</p>
+    <p class="backlink-link"><a href="/">Home</a></p>
+    "
+`;

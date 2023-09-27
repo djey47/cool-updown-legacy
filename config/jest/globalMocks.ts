@@ -5,8 +5,10 @@ Date.now = mockDateNow as unknown as () => number;
 // NODE API //
 // fs
 const mockFSReadFile = jest.fn();
+const mockFSStat = jest.fn();
 jest.mock('fs/promises', () => ({
   readFile: async (p, e) => mockFSReadFile(p, e),
+  stat: async (p) => mockFSStat(p),
 }));
 
 // NODE MODULES //
@@ -138,6 +140,7 @@ export default {
   },
   nodeFSMock: {
     readFile: mockFSReadFile,
+    stat: mockFSStat,
   },
   pageMock: {
     generatePage: mockPageGeneratePage,

@@ -8,6 +8,8 @@ export default {
   wakeKO: 'Could not send WOL packets!',
   sshOK: 'Connected to host via SSH!',
   sshKO: 'Could not connect to host via SSH!',
+  home: 'Home',
+  bytes: 'bytes',
   ping: {
     statusTitle: 'coolupdown alive and running!',
     statusTitleNoSchedule: 'coolupdown alive but schedule is disabled!',
@@ -38,5 +40,8 @@ export default {
   },
   errors: {
     invalidArg: 'Invalid argument specified!',
+  },
+  logs: {
+    none: 'No logs available!',
   }
 };

@@ -1,4 +1,5 @@
 import { validateInputParameters } from '../helpers/api';
+import { withBackLink } from '../helpers/components';
 import logger from '../helpers/logger';
 import { generatePage } from '../helpers/page';
 import { TypedResponse } from '../model/express';
@@ -28,7 +29,7 @@ export function enableServer(req: Express.Request, res: TypedResponse<string>, a
 
   logger.info(`(enable-server:${serverId}) schedule enabled`);
 
-  res.send(generatePage(messages.status.okay));
+  res.send(generatePage(withBackLink(messages.status.okay, '/', messages.home)));
 }
 
 /**
@@ -44,5 +45,5 @@ export function disableServer(req: Express.Request, res: TypedResponse<string>, 
 
   logger.info(`(disable-server:${serverId}) schedule disabled`);
 
-  res.send(generatePage(messages.status.okay));
+  res.send(generatePage(withBackLink(messages.status.okay, '/', messages.home)));
 }
