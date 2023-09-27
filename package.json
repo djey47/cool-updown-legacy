@@ -1,6 +1,6 @@
 {
   "name": "cool-updown",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Script to enable scheduled server start/stop",
   "main": "src/coolupdown",
   "dependencies": {
