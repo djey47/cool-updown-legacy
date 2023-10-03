@@ -14,10 +14,13 @@ import { AppConfig, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { readPackageConfiguration } from '../helpers/project';
 import { generatePage } from '../helpers/page';
+import { MetaOptions } from '../model/page';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep } = lodash;
 const { differenceInMilliseconds } = dateFns;
+
+const DEFAULT_STATUS_REFRESH_SECONDS = 60;
 
 interface Diagnostics {
   httpStatus: string;
@@ -207,7 +210,9 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
   <section><p><em>${packageConfig.name}, v${packageConfig.version}</em></p></section>
   `;
 
-  res.send(generatePage(htmlResult));
+  const metaOptions = buildMetaOptions(appConfig);
+
+  res.send(generatePage(htmlResult, metaOptions));
 }
 
 function resolveBaseServiceUrl(serverId: number) {
@@ -227,5 +232,12 @@ function resolveScheduleServiceUrls(serverId: number) {
   return {
     enableScheduleUrl: `${powerUrlBase}enable`,
     disableScheduleUrl: `${powerUrlBase}disable`,
+  };
+}
+
+function buildMetaOptions(appConfig: AppConfig): MetaOptions {
+  const statusRefreshInterval = appConfig.ui?.statusRefreshInterval;
+  return {
+    refreshSeconds: statusRefreshInterval === undefined ? DEFAULT_STATUS_REFRESH_SECONDS : statusRefreshInterval,
   };
 }

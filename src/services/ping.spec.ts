@@ -37,7 +37,7 @@ describe('ping service', () => {
     readPackageConfigurationMock.mockResolvedValue({name: 'cud', version: 'test'});
 
     // Page helper
-    pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
+    pageMock.generatePage.mockImplementation((html, metaOptions) => `<page-shared with meta ${JSON.stringify(metaOptions)} />${html}`);
   });
 
   it('should perform diagnosis and send appropriate response when schedule enabled', async () => {
