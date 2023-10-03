@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ping service should perform diagnosis and send appropriate response when schedule enabled 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -24,38 +24,39 @@ exports[`ping service should perform diagnosis and send appropriate response whe
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>
@@ -65,9 +66,9 @@ exports[`ping service should perform diagnosis and send appropriate response whe
 `;
 
 exports[`ping service should send appropriate response when server HTTP KO 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -88,38 +89,39 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>
@@ -129,9 +131,9 @@ exports[`ping service should send appropriate response when server HTTP KO 1`] =
 `;
 
 exports[`ping service should send appropriate response when server OFFLINE 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -152,38 +154,39 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>
@@ -193,9 +196,9 @@ exports[`ping service should send appropriate response when server OFFLINE 1`] =
 `;
 
 exports[`ping service should send appropriate response when server SSH KO 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -216,38 +219,39 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>
@@ -257,9 +261,9 @@ exports[`ping service should send appropriate response when server SSH KO 1`] = 
 `;
 
 exports[`ping service should send appropriate response when server ping KO 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -280,38 +284,39 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>
@@ -321,9 +326,9 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
 `;
 
 exports[`ping service should send appropriate response when serverStartedAt defined 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -344,38 +349,39 @@ exports[`ping service should send appropriate response when serverStartedAt defi
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>
@@ -385,9 +391,9 @@ exports[`ping service should send appropriate response when serverStartedAt defi
 `;
 
 exports[`ping service should send appropriate response when serverStoppedAt defined 1`] = `
-"<page-shared />
+"<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
-  <p><em>Running for <b>1 hour(s)</b>.</em></p>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
   <ul>
   
       <li>
@@ -408,38 +414,39 @@ exports[`ping service should send appropriate response when serverStoppedAt defi
   <h2>Configuration</h2>
   <pre>{
   "app": {
-    "port": 4600,
     "authEnabled": true,
-    "user": "bob",
-    "password": "********"
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
   },
   "servers": [
     {
-      "url": "http://localhost",
       "network": {
-        "macAddress": "FF:FF:FF:FF:FF:FF",
         "broadcastIpAddress": "255.255.255.255",
-        "hostname": "Host Name"
-      },
-      "ssh": {
-        "user": "User",
-        "password": "********",
-        "offCommand": "OFF Command",
-        "port": 22,
-        "keyPath": "Key Path"
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
       },
       "schedule": {
         "enabled": false,
-        "on": {
-          "at": "00:00"
-        },
         "off": {
           "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
         }
-      }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      },
+      "url": "http://localhost"
     }
   ],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }</pre>

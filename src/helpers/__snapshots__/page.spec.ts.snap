@@ -1,5 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`page helper generatePage function should include default styles with unknown theme 1`] = `
+"
+  
+    <style type="text/css">
+    body { 
+      font-family: math;
+      background-color: white;
+      color: black;
+    }
+    body a {
+      color: blue;
+    }
+  </style>
+    
+    
+  <div>contents</div>
+  "
+`;
+
+exports[`page helper generatePage function should include metas with provided options 1`] = `
+"
+  
+    <style type="text/css">
+    body { 
+      font-family: math;
+      background-color: black;
+      color: white;
+    }
+    body a {
+      color: gray;
+    }
+  </style>
+    <meta http-equiv="refresh" content="10">
+    
+  
+  "
+`;
+
 exports[`page helper generatePage function should include styles with provided theme 1`] = `
 "
   
@@ -14,6 +52,26 @@ exports[`page helper generatePage function should include styles with provided t
     }
   </style>
     
+    
   <div>contents</div>
+  "
+`;
+
+exports[`page helper generatePage function should not include metas with unknown option 1`] = `
+"
+  
+    <style type="text/css">
+    body { 
+      font-family: math;
+      background-color: black;
+      color: white;
+    }
+    body a {
+      color: gray;
+    }
+  </style>
+    
+    
+  
   "
 `;

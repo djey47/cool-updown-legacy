@@ -59,6 +59,7 @@ export interface AppConfig {
   };
   servers: ServerConfig[];
   ui?: {
+    statusRefreshInterval?: number;
     theme?: ColorTheme;
   }
 }

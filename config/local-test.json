@@ -29,6 +29,7 @@
     }
   }],
   "ui": {
+    "statusRefreshInterval": 30,
     "theme": "dark"
   }
 }

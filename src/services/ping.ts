@@ -14,10 +14,13 @@ import { AppConfig, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { readPackageConfiguration } from '../helpers/project';
 import { generatePage } from '../helpers/page';
+import { MetaOptions } from '../model/page';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep } = lodash;
 const { differenceInMilliseconds } = dateFns;
+
+const DEFAULT_STATUS_REFRESH_SECONDS = 60;
 
 interface Diagnostics {
   httpStatus: string;
@@ -103,7 +106,7 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
   } = messages;
 
   const diagPromises = config.servers.map(async (s, serverId) => {
-    const { 
+    const {
       startedAt: serverStartedAt, stoppedAt: serverStoppedAt, isScheduleEnabled: serverScheduleEnabled
     } = appState.servers[serverId];
     const host = s.network?.hostname || undefined;
@@ -113,7 +116,7 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     const hostname = s.network?.hostname || undefined;
     const isScheduleEnabled = serverScheduleEnabled || false;
     const privateKeyPath = s.ssh?.keyPath || undefined;
-    
+
     const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
       gatewayPing(host),
       serverSSHTest(serverId, host, port, username, privateKeyPath),
@@ -144,8 +147,18 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     };
   });
 
-  return Promise.all(diagPromises); 
+  return Promise.all(diagPromises);
 }
+
+const configKeySorter = (key, value) =>
+  value instanceof Object && !(value instanceof Array) ?
+    Object.keys(value)
+      .sort()
+      .reduce((sorted, key) => {
+        sorted[key] = value[key];
+        return sorted
+      }, {}) :
+    value;
 
 /**
  * Returns diagnostics with status message
@@ -164,15 +177,69 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
 
   // Diagnostics
   const diags = await diagnose(appConfig, appState);
+  const serverDiagnostics = formatDiagnostics(diags);
 
   // Uptime app calculation
   const now = new Date(Date.now());
   const uptime = computeDuration(startedAt || now, now);
-  
+
+  // Refresh interval
+  const refreshInterval = appConfig.ui?.statusRefreshInterval == undefined ? DEFAULT_STATUS_REFRESH_SECONDS : appConfig.ui?.statusRefreshInterval;
+
   // Package configuration
   const packageConfig = await readPackageConfiguration();
 
-  const serverDiagnostics = diags.map((d, serverId) => {
+  const htmlResult = `
+  <h1>${pingMessages.statusTitle}</h1>
+  <p><em>${interpolate(pingMessages.appUptime, { uptime, refreshInterval })}</em></p>
+  <ul>
+  ${serverDiagnostics}
+  </ul>
+  <p>${pingMessages.instructions}</p>
+  <h2>${pingMessages.configurationTitle}</h2>
+  <pre>${JSON.stringify(displayedConfig, configKeySorter, 2)}</pre>
+  <hr/>
+  <section><p><em>${packageConfig.name}, v${packageConfig.version}</em></p></section>
+  `;
+
+  const metaOptions = buildMetaOptions(appConfig);
+
+  res.send(generatePage(htmlResult, metaOptions));
+}
+
+function resolveBaseServiceUrl(serverId: number) {
+  return `/${serverId}/`;
+}
+
+function resolvePowerServiceUrls(serverId: number) {
+  const powerUrlBase = resolveBaseServiceUrl(serverId);
+  return {
+    onUrl: `${powerUrlBase}on`,
+    offUrl: `${powerUrlBase}off`,
+  };
+}
+
+function resolveScheduleServiceUrls(serverId: number) {
+  const powerUrlBase = resolveBaseServiceUrl(serverId);
+  return {
+    enableScheduleUrl: `${powerUrlBase}enable`,
+    disableScheduleUrl: `${powerUrlBase}disable`,
+  };
+}
+
+function buildMetaOptions(appConfig: AppConfig): MetaOptions {
+  const statusRefreshInterval = appConfig.ui?.statusRefreshInterval;
+  return {
+    refreshSeconds: statusRefreshInterval === undefined ? DEFAULT_STATUS_REFRESH_SECONDS : statusRefreshInterval,
+  };
+}
+
+function formatDiagnostics(diags: Diagnostics[]) {
+  const {
+    ping: pingMessages,
+  } = messages;
+
+  return diags.map((d, serverId) => {
     const { httpStatus, pingStatus, sshStatus, isPingSuccess, isSSHSuccess, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
 
     const powerUrls = resolvePowerServiceUrls(serverId);
@@ -193,39 +260,4 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
       </li>
     `;
   }).join('\n');
-
-  const htmlResult = `
-  <h1>${pingMessages.statusTitle}</h1>
-  <p><em>${interpolate(pingMessages.appUptime, { uptime })}</em></p>
-  <ul>
-  ${serverDiagnostics}
-  </ul>
-  <p>${pingMessages.instructions}</p>
-  <h2>${pingMessages.configurationTitle}</h2>
-  <pre>${JSON.stringify(displayedConfig, null, 2)}</pre>
-  <hr/>
-  <section><p><em>${packageConfig.name}, v${packageConfig.version}</em></p></section>
-  `;
-
-  res.send(generatePage(htmlResult));
-}
-
-function resolveBaseServiceUrl(serverId: number) {
-  return `/${serverId}/`; 
-}
-
-function resolvePowerServiceUrls(serverId: number) {
-  const powerUrlBase = resolveBaseServiceUrl(serverId);
-  return {
-    onUrl: `${powerUrlBase}on`,
-    offUrl: `${powerUrlBase}off`,
-  };
-}
-
-function resolveScheduleServiceUrls(serverId: number) {
-  const powerUrlBase = resolveBaseServiceUrl(serverId);
-  return {
-    enableScheduleUrl: `${powerUrlBase}enable`,
-    disableScheduleUrl: `${powerUrlBase}disable`,
-  };
 }

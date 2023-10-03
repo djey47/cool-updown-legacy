@@ -22,7 +22,7 @@ export default {
     actionsItem: 'Actions: <a href="{onUrl}">Power ON</a> | <a href="{offUrl}">Power OFF</a> | <a href="{enableScheduleUrl}">Schedule ENABLE</a> | <a href="{disableScheduleUrl}">Schedule DISABLE</a>',
     instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
     offline: 'Server is likely to be OFFLINE!',
-    appUptime: 'Running for <b>{uptime}</b>.',
+    appUptime: 'Running for <b>{uptime}</b> - refresh every <b>{refreshInterval} second(s)</b> .',
     serverUptime: 'Last start attempt: <b>{time} ago</b>.',
     serverDowntime: 'Last stop attempt: <b>{time} ago</b>.',
     serverUndefinedTime: 'Last start/stop attempt: <b>N/A</b>',
