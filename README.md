@@ -64,7 +64,8 @@ Default configuration is given as example in `config/default.json` file.
     }  
   }],
   "ui": {
-    "theme": "dark"
+    "statusRefreshInterval": 30,
+    "theme": "dark",
   }
 }
 ```
@@ -96,6 +97,7 @@ Note: `config/local-test.json` is used for testing during development only!
 | `... enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
 | `... on.at`, `off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
 | `ui` | Visual settings for the web user interface | {...} |
+| `>> statusRefreshInterval` | interval in seconds between 2 status page refreshes | 60 | 
 | `>> theme` | one of available color themes: light, dark, crimson | light | 
 
 ### SSH Configuration
@@ -148,7 +150,7 @@ Here is a sample page output:
 ```
 coolupdown alive and running!
 
-Running for less than one minute.
+Running for less than one minute - refresh every 60 second(s).
 
 - Server #0: MY-SERVER
 
