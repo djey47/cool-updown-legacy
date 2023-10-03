@@ -177,39 +177,21 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
 
   // Diagnostics
   const diags = await diagnose(appConfig, appState);
+  const serverDiagnostics = formatDiagnostics(diags);
 
   // Uptime app calculation
   const now = new Date(Date.now());
   const uptime = computeDuration(startedAt || now, now);
 
+  // Refresh interval
+  const refreshInterval = appConfig.ui?.statusRefreshInterval == undefined ? DEFAULT_STATUS_REFRESH_SECONDS : appConfig.ui?.statusRefreshInterval;
+
   // Package configuration
   const packageConfig = await readPackageConfiguration();
 
-  const serverDiagnostics = diags.map((d, serverId) => {
-    const { httpStatus, pingStatus, sshStatus, isPingSuccess, isSSHSuccess, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
-
-    const powerUrls = resolvePowerServiceUrls(serverId);
-    const scheduleUrls = resolveScheduleServiceUrls(serverId);
-
-    return `
-      <li>
-        <h2>${interpolate(pingMessages.serverTitle, { serverId })}${hostname && (': ' + hostname) || ''}</h2>
-        <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
-        <ul>
-          <li>${interpolate(pingMessages.scheduleItem, { scheduleStatus })}</li>
-          <li>${serverUpDownTimeMessage}</li>
-          <li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
-          <li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
-          <li>${interpolate(pingMessages.httpItem, { httpStatus, url })}</li>
-          <li>${interpolate(pingMessages.actionsItem, { ...powerUrls, ...scheduleUrls })}</li>
-        </ul>
-      </li>
-    `;
-  }).join('\n');
-
   const htmlResult = `
   <h1>${pingMessages.statusTitle}</h1>
-  <p><em>${interpolate(pingMessages.appUptime, { uptime })}</em></p>
+  <p><em>${interpolate(pingMessages.appUptime, { uptime, refreshInterval })}</em></p>
   <ul>
   ${serverDiagnostics}
   </ul>
@@ -250,4 +232,32 @@ function buildMetaOptions(appConfig: AppConfig): MetaOptions {
   return {
     refreshSeconds: statusRefreshInterval === undefined ? DEFAULT_STATUS_REFRESH_SECONDS : statusRefreshInterval,
   };
+}
+
+function formatDiagnostics(diags: Diagnostics[]) {
+  const {
+    ping: pingMessages,
+  } = messages;
+
+  return diags.map((d, serverId) => {
+    const { httpStatus, pingStatus, sshStatus, isPingSuccess, isSSHSuccess, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
+
+    const powerUrls = resolvePowerServiceUrls(serverId);
+    const scheduleUrls = resolveScheduleServiceUrls(serverId);
+
+    return `
+      <li>
+        <h2>${interpolate(pingMessages.serverTitle, { serverId })}${hostname && (': ' + hostname) || ''}</h2>
+        <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
+        <ul>
+          <li>${interpolate(pingMessages.scheduleItem, { scheduleStatus })}</li>
+          <li>${serverUpDownTimeMessage}</li>
+          <li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
+          <li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
+          <li>${interpolate(pingMessages.httpItem, { httpStatus, url })}</li>
+          <li>${interpolate(pingMessages.actionsItem, { ...powerUrls, ...scheduleUrls })}</li>
+        </ul>
+      </li>
+    `;
+  }).join('\n');
 }
