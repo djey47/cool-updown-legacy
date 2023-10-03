@@ -8,6 +8,8 @@ It can manage one to many servers.
 
 It also pings monitored server (ICMP, SSH, HTTP) and display result.
 
+![screenshot](https://github.com/djey47/cool-updown/blob/master/screens/screen-1.png)
+
 ## Install
 
 ### Requirements
