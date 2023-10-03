@@ -106,7 +106,7 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
   } = messages;
 
   const diagPromises = config.servers.map(async (s, serverId) => {
-    const { 
+    const {
       startedAt: serverStartedAt, stoppedAt: serverStoppedAt, isScheduleEnabled: serverScheduleEnabled
     } = appState.servers[serverId];
     const host = s.network?.hostname || undefined;
@@ -116,7 +116,7 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     const hostname = s.network?.hostname || undefined;
     const isScheduleEnabled = serverScheduleEnabled || false;
     const privateKeyPath = s.ssh?.keyPath || undefined;
-    
+
     const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
       gatewayPing(host),
       serverSSHTest(serverId, host, port, username, privateKeyPath),
@@ -147,8 +147,18 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     };
   });
 
-  return Promise.all(diagPromises); 
+  return Promise.all(diagPromises);
 }
+
+const configKeySorter = (key, value) =>
+  value instanceof Object && !(value instanceof Array) ?
+    Object.keys(value)
+      .sort()
+      .reduce((sorted, key) => {
+        sorted[key] = value[key];
+        return sorted
+      }, {}) :
+    value;
 
 /**
  * Returns diagnostics with status message
@@ -171,7 +181,7 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
   // Uptime app calculation
   const now = new Date(Date.now());
   const uptime = computeDuration(startedAt || now, now);
-  
+
   // Package configuration
   const packageConfig = await readPackageConfiguration();
 
@@ -205,7 +215,7 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
   </ul>
   <p>${pingMessages.instructions}</p>
   <h2>${pingMessages.configurationTitle}</h2>
-  <pre>${JSON.stringify(displayedConfig, null, 2)}</pre>
+  <pre>${JSON.stringify(displayedConfig, configKeySorter, 2)}</pre>
   <hr/>
   <section><p><em>${packageConfig.name}, v${packageConfig.version}</em></p></section>
   `;
@@ -216,7 +226,7 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
 }
 
 function resolveBaseServiceUrl(serverId: number) {
-  return `/${serverId}/`; 
+  return `/${serverId}/`;
 }
 
 function resolvePowerServiceUrls(serverId: number) {
