@@ -2,13 +2,15 @@ import { NodeSSH, SSHExecCommandOptions } from 'node-ssh';
 import wol, { WakeOptions } from 'wake_on_lan';
 import logger from '../helpers/logger';
 import messages from '../resources/messages';
-import { ApiRequest, AppState } from '../model/models';
-import { TypedResponse } from '../model/express';
 import { validateInputParameters } from '../helpers/api';
 import { retrieveServerConfiguration } from '../helpers/config';
 import { generatePage } from '../helpers/page';
 import { withBackLink } from '../helpers/components';
 import { getSSHParameters } from '../helpers/ssh';
+
+import type { AppState } from '../model/models';
+import type { TypedResponse } from '../model/express';
+import type { ApiRequest } from '../model/api';
 
 const ssh = new NodeSSH();
 

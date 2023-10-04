@@ -1,8 +1,9 @@
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultRequest, generateDefaultResponse } from '../helpers/testing';
-import { AppState } from '../model/models';
 import { offServer, onServer } from './power';
+
+import type { AppState } from '../model/models';
 
 jest.mock('../helpers/page', () => globalMocks.pageMock);
 jest.mock('../helpers/ssh', () => globalMocks.sshMock);

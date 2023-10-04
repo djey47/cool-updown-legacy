@@ -1,12 +1,6 @@
 import { CronJob } from 'cron';
 import { TypedResponse } from './express';
 
-export interface ApiRequest {
-  params: {
-    serverId?: string;
-  };
-}
-
 export interface ServerState {
   startedAt?: Date;
   stoppedAt?: Date;

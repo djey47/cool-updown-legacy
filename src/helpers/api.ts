@@ -2,10 +2,10 @@
  * Provides utility functions to handle Cool-updown API requests and responses
  */
 
-import { ApiInputParameters } from '../model/api';
-import { TypedResponse } from "../model/express";
-import { ApiRequest } from "../model/models";
 import messages from "../resources/messages";
+
+import type { ApiRequest, ApiInputParameters } from '../model/api';
+import type { TypedResponse } from "../model/express";
 
 /**
  * @param request API request from Express middleware

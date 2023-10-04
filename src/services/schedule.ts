@@ -2,9 +2,11 @@ import { validateInputParameters } from '../helpers/api';
 import { withBackLink } from '../helpers/components';
 import logger from '../helpers/logger';
 import { generatePage } from '../helpers/page';
-import { TypedResponse } from '../model/express';
-import { ApiRequest, AppState, ServerState } from '../model/models';
 import messages from '../resources/messages';
+
+import type { TypedResponse } from '../model/express';
+import type { AppState, ServerState } from '../model/models';
+import type { ApiRequest } from '../model/api';
 
 export function enable(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   // TODO

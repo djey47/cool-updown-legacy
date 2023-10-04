@@ -2,7 +2,7 @@
  * Unit testing support functions
  */
 
-import { ApiRequest } from "../model/models";
+import type { ApiRequest } from '../model/api';
 
 /**
  * @param expressResponseMock 

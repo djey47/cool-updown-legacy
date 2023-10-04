@@ -1,6 +1,7 @@
-import { ApiRequest } from '../model/models';
 import { validateInputParameters } from './api';
 import globalMocks from '../../config/jest/globalMocks';
+
+import type { ApiRequest } from '../model/api';
 
 const responseMock = globalMocks.expressResponseMock;
 
