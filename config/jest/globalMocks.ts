@@ -63,6 +63,7 @@ jest.mock('wake_on_lan', () => ({
 
 // winston
 const mockWinstonLogger = jest.fn(() => ({
+  debug: () => null,
   error: () => null,
   info: () => null,
   log: () => null,
@@ -89,6 +90,10 @@ const mockOffJobStop = jest.fn();
 const mockGatewayPing = jest.fn();
 
 const mockPageGeneratePage = jest.fn();
+
+const mockSSHGetParams = jest.fn();
+
+const mockAuthReadPrivateKey = jest.fn();
 
 export default {
   dateMock: {
@@ -145,4 +150,10 @@ export default {
   pageMock: {
     generatePage: mockPageGeneratePage,
   },
+  sshMock: {
+    getSSHParameters: mockSSHGetParams,
+  },
+  authMock: {
+    readPrivateKey: mockAuthReadPrivateKey,
+  }
 };

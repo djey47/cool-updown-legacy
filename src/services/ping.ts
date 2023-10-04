@@ -9,12 +9,12 @@ import { ping as gatewayPing } from '../helpers/systemGateway';
 import logger from '../helpers/logger';
 import { interpolate, toHumanDuration } from '../helpers/format';
 import { getTimeDetails } from '../helpers/date';
-import { readPrivateKey } from '../helpers/auth';
-import { AppConfig, AppState } from '../model/models';
+import { AppConfig, AppState, ServerConfig } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { readPackageConfiguration } from '../helpers/project';
 import { generatePage } from '../helpers/page';
 import { MetaOptions } from '../model/page';
+import { getSSHParameters } from '../helpers/ssh';
 
 const ssh = new NodeSSH();
 const { cloneDeep: loCloneDeep } = lodash;
@@ -47,15 +47,10 @@ function computeDuration(from: Date, to: Date) {
 /**
  * @private
  */
-async function serverSSHTest(serverId: number, host: string, port: number, username: string, privateKeyPath?: string) {
-  const privateKey = await readPrivateKey(privateKeyPath);
+async function serverSSHTest(serverId: number, serverConfiguration: ServerConfig) {
   try {
-    await ssh.connect({
-      host,
-      port,
-      username,
-      privateKey,
-    });
+    const sshClientConfig = await getSSHParameters(serverConfiguration);
+    await ssh.connect(sshClientConfig);
     logger.info(`(ping:${serverId}) SSH connection OK`);
     return true;
   } catch (err) {
@@ -110,16 +105,13 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
       startedAt: serverStartedAt, stoppedAt: serverStoppedAt, isScheduleEnabled: serverScheduleEnabled
     } = appState.servers[serverId];
     const host = s.network?.hostname || undefined;
-    const port = s.ssh?.port || undefined;
-    const username = s.ssh?.user || undefined;
     const url = s.url || undefined;
     const hostname = s.network?.hostname || undefined;
     const isScheduleEnabled = serverScheduleEnabled || false;
-    const privateKeyPath = s.ssh?.keyPath || undefined;
 
     const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
       gatewayPing(host),
-      serverSSHTest(serverId, host, port, username, privateKeyPath),
+      serverSSHTest(serverId, s),
       url ? serverHTTPTest(serverId, url) : Promise.resolve(false),
     ]);
 
