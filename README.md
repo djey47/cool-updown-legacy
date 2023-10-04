@@ -86,12 +86,12 @@ Note: `config/local-test.json` is used for testing during development only!
 | `>> network` | Set of network related configuration as described below | {...} |
 | `... macAddress`| used to wake the server up | FF:FF:FF:FF:FF:FF (**change it**) |
 | `... broadcastIpAddress`| useful to fix wake on lan on Windows systems, eventually | 255.255.255.255 |
-| `... hostName`| name or IP address to join your server via SSH | myserver and label it in ping page (**change it**) |
+| `... hostName`| name or IP address to join your server via SSH | / |
 | `>> ssh` | Set of SSH access related configuration as described below | {...} |
-| `... keyPath`| location of your private key to be used for SSH (PEM format, RSA only supported) | /home/user/.ssh/id_rsa (**change it**) |
+| `... keyPath`| location of your private key to be used for SSH (PEM format, RSA only supported) | / |
 | `... offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
-| `... user`| user name to join your server via SSH (sudoer) | bob (**change it**) |
-| `... password`| password for user above | alice (**change it**) |
+| `... user`| user name to join your server via SSH (sudoer) | / |
+| `... password`| password for user above if required for sudo | / |
 | `... port`| TCP port to join your server via SSH | 22 |
 | `>> ssh` | Set of SSH access related configuration as described below | {...} |
 | `... enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |

@@ -9,9 +9,10 @@ jest.mock('../helpers/project', () => ({
   readPackageConfiguration: jest.fn(),
 }));
 jest.mock('../helpers/page', () => globalMocks.pageMock);
+jest.mock('../helpers/ssh', () => globalMocks.sshMock);
 
 const {
-  axiosMock, expressResponseMock, nodeFSMock, systemGatewayMock: mockSystemGateway, nodesshMock, pageMock
+  axiosMock, expressResponseMock, systemGatewayMock: mockSystemGateway, nodesshMock, pageMock, sshMock
 } = globalMocks;
 
 const readPackageConfigurationMock = readPackageConfiguration as jest.Mock;
@@ -30,14 +31,20 @@ describe('ping service', () => {
     // HTTP OK
     axiosMock.get.mockImplementation(() => Promise.resolve());
 
-    // Async file reader OK with private key contents
-    nodeFSMock.readFile.mockResolvedValue('=== PRIVATE KEY ===');
-
     // Package config utility
-    readPackageConfigurationMock.mockResolvedValue({name: 'cud', version: 'test'});
+    readPackageConfigurationMock.mockResolvedValue({ name: 'cud', version: 'test' });
 
     // Page helper
     pageMock.generatePage.mockImplementation((html, metaOptions) => `<page-shared with meta ${JSON.stringify(metaOptions)} />${html}`);
+
+    // SSH helper
+    sshMock.getSSHParameters.mockResolvedValue({
+      host: 'Host Name',
+      port: 22,
+      privateKey: '=== PRIVATE KEY ===',
+      username: 'User',
+    });
+
   });
 
   it('should perform diagnosis and send appropriate response when schedule enabled', async () => {
@@ -98,7 +105,7 @@ describe('ping service', () => {
     const state = {
       ...appState,
     };
-      // Ping KO
+    // Ping KO
     mockSystemGateway.pingMock.mockResolvedValue(false);
 
     // when
@@ -117,7 +124,7 @@ describe('ping service', () => {
     const state = {
       ...appState,
     };
-      // SSH KO
+    // SSH KO
     nodesshMock.connect.mockImplementation(() => Promise.reject());
 
     // when
@@ -136,7 +143,7 @@ describe('ping service', () => {
     const state = {
       ...appState,
     };
-      // HTTP KO
+    // HTTP KO
     axiosMock.get.mockImplementation(() => Promise.reject());
 
     // when
@@ -155,7 +162,7 @@ describe('ping service', () => {
     const state = {
       ...appState,
     };
-      // Ping KO
+    // Ping KO
     mockSystemGateway.pingMock.mockImplementation(() => Promise.resolve(false));
     // SSH KO
     nodesshMock.connect.mockImplementation(() => Promise.reject());

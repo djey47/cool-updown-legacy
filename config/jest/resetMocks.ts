@@ -1,7 +1,7 @@
 import globalMocks from '../../config/jest/globalMocks';
 
 const {
-    axiosMock, expressResponseMock, nodeFSMock, systemGatewayMock, nodesshMock, pageMock
+    axiosMock, expressResponseMock, nodeFSMock, systemGatewayMock, nodesshMock, pageMock, sshMock, authMock
 } = globalMocks;
   
 export default function() {
@@ -15,4 +15,6 @@ export default function() {
     nodesshMock.dispose.mockReset();
     nodesshMock.execCommand.mockReset();
     pageMock.generatePage.mockReset();
+    sshMock.getSSHParameters.mockReset();
+    authMock.readPrivateKey.mockReset();
 }

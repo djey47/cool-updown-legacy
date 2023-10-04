@@ -25,7 +25,6 @@ export function initBasicAuth(app: App, isEnabled: boolean, userName: string, pa
 }
 
 /**
- * @private
  * @return Promise which resolves to String,
  * with the contents of SSH private key as per provided keyPath
  */

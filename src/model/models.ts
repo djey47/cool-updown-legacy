@@ -31,11 +31,11 @@ export interface ServerConfig {
     macAddress: string;
   };
   ssh?: {
-    keyPath?: string;
-    offCommand: string;
+    keyPath: string;
+    offCommand?: string;
     password?: string;
     port?: number;
-    user?: string;
+    user: string;
   };
   schedule?: {
     enabled: boolean;

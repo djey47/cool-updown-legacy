@@ -5,8 +5,9 @@ import { AppState } from '../model/models';
 import { offServer, onServer } from './power';
 
 jest.mock('../helpers/page', () => globalMocks.pageMock);
+jest.mock('../helpers/ssh', () => globalMocks.sshMock);
 
-const { expressResponseMock, nodeFSMock, nodesshMock, wakeonlanMock, pageMock } = globalMocks;
+const { expressResponseMock, nodesshMock, wakeonlanMock, pageMock, sshMock } = globalMocks;
 
 const appState = generateDefaultAppState();
 const res = generateDefaultResponse(expressResponseMock);
@@ -93,15 +94,21 @@ describe('power services', () => {
     beforeEach(() => {
       resetMocks();
 
-      // Async file reader OK with private key contents
-      nodeFSMock.readFile.mockResolvedValue('=== PRIVATE KEY ===');
-
       expressResponseMock.statusMock.mockImplementation(() => expressResponseMock);
 
+      nodesshMock.connect.mockResolvedValue(undefined);
       nodesshMock.execCommand.mockResolvedValue({ stdout: '', stderr: '', code: 0 });
 
       // Page helper
       pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
+    
+      // SSH helper
+      sshMock.getSSHParameters.mockResolvedValue({
+        host: 'Host Name',
+        port: 22,
+        privateKey: '=== PRIVATE KEY ===',
+        username: 'User',
+       });
     });
 
     it('should invoke SSH and generate correct response on success', async () => {

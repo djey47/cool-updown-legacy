@@ -1,16 +1,18 @@
-import { NodeSSH } from 'node-ssh';
+import { NodeSSH, SSHExecCommandOptions } from 'node-ssh';
 import wol, { WakeOptions } from 'wake_on_lan';
 import logger from '../helpers/logger';
 import messages from '../resources/messages';
-import { readPrivateKey } from '../helpers/auth';
 import { ApiRequest, AppState } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { validateInputParameters } from '../helpers/api';
 import { retrieveServerConfiguration } from '../helpers/config';
 import { generatePage } from '../helpers/page';
 import { withBackLink } from '../helpers/components';
+import { getSSHParameters } from '../helpers/ssh';
 
 const ssh = new NodeSSH();
+
+const DEFAULT_SSH_OFF_COMMAND = 'sudo -S shutdown -h now';
 
 /**
  * Handles ON request for all servers
@@ -67,28 +69,25 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
 export async function offServer(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const { serverId } = validateInputParameters(req as ApiRequest, res);
   const serverConfiguration = retrieveServerConfiguration(res, serverId);
-  
-  const host = serverConfiguration.network?.hostname || undefined;
-  const port = serverConfiguration.ssh?.port;
-  const username = serverConfiguration.ssh?.user;
-  const password = serverConfiguration.ssh?.password;
-  const command = serverConfiguration.ssh?.offCommand;
-  const privateKeyPath = serverConfiguration.ssh?.keyPath || undefined;
+  const { ssh: sshConfiguration } = serverConfiguration;
 
   try {
-    const privateKey = await readPrivateKey(privateKeyPath);
-    await ssh.connect({
-      host,
-      port,
-      username,
-      privateKey,
-    });
+    const sshClientConfig = await getSSHParameters(serverConfiguration);
+    await ssh.connect(sshClientConfig);
 
     logger.info(`(off-server:${serverId}) ${messages.sshOK}`);
 
-    const { stdout, stderr, code } = await ssh.execCommand(command, { stdin: `${password}\n` });
-    logger.log('debug', `(off-server:${serverId}) STDOUT: ${stdout}`);
-    logger.log('debug', `(off-server:${serverId}) STDERR: ${stderr}`);
+    const commandOptions: SSHExecCommandOptions = {};
+    const password = sshConfiguration?.password;
+    if (password !== undefined) {
+      commandOptions.stdin = `${password}\n`; 
+    }
+
+    const command = sshConfiguration?.offCommand || DEFAULT_SSH_OFF_COMMAND;
+    const { stdout, stderr, code } = await ssh.execCommand(command, commandOptions);
+
+    logger.debug(`(off-server:${serverId}) STDOUT: ${stdout}`);
+    logger.debug(`(off-server:${serverId}) STDERR: ${stderr}`);
 
     if (code !== 0) throw stderr;
 
