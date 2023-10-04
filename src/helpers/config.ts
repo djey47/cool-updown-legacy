@@ -1,18 +1,16 @@
 import config from 'config';
-import { TypedResponse } from "../model/express";
+import { TypedResponse } from '../model/express';
 import { ServerConfig } from '../model/models';
 import messages from '../resources/messages';
 
 /**
- * 
- * @param res 
- * @param serverId 
- * @returns 
+ * @returns configuration for server with provided identifier
  */
-export function retrieveServerConfiguration(res: TypedResponse<string>, serverId: string) {
-  const serversConfiguration = config.get('servers');
-  const serverConfiguration = serversConfiguration[serverId] as ServerConfig;
+export function retrieveServerConfiguration(res: TypedResponse<string>, serverId: number) {
+  const serversConfiguration = config.get('servers') as ServerConfig[];
+  const serverConfiguration = serversConfiguration[serverId];
 
+  // FIXME should not set response here, let calling service do this
   if (!serverConfiguration) {
     res.status(400).send(messages.errors.invalidArg);
   }
