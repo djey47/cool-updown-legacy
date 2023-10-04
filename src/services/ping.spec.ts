@@ -3,6 +3,7 @@ import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
 import ping from './ping';
 import { readPackageConfiguration } from '../helpers/project';
+import { FeatureStatus } from '../model/models';
 
 jest.mock('../helpers/systemGateway', () => globalMocks.systemGatewayMock);
 jest.mock('../helpers/project', () => ({
@@ -68,6 +69,7 @@ describe('ping service', () => {
     expect(nodesshMock.dispose).toHaveBeenCalled();
     expect(expressResponseMock.sendMock).toHaveBeenCalled();
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    expect(state.servers[0].lastPingStatus).toBe(FeatureStatus.OK); 
   });
 
   it('should send appropriate response when serverStartedAt defined', async () => {
@@ -117,6 +119,7 @@ describe('ping service', () => {
     expect(nodesshMock.dispose).toHaveBeenCalled();
     expect(expressResponseMock.sendMock).toHaveBeenCalled();
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    expect(state.servers[0].lastPingStatus).toBe(FeatureStatus.KO);
   });
 
   it('should send appropriate response when server SSH KO', async () => {
