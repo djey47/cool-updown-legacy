@@ -2,7 +2,7 @@ import { CronJob } from 'cron';
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultRequest, generateDefaultResponse } from '../helpers/testing';
-import { AppState } from '../model/models';
+import { AppState, FeatureStatus } from '../model/models';
 import { disableServer, enableServer } from './schedule';
 
 jest.mock('../helpers/page', () => globalMocks.pageMock);
@@ -33,6 +33,7 @@ describe('schedule services', () => {
         ...appState,
         servers: [{
           isScheduleEnabled: false,
+          lastPingStatus: FeatureStatus.UNAVAILABLE,
           ...mockJobs,
         }],
       };
@@ -59,10 +60,11 @@ describe('schedule services', () => {
 
     it('should set jobs state correctly and generate correct response', () => {
       // given
-      const state = {
+      const state: AppState = {
         ...appState,
         servers: [{
           isScheduleEnabled: true,
+          lastPingStatus: FeatureStatus.UNAVAILABLE,
           ...mockJobs,
         }],
       };

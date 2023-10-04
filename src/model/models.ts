@@ -7,6 +7,7 @@ export interface ServerState {
   isScheduleEnabled?: boolean;
   onJob?: CronJob;
   offJob?: CronJob;
+  lastPingStatus: FeatureStatus;
 }
 
 export interface AppState {
@@ -42,6 +43,12 @@ export enum ColorTheme {
   light = 'light',
   dark = 'dark',
   crimson = "crimson",
+}
+
+export enum FeatureStatus {
+  OK = 'ok',
+  KO = 'ko',
+  UNAVAILABLE = 'n/a',
 }
 
 export interface AppConfig {

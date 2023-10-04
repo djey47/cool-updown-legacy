@@ -2,6 +2,7 @@ import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultRequest, generateDefaultResponse } from '../helpers/testing';
 import { offServer, onServer } from './power';
+import { FeatureStatus } from '../model/models';
 
 import type { AppState } from '../model/models';
 
@@ -36,7 +37,8 @@ describe('power services', () => {
         ...appState,
         servers: [{
           startedAt: null,
-          stoppedAt: new Date(),  
+          stoppedAt: new Date(),
+          lastPingStatus: FeatureStatus.UNAVAILABLE,  
         }],
       };
 
@@ -114,11 +116,12 @@ describe('power services', () => {
 
     it('should invoke SSH and generate correct response on success', async () => {
       // given
-      const appStateWithServerStartTime = {
+      const appStateWithServerStartTime: AppState = {
         ...appState,
         servers: [{
           startedAt: new Date(),
           stoppedAt: undefined,
+          lastPingStatus: FeatureStatus.UNAVAILABLE,
         }],
       };
 

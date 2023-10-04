@@ -7,8 +7,10 @@ import messages from './resources/messages';
 import { enableServer, disableServer, disable, enable } from './services/schedule';
 import { initBasicAuth } from './helpers/auth';
 import logger from './helpers/logger';
-import { AppState, ServerConfig } from './model/models';
 import { createOffJob, createOnJob } from './helpers/jobs';
+import { FeatureStatus } from './model/models';
+
+import type { AppState, ServerConfig, ServerState } from './model/models';
 
 const app = express();
 
@@ -25,7 +27,8 @@ const initServersState = (serversConfig: ServerConfig[], appState: AppState) => 
       onJob: createOnJob(serverIdAsString, sc.schedule?.on || undefined, isServerScheduleEnabled, appState),
       offJob: createOffJob(serverIdAsString, sc.schedule?.off || undefined, isServerScheduleEnabled, appState),
       isScheduleEnabled: isServerScheduleEnabled,
-    };
+      lastPingStatus: FeatureStatus.UNAVAILABLE,
+    } as ServerState;
   });
 }
 
