@@ -1,10 +1,11 @@
+import config from 'config';
 import dateFns from 'date-fns';
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
 import ping from './ping';
 import { readPackageConfiguration } from '../helpers/project';
-import { AppState, FeatureStatus } from '../model/models';
+import { AppConfig, AppState, FeatureStatus } from '../model/models';
 
 jest.mock('../helpers/systemGateway', () => globalMocks.systemGatewayMock);
 jest.mock('../helpers/project', () => ({
@@ -28,7 +29,7 @@ describe('ping service', () => {
     readPackageConfigurationMock.mockReset();
 
     // Ping OK
-    mockSystemGateway.pingMock.mockResolvedValue(true);
+    mockSystemGateway.pingMock.mockResolvedValue(FeatureStatus.OK);
 
     // HTTP OK
     axiosMock.get.mockImplementation(() => Promise.resolve());
@@ -117,7 +118,7 @@ describe('ping service', () => {
       ...appState,
     };
     // Ping KO
-    mockSystemGateway.pingMock.mockResolvedValue(false);
+    mockSystemGateway.pingMock.mockResolvedValue(FeatureStatus.KO);
 
     // when
     await ping({}, expressResponseMock, state);
@@ -148,6 +149,29 @@ describe('ping service', () => {
     expect(nodesshMock.dispose).toHaveBeenCalled();
     expect(expressResponseMock.sendMock).toHaveBeenCalled();
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+  });  
+  
+  it('should send appropriate response when missing SSH configuration', async () => {
+    // given
+    const state: AppState = {
+      ...appState,
+    };
+    const appConfig = config as unknown as AppConfig;
+    const { servers: [serverConfig] } = appConfig; 
+    const sshConfig = serverConfig.ssh;
+    const sshConfigBackup = { ...sshConfig };
+    delete serverConfig.ssh;
+
+    // when
+    await ping({}, expressResponseMock, state);
+
+    // then
+    expect(nodesshMock.connect).not.toHaveBeenCalled();
+    expect(nodesshMock.dispose).not.toHaveBeenCalled();
+    expect(expressResponseMock.sendMock).toHaveBeenCalled();
+    expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+
+    serverConfig.ssh = sshConfigBackup;
   });
 
   it('should send appropriate response when server HTTP KO', async () => {
@@ -169,13 +193,34 @@ describe('ping service', () => {
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
   });
 
+  it('should send appropriate response when missing HTTP URL', async () => {
+    // given
+    const state: AppState = {
+      ...appState,
+    };
+    const appConfig = config as unknown as AppConfig;
+    const { servers: [serverConfig] } = appConfig; 
+    const serverUrlBackup = serverConfig.url;
+    delete serverConfig.url;
+
+    // when
+    await ping({}, expressResponseMock, state);
+
+    // then
+    expect(axiosMock.get).not.toHaveBeenCalled();
+    expect(expressResponseMock.sendMock).toHaveBeenCalled();
+    expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+
+    serverConfig.url = serverUrlBackup;
+  });
+
   it('should send appropriate response when server OFFLINE', async () => {
     // given
     const state: AppState = {
       ...appState,
     };
     // Ping KO
-    mockSystemGateway.pingMock.mockImplementation(() => Promise.resolve(false));
+    mockSystemGateway.pingMock.mockImplementation(() => Promise.resolve(FeatureStatus.KO));
     // SSH KO
     nodesshMock.connect.mockImplementation(() => Promise.reject());
     // HTTP KO

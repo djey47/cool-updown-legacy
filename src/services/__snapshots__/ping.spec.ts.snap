@@ -65,6 +65,128 @@ exports[`ping service should perform diagnosis and send appropriate response whe
   "
 `;
 
+exports[`ping service should send appropriate response when missing HTTP URL 1`] = `
+"<page-shared with meta {"refreshSeconds":30} />
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
+  <ul>
+  
+      <li>
+        <h2>Server #0: Host Name</h2>
+        <p></p>
+        <ul>
+          <li>Schedule: <b>DISABLED</b></li>
+          <li>Last start/stop attempt: <b>N/A</b></li>
+          <li>Ping test: <b>OK</b></li>
+          <li>SSH test: <b>OK</b></li>
+          <li>HTTP test: <b>N/A</b> </li>
+          <li>Actions: <a href="/0/on">Power ON</a> | <a href="/0/off">Power OFF</a> | <a href="/0/enable">Schedule ENABLE</a> | <a href="/0/disable">Schedule DISABLE</a></li>
+        </ul>
+      </li>
+    
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "authEnabled": true,
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
+  },
+  "servers": [
+    {
+      "network": {
+        "broadcastIpAddress": "255.255.255.255",
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
+      },
+      "schedule": {
+        "enabled": false,
+        "off": {
+          "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
+        }
+      },
+      "ssh": {
+        "keyPath": "Key Path",
+        "offCommand": "OFF Command",
+        "password": "********",
+        "port": 22,
+        "user": "User"
+      }
+    }
+  ],
+  "ui": {
+    "statusRefreshInterval": 30,
+    "theme": "dark"
+  }
+}</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
+  "
+`;
+
+exports[`ping service should send appropriate response when missing SSH configuration 1`] = `
+"<page-shared with meta {"refreshSeconds":30} />
+  <h1>coolupdown alive and running!</h1>
+  <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
+  <ul>
+  
+      <li>
+        <h2>Server #0: Host Name</h2>
+        <p></p>
+        <ul>
+          <li>Schedule: <b>DISABLED</b></li>
+          <li>Last start/stop attempt: <b>N/A</b></li>
+          <li>Ping test: <b>OK</b></li>
+          <li>SSH test: <b>N/A</b></li>
+          <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
+          <li>Actions: <a href="/0/on">Power ON</a> | <a href="/0/off">Power OFF</a> | <a href="/0/enable">Schedule ENABLE</a> | <a href="/0/disable">Schedule DISABLE</a></li>
+        </ul>
+      </li>
+    
+  </ul>
+  <p>See <a href="/logs" target="_blank">logs</a> for details.</p>
+  <h2>Configuration</h2>
+  <pre>{
+  "app": {
+    "authEnabled": true,
+    "password": "********",
+    "port": 4600,
+    "user": "bob"
+  },
+  "servers": [
+    {
+      "network": {
+        "broadcastIpAddress": "255.255.255.255",
+        "hostname": "Host Name",
+        "macAddress": "FF:FF:FF:FF:FF:FF"
+      },
+      "schedule": {
+        "enabled": false,
+        "off": {
+          "at": "01:00"
+        },
+        "on": {
+          "at": "00:00"
+        }
+      },
+      "url": "http://localhost"
+    }
+  ],
+  "ui": {
+    "statusRefreshInterval": 30,
+    "theme": "dark"
+  }
+}</pre>
+  <hr/>
+  <section><p><em>cud, vtest</em></p></section>
+  "
+`;
+
 exports[`ping service should send appropriate response when server HTTP KO 1`] = `
 "<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
@@ -268,7 +390,7 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
   
       <li>
         <h2>Server #0: Host Name</h2>
-        <p></p>
+        <p>Server is likely to be OFFLINE!</p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
           <li>Last start/stop attempt: <b>N/A</b></li>

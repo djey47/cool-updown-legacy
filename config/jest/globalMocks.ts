@@ -11,6 +11,12 @@ jest.mock('fs/promises', () => ({
   stat: async (p) => mockFSStat(p),
 }));
 
+// child_process
+const mockChildProcessExec = jest.fn();
+jest.mock('child_process', () => ({
+  exec: (cmd, cb) => mockChildProcessExec(cmd, cb),
+}));
+
 // NODE MODULES //
 // app-root-dir
 const mockAppRootDirGet = jest.fn(() => './test');
@@ -146,6 +152,9 @@ export default {
   nodeFSMock: {
     readFile: mockFSReadFile,
     stat: mockFSStat,
+  },
+  nodeChildProcessMock: {
+    exec: mockChildProcessExec,
   },
   pageMock: {
     generatePage: mockPageGeneratePage,

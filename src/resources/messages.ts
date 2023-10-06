@@ -18,7 +18,8 @@ export default {
     pingItem: 'Ping test: <b>{pingStatus}</b>',
     scheduleItem: 'Schedule: <b>{scheduleStatus}</b>',
     sshItem: 'SSH test: <b>{sshStatus}</b>',
-    httpItem: 'HTTP test: <b>{httpStatus}</b> <a href="{url}" target="_blank">URL</a>',
+    httpItem: 'HTTP test: <b>{httpStatus}</b>',
+    httpLinkItem: '<a href="{url}" target="_blank">URL</a>',
     actionsItem: 'Actions: <a href="{onUrl}">Power ON</a> | <a href="{offUrl}">Power OFF</a> | <a href="{enableScheduleUrl}">Schedule ENABLE</a> | <a href="{disableScheduleUrl}">Schedule DISABLE</a>',
     instructions: 'See <a href="/logs" target="_blank">logs</a> for details.',
     offline: 'Server is likely to be OFFLINE!',
@@ -33,6 +34,7 @@ export default {
     kayo: 'KO',
     okay: 'OK',
     noop: 'NOOP',
+    unavail: 'N/A',
   },
   dates: {
     days: 'day(s)',
