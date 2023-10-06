@@ -14,7 +14,7 @@ describe('configuration helper functions', () => {
 
     it('should return proper server config', () => {
       // given-when
-      const actualConfig = retrieveServerConfiguration(responseMock, '0');
+      const actualConfig = retrieveServerConfiguration(responseMock, 0);
 
       // then
       const [expectedConfig] = config.get('servers') as ServerConfig[];
@@ -26,7 +26,7 @@ describe('configuration helper functions', () => {
       responseMock.statusMock.mockReturnValue(responseMock);
 
       // when
-      const actualConfig = retrieveServerConfiguration(responseMock, '1');
+      const actualConfig = retrieveServerConfiguration(responseMock, 1);
 
       // then
       expect(responseMock.statusMock).toHaveBeenCalledWith(400);

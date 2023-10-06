@@ -9,7 +9,7 @@ import { ping as gatewayPing } from '../helpers/systemGateway';
 import logger from '../helpers/logger';
 import { interpolate, toHumanDuration } from '../helpers/format';
 import { getTimeDetails } from '../helpers/date';
-import { AppConfig, AppState, ServerConfig } from '../model/models';
+import { AppConfig, AppState, FeatureStatus, ServerConfig } from '../model/models';
 import { TypedResponse } from '../model/express';
 import { readPackageConfiguration } from '../helpers/project';
 import { generatePage } from '../helpers/page';
@@ -118,11 +118,16 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     // Uptime/Downtime server calculation
     const now = new Date(Date.now());
     const time = computeDuration(serverStartedAt || serverStoppedAt || now, now);
-    let serverUpDownTimeMessage = pingMessages.serverUndefinedTime;
-    if (serverStartedAt) {
-      serverUpDownTimeMessage = interpolate(pingMessages.serverUptime, { time });
-    } else if (serverStoppedAt) {
-      serverUpDownTimeMessage = interpolate(pingMessages.serverDowntime, { time });
+    let serverUpDownTimeMessage;
+    if (!serverStartedAt && !serverStoppedAt) {
+      serverUpDownTimeMessage = pingMessages.serverUndefinedTime;
+    } else {
+      if (!serverStoppedAt || dateFns.isAfter(serverStartedAt, serverStoppedAt)) {
+        serverUpDownTimeMessage = interpolate(pingMessages.serverUptime, { time });
+      }
+      if (!serverStartedAt || dateFns.isAfter(serverStoppedAt, serverStartedAt)) {
+        serverUpDownTimeMessage = interpolate(pingMessages.serverDowntime, { time });
+      } 
     }
 
     return {
@@ -142,7 +147,7 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
   return Promise.all(diagPromises);
 }
 
-const configKeySorter = (key, value) =>
+const configKeySorter = (_key, value) =>
   value instanceof Object && !(value instanceof Array) ?
     Object.keys(value)
       .sort()
@@ -169,6 +174,7 @@ export default async function ping(_req: Express.Request, res: TypedResponse<str
 
   // Diagnostics
   const diags = await diagnose(appConfig, appState);
+  updateAppStateWithDiags(appState, diags);
   const serverDiagnostics = formatDiagnostics(diags);
 
   // Uptime app calculation
@@ -252,4 +258,14 @@ function formatDiagnostics(diags: Diagnostics[]) {
       </li>
     `;
   }).join('\n');
+}
+
+function updateAppStateWithDiags(appState: AppState, diags: Diagnostics[]) {
+  // console.log('ping::updateAppStateWithDiags', {  appState, diags });
+  
+  diags.forEach((diag, serverId) => {
+    appState.servers[serverId].lastPingStatus = diag.isPingSuccess ? FeatureStatus.OK : FeatureStatus.KO;
+  });
+
+  // console.log('ping::updateAppStateWithDiags', { appState });
 }

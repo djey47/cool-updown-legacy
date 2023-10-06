@@ -325,7 +325,7 @@ exports[`ping service should send appropriate response when server ping KO 1`] =
   "
 `;
 
-exports[`ping service should send appropriate response when serverStartedAt defined 1`] = `
+exports[`ping service should send appropriate response when serverStartedAt more recent than serverStoppedAt 1`] = `
 "<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
@@ -336,7 +336,7 @@ exports[`ping service should send appropriate response when serverStartedAt defi
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
-          <li>Last start/stop attempt: <b>N/A</b></li>
+          <li>Last start attempt: <b>less than one minute ago</b>.</li>
           <li>Ping test: <b>OK</b></li>
           <li>SSH test: <b>OK</b></li>
           <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>
@@ -390,7 +390,7 @@ exports[`ping service should send appropriate response when serverStartedAt defi
   "
 `;
 
-exports[`ping service should send appropriate response when serverStoppedAt defined 1`] = `
+exports[`ping service should send appropriate response when serverStoppedAt more recent than serverStartedAt 1`] = `
 "<page-shared with meta {"refreshSeconds":30} />
   <h1>coolupdown alive and running!</h1>
   <p><em>Running for <b>1 hour(s)</b> - refresh every <b>30 second(s)</b> .</em></p>
@@ -401,7 +401,7 @@ exports[`ping service should send appropriate response when serverStoppedAt defi
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
-          <li>Last start/stop attempt: <b>N/A</b></li>
+          <li>Last stop attempt: <b>1 hour(s) ago</b>.</li>
           <li>Ping test: <b>OK</b></li>
           <li>SSH test: <b>OK</b></li>
           <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>

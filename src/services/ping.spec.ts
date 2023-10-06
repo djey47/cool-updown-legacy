@@ -1,8 +1,10 @@
+import dateFns from 'date-fns';
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultResponse } from '../helpers/testing';
 import ping from './ping';
 import { readPackageConfiguration } from '../helpers/project';
+import { AppState, FeatureStatus } from '../model/models';
 
 jest.mock('../helpers/systemGateway', () => globalMocks.systemGatewayMock);
 jest.mock('../helpers/project', () => ({
@@ -49,7 +51,7 @@ describe('ping service', () => {
 
   it('should perform diagnosis and send appropriate response when schedule enabled', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
     };
 
@@ -68,13 +70,18 @@ describe('ping service', () => {
     expect(nodesshMock.dispose).toHaveBeenCalled();
     expect(expressResponseMock.sendMock).toHaveBeenCalled();
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    expect(state.servers[0].lastPingStatus).toBe(FeatureStatus.OK); 
   });
 
-  it('should send appropriate response when serverStartedAt defined', async () => {
+  it('should send appropriate response when serverStartedAt more recent than serverStoppedAt', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
-      serverStartedAt: new Date(Date.now()),
+      servers: [{
+        ...appState.servers[0],
+        startedAt: new Date(Date.now()),
+        stoppedAt: dateFns.subHours(Date.now(), 1),
+      }],
     };
 
     // when
@@ -85,11 +92,15 @@ describe('ping service', () => {
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
   });
 
-  it('should send appropriate response when serverStoppedAt defined', async () => {
+  it('should send appropriate response when serverStoppedAt more recent than serverStartedAt', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
-      serverStoppedAt: new Date(Date.now()),
+      servers: [{
+        ...appState.servers[0],
+        startedAt: dateFns.subHours(Date.now(), 1),
+        stoppedAt: new Date(Date.now()),
+      }],
     };
 
     // when
@@ -102,7 +113,7 @@ describe('ping service', () => {
 
   it('should send appropriate response when server ping KO', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
     };
     // Ping KO
@@ -117,11 +128,12 @@ describe('ping service', () => {
     expect(nodesshMock.dispose).toHaveBeenCalled();
     expect(expressResponseMock.sendMock).toHaveBeenCalled();
     expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    expect(state.servers[0].lastPingStatus).toBe(FeatureStatus.KO);
   });
 
   it('should send appropriate response when server SSH KO', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
     };
     // SSH KO
@@ -140,7 +152,7 @@ describe('ping service', () => {
 
   it('should send appropriate response when server HTTP KO', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
     };
     // HTTP KO
@@ -159,7 +171,7 @@ describe('ping service', () => {
 
   it('should send appropriate response when server OFFLINE', async () => {
     // given
-    const state = {
+    const state: AppState = {
       ...appState,
     };
     // Ping KO

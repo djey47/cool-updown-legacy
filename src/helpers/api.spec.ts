@@ -1,6 +1,7 @@
-import { ApiRequest } from '../model/models';
 import { validateInputParameters } from './api';
 import globalMocks from '../../config/jest/globalMocks';
+
+import type { ApiRequest } from '../model/api';
 
 const responseMock = globalMocks.expressResponseMock;
 
@@ -15,7 +16,7 @@ describe('api helper functions', () => {
       // given
       const request: ApiRequest = {
         params: {
-          serverId: 'server-id',
+          serverId: '0',
         },
       };
 
@@ -23,7 +24,7 @@ describe('api helper functions', () => {
       const actualParameters = validateInputParameters(request, responseMock);
 
       // then
-      expect(actualParameters.serverId).toBe('server-id');
+      expect(actualParameters.serverId).toBe(0);
     });
 
     it('should return 400 HTTP response when missing serverId', () => {

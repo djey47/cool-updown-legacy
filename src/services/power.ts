@@ -2,13 +2,15 @@ import { NodeSSH, SSHExecCommandOptions } from 'node-ssh';
 import wol, { WakeOptions } from 'wake_on_lan';
 import logger from '../helpers/logger';
 import messages from '../resources/messages';
-import { ApiRequest, AppState } from '../model/models';
-import { TypedResponse } from '../model/express';
 import { validateInputParameters } from '../helpers/api';
 import { retrieveServerConfiguration } from '../helpers/config';
 import { generatePage } from '../helpers/page';
 import { withBackLink } from '../helpers/components';
 import { getSSHParameters } from '../helpers/ssh';
+
+import { AppState, FeatureStatus } from '../model/models';
+import type { TypedResponse } from '../model/express';
+import type { ApiRequest } from '../model/api';
 
 const ssh = new NodeSSH();
 
@@ -35,6 +37,14 @@ export function off(req: Express.Request, res: TypedResponse<string>, appState: 
  */
 export function onServer(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const { serverId } = validateInputParameters(req as ApiRequest, res);
+  const serverState = appState.servers[serverId];
+
+  if (serverState.lastPingStatus === FeatureStatus.OK) {
+    logger.info(`(on-server:${serverId})) no operation will be processed as the last ping status is OK`);
+    if (res) res.send(generatePage(withBackLink(messages.status.noop, '/', messages.home)));
+    return;
+  }
+
   const serverConfiguration = retrieveServerConfiguration(res, serverId);
 
   const macAddress = serverConfiguration.network?.macAddress || undefined;
@@ -52,11 +62,7 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
 
       // console.log('onServer', { appState }, appState.servers);
 
-      const serverState = appState.servers[serverId];
-      if (!serverState.startedAt) {
-        serverState.startedAt = new Date(Date.now());
-        serverState.stoppedAt = undefined;
-      }
+      serverState.startedAt = new Date(Date.now());
 
       if (res) res.send(generatePage(withBackLink(messages.status.okay, '/', messages.home)));
     }
@@ -68,6 +74,13 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
  */
 export async function offServer(req: Express.Request, res: TypedResponse<string>, appState: AppState) {
   const { serverId } = validateInputParameters(req as ApiRequest, res);
+  const serverState = appState.servers[serverId];
+
+  if (serverState.lastPingStatus === FeatureStatus.KO) {
+    logger.info(`(off-server:${serverId})) no operation will be processed as the last ping status is KO`);
+    if (res) res.send(generatePage(withBackLink(messages.status.noop, '/', messages.home)));
+  }
+
   const serverConfiguration = retrieveServerConfiguration(res, serverId);
   const { ssh: sshConfiguration } = serverConfiguration;
 
@@ -91,11 +104,7 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
 
     if (code !== 0) throw stderr;
 
-    const serverState = appState.servers[serverId];
-    if (!serverState.stoppedAt) {
-      serverState.startedAt = undefined;
-      serverState.stoppedAt = new Date(Date.now());
-    }
+    serverState.stoppedAt = new Date(Date.now());
 
     if (res) res.send(generatePage(withBackLink(messages.status.okay, '/', messages.home)));
   } catch (err) {

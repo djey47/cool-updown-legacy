@@ -1,8 +1,10 @@
 import globalMocks from '../../config/jest/globalMocks';
 import resetMocks from '../../config/jest/resetMocks';
 import { generateDefaultAppState, generateDefaultRequest, generateDefaultResponse } from '../helpers/testing';
-import { AppState } from '../model/models';
 import { offServer, onServer } from './power';
+import { FeatureStatus } from '../model/models';
+
+import type { AppState } from '../model/models';
 
 jest.mock('../helpers/page', () => globalMocks.pageMock);
 jest.mock('../helpers/ssh', () => globalMocks.sshMock);
@@ -29,13 +31,31 @@ describe('power services', () => {
       pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
     });
 
+    it('should not wake server if last ping state for this server is already OK', () => {
+      // given
+      const appStateWithServerPingOK: AppState = {
+        ...appState,
+        servers: [{
+          lastPingStatus: FeatureStatus.OK,
+        }],
+      };
+
+      // when
+      onServer(req, res, appStateWithServerPingOK);
+
+      // then
+      expect(wakeonlanMock.wake).not.toHaveBeenCalled();
+      expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    });
+
     it('should invoke wol and generate correct response on success', () => {
       // given
       const appStateWithServerStopTime: AppState = {
         ...appState,
         servers: [{
           startedAt: null,
-          stoppedAt: new Date(),  
+          stoppedAt: new Date(),
+          lastPingStatus: FeatureStatus.UNAVAILABLE,  
         }],
       };
 
@@ -48,7 +68,6 @@ describe('power services', () => {
       expect(wakeonlanMock.wake.mock.calls[0][1]).toEqual({ address: '255.255.255.255' });
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
       expect(appStateWithServerStopTime.servers[0].startedAt.getTime()).toEqual(1528812840000);
-      expect(appStateWithServerStopTime.servers[0].stoppedAt).toBeUndefined();
     });
 
     it('should not alter server start time when already defined', () => {
@@ -111,13 +130,31 @@ describe('power services', () => {
        });
     });
 
+    it('should not connect to server if last ping state for this server is already KO', () => {
+      // given
+      const appStateWithServerPingKO: AppState = {
+        ...appState,
+        servers: [{
+          lastPingStatus: FeatureStatus.KO,
+        }],
+      };
+
+      // when
+      offServer(req, res, appStateWithServerPingKO);
+
+      // then
+      expect(nodesshMock.execCommand).not.toHaveBeenCalled();
+      expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    });
+
     it('should invoke SSH and generate correct response on success', async () => {
       // given
-      const appStateWithServerStartTime = {
+      const appStateWithServerStartTime: AppState = {
         ...appState,
         servers: [{
           startedAt: new Date(),
           stoppedAt: undefined,
+          lastPingStatus: FeatureStatus.UNAVAILABLE,
         }],
       };
 
@@ -134,7 +171,6 @@ describe('power services', () => {
       expect(nodesshMock.execCommand).toHaveBeenCalledWith('OFF Command');
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      expect(appStateWithServerStartTime.servers[0].startedAt).toBeUndefined();
       expect(appStateWithServerStartTime.servers[0].stoppedAt.getTime()).toEqual(1528812840000);
     });
 

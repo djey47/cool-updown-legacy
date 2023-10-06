@@ -1,7 +1,9 @@
 import cron from 'cron';
 import { onServer, offServer } from '../services/power';
 import logger from './logger';
-import { ApiRequest, AppState, HandlerCallback, Schedule } from '../model/models';
+
+import type { AppState, HandlerCallback, Schedule } from '../model/models';
+import type { ApiRequest } from '../model/api';
 
 const { CronJob } = cron;
 
