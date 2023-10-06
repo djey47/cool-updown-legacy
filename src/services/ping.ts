@@ -118,11 +118,16 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     // Uptime/Downtime server calculation
     const now = new Date(Date.now());
     const time = computeDuration(serverStartedAt || serverStoppedAt || now, now);
-    let serverUpDownTimeMessage = pingMessages.serverUndefinedTime;
-    if (serverStartedAt) {
-      serverUpDownTimeMessage = interpolate(pingMessages.serverUptime, { time });
-    } else if (serverStoppedAt) {
-      serverUpDownTimeMessage = interpolate(pingMessages.serverDowntime, { time });
+    let serverUpDownTimeMessage;
+    if (!serverStartedAt && !serverStoppedAt) {
+      serverUpDownTimeMessage = pingMessages.serverUndefinedTime;
+    } else {
+      if (!serverStoppedAt || dateFns.isAfter(serverStartedAt, serverStoppedAt)) {
+        serverUpDownTimeMessage = interpolate(pingMessages.serverUptime, { time });
+      }
+      if (!serverStartedAt || dateFns.isAfter(serverStoppedAt, serverStartedAt)) {
+        serverUpDownTimeMessage = interpolate(pingMessages.serverDowntime, { time });
+      } 
     }
 
     return {
