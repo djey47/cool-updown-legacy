@@ -62,10 +62,7 @@ export function onServer(req: Express.Request, res: TypedResponse<string>, appSt
 
       // console.log('onServer', { appState }, appState.servers);
 
-      if (!serverState.startedAt) {
-        serverState.startedAt = new Date(Date.now());
-        serverState.stoppedAt = undefined;
-      }
+      serverState.startedAt = new Date(Date.now());
 
       if (res) res.send(generatePage(withBackLink(messages.status.okay, '/', messages.home)));
     }
@@ -107,10 +104,7 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
 
     if (code !== 0) throw stderr;
 
-    if (!serverState.stoppedAt) {
-      serverState.startedAt = undefined;
-      serverState.stoppedAt = new Date(Date.now());
-    }
+    serverState.stoppedAt = new Date(Date.now());
 
     if (res) res.send(generatePage(withBackLink(messages.status.okay, '/', messages.home)));
   } catch (err) {

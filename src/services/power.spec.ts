@@ -68,7 +68,6 @@ describe('power services', () => {
       expect(wakeonlanMock.wake.mock.calls[0][1]).toEqual({ address: '255.255.255.255' });
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
       expect(appStateWithServerStopTime.servers[0].startedAt.getTime()).toEqual(1528812840000);
-      expect(appStateWithServerStopTime.servers[0].stoppedAt).toBeUndefined();
     });
 
     it('should not alter server start time when already defined', () => {
@@ -172,7 +171,6 @@ describe('power services', () => {
       expect(nodesshMock.execCommand).toHaveBeenCalledWith('OFF Command');
       expect(nodesshMock.dispose).toHaveBeenCalled();
       expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
-      expect(appStateWithServerStartTime.servers[0].startedAt).toBeUndefined();
       expect(appStateWithServerStartTime.servers[0].stoppedAt.getTime()).toEqual(1528812840000);
     });
 
