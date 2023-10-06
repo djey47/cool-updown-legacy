@@ -32,6 +32,7 @@ export default {
     enabled: 'ENABLED',
     kayo: 'KO',
     okay: 'OK',
+    noop: 'NOOP',
   },
   dates: {
     days: 'day(s)',

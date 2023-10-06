@@ -31,6 +31,23 @@ describe('power services', () => {
       pageMock.generatePage.mockImplementation((html) => `<page-shared />${html}`);
     });
 
+    it('should not wake server if last ping state for this server is already OK', () => {
+      // given
+      const appStateWithServerPingOK: AppState = {
+        ...appState,
+        servers: [{
+          lastPingStatus: FeatureStatus.OK,
+        }],
+      };
+
+      // when
+      onServer(req, res, appStateWithServerPingOK);
+
+      // then
+      expect(wakeonlanMock.wake).not.toHaveBeenCalled();
+      expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
+    });
+
     it('should invoke wol and generate correct response on success', () => {
       // given
       const appStateWithServerStopTime: AppState = {
@@ -112,6 +129,23 @@ describe('power services', () => {
         privateKey: '=== PRIVATE KEY ===',
         username: 'User',
        });
+    });
+
+    it('should not connect to server if last ping state for this server is already KO', () => {
+      // given
+      const appStateWithServerPingKO: AppState = {
+        ...appState,
+        servers: [{
+          lastPingStatus: FeatureStatus.KO,
+        }],
+      };
+
+      // when
+      offServer(req, res, appStateWithServerPingKO);
+
+      // then
+      expect(nodesshMock.execCommand).not.toHaveBeenCalled();
+      expect(expressResponseMock.sendMock.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('should invoke SSH and generate correct response on success', async () => {
