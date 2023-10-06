@@ -6,7 +6,7 @@ NodeJS script, written in Typescript, to enable scheduled server start/stop. Run
 
 It can manage one to many servers.
 
-It also pings monitored server (ICMP, SSH, HTTP) and display result.
+It also pings monitored server (ICMP, SSH, HTTP) and displays result.
 
 ![screenshot](https://github.com/djey47/cool-updown/blob/master/screens/screen-1.png)
 
@@ -19,14 +19,17 @@ It also pings monitored server (ICMP, SSH, HTTP) and display result.
   - NodeJS v18
   - Yarn (optionally)
 - *Remote server*:
-  - Linux
-  - WOL enabled
-  - LAN properly configured, SSH service running
+  - Linux / Windows (experimental)
+  - WOL enabled (for remote power-on ability)
+  - LAN properly configured
+  - SSH service running (for remote shutdown ability)
   - User with root privileges (sudoer)
+
+*Note: Windows devices may be monitored with this app but with less abilities; as an example, shutdown support is not guaranteed to work since relying on SSH.*
 
 ### Steps
 - Clone this repository with git or extract source archive to a directory
-- Head to directory then type `npm install` or `yarn`, according to your preferences; a 'ready to start' bundle will be generated automatically.
+- Head to directory then type `npm install`, according to your preferences; a 'ready to start' bundle will be generated automatically.
 
 ## Configure
 Default configuration is given as example in `config/default.json` file.
@@ -93,7 +96,7 @@ Note: `config/local-test.json` is used for testing during development only!
 | `... user`| user name to join your server via SSH (sudoer) | / |
 | `... password`| password for user above if required for sudo | / |
 | `... port`| TCP port to join your server via SSH | 22 |
-| `>> ssh` | Set of SSH access related configuration as described below | {...} |
+| `>> ssh` | Set of SSH access related configuration as described below | {...} (**optional**) |
 | `... enabled`| `true` will execute provided schedules, `false` won't | true (=enabled) |
 | `... on.at`, `off.at`| time as `HH:MM` (24hr format) when automatically triggering ON or OFF actions, respectively | 00:00, 01:00 (**change it**) |
 | `ui` | Visual settings for the web user interface | {...} |
@@ -110,14 +113,14 @@ OFF command does require a working communication via SSH; you should check both 
 
 #### Server side, for each of those to be managed
 - Allow public key authentication in SSH service parameters
-- Add client public key in `.ssh/authorized_keys` file for the user you wanna connect with.
+- Add client public key in `~/.ssh/authorized_keys` file for the user you wanna connect with.
 
 ### Run
 Assuming install part above went well, and a `build/coolupdown.js` script has been generated:
 
-simply execute `npm start` or `yarn start`.
+simply execute `npm start`.
 
-Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` or `yarn start:service` to run in background; you may also use [PM2](https://pm2.keymetrics.io/) to manage running it as a service (recommended).
+Remember that application has to remain active for ON/OFF scheduling to work, so in target environment, you may want to use: `npm run start:service` to run in background; you may also use [PM2](https://pm2.keymetrics.io/) to manage running it as a service (recommended).
 
 For debugging purposes, commands are also available `npm run start:service-debug` or `yarn start:service-debug`: a `logs/debug.log` file will be created with all console output including fatal errors.
 
@@ -132,9 +135,9 @@ While totally working, this is not recommended in production, especially under l
 #### Logs
 In foreground execution, logs are written to both console and `logs/app.log` file.
 
-While running in background, logs are written to above file only; to display 500 last logs events, following commands will help you: `npm run logs` or `yarn logs`.
+While running in background, logs are written to above file only; to display 500 last logs events, following command will help you: `npm run logs`.
 
-Full logs will be displayed with `npm run logs:all` or `yarn logs:all` commands.
+Full logs will be displayed with `npm run logs:all` command.
 
 ### Web-based usage
 
