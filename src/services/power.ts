@@ -90,7 +90,9 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
 
     logger.info(`(off-server:${serverId}) ${messages.sshOK}`);
 
-    const commandOptions: SSHExecCommandOptions = {};
+    const commandOptions: SSHExecCommandOptions = {
+
+    };
     const password = sshConfiguration?.password;
     if (password !== undefined) {
       commandOptions.stdin = `${password}\n`; 
@@ -101,6 +103,7 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
 
     logger.debug(`(off-server:${serverId}) STDOUT: ${stdout}`);
     logger.debug(`(off-server:${serverId}) STDERR: ${stderr}`);
+    logger.debug(`(off-server:${serverId}) shutdown command exit code: ${code}`);
 
     if (code !== 0) throw stderr;
 
