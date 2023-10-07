@@ -24,9 +24,9 @@ const DEFAULT_STATUS_REFRESH_SECONDS = 60;
 
 interface Diagnostics {
   httpStatus: string;
-  isHTTPSuccess: boolean;
-  isPingSuccess: boolean;
-  isSSHSuccess: boolean;
+  httpFeatureStatus: FeatureStatus;
+  pingFeatureStatus: FeatureStatus;
+  sshFeatureStatus: FeatureStatus;
   pingStatus: string;
   serverUpDownTimeMessage: string;
   sshStatus: string;
@@ -48,14 +48,18 @@ function computeDuration(from: Date, to: Date) {
  * @private
  */
 async function serverSSHTest(serverId: number, serverConfiguration: ServerConfig) {
+  if (!serverConfiguration.ssh) {
+    return FeatureStatus.UNAVAILABLE;
+  }
+
   try {
     const sshClientConfig = await getSSHParameters(serverConfiguration);
     await ssh.connect(sshClientConfig);
     logger.info(`(ping:${serverId}) SSH connection OK`);
-    return true;
+    return FeatureStatus.OK;
   } catch (err) {
     logger.error(`(ping:${serverId}) SSH connection KO: ${err}`);
-    return false;
+    return FeatureStatus.KO;
   } finally {
     ssh.dispose();
   }
@@ -65,16 +69,20 @@ async function serverSSHTest(serverId: number, serverConfiguration: ServerConfig
  * @private
  */
 async function serverHTTPTest(serverId: number, url: string) {
+  if (!url) {
+    return FeatureStatus.UNAVAILABLE;
+  }
+
   try {
     const httpsAgent = new https.Agent({
       rejectUnauthorized: false,
     });
     await axios.get(url, { httpsAgent });
     logger.info(`(ping:${serverId}) HTTP connection OK`);
-    return Promise.resolve(true);
+    return Promise.resolve(FeatureStatus.OK);
   } catch (err: unknown) {
     logger.error(`(ping:${serverId}) HTTP connection KO: ${err}`);
-    return Promise.resolve(false);
+    return Promise.resolve(FeatureStatus.KO);
   }
 }
 
@@ -100,19 +108,18 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     ping: pingMessages, status: statusMessages,
   } = messages;
 
-  const diagPromises = config.servers.map(async (s, serverId) => {
+  const diagPromises = config.servers.map(async (serverConfig, serverId) => {
     const {
       startedAt: serverStartedAt, stoppedAt: serverStoppedAt, isScheduleEnabled: serverScheduleEnabled
     } = appState.servers[serverId];
-    const host = s.network?.hostname || undefined;
-    const url = s.url || undefined;
-    const hostname = s.network?.hostname || undefined;
+    const url = serverConfig.url || undefined;
+    const hostname = serverConfig.network?.hostname || undefined;
     const isScheduleEnabled = serverScheduleEnabled || false;
 
-    const [isPingSuccess, isSSHSuccess, isHTTPSuccess] = await Promise.all([
-      gatewayPing(host),
-      serverSSHTest(serverId, s),
-      url ? serverHTTPTest(serverId, url) : Promise.resolve(false),
+    const [pingFeatureStatus, sshFeatureStatus, httpFeatureStatus] = await Promise.all([
+      gatewayPing(hostname),
+      serverSSHTest(serverId, serverConfig),
+      serverHTTPTest(serverId, url),
     ]);
 
     // Uptime/Downtime server calculation
@@ -131,12 +138,12 @@ async function diagnose(config: AppConfig, appState: AppState): Promise<Diagnost
     }
 
     return {
-      isPingSuccess,
-      isSSHSuccess,
-      isHTTPSuccess,
-      pingStatus: isPingSuccess ? statusMessages.okay : statusMessages.kayo,
-      sshStatus: isSSHSuccess ? statusMessages.okay : statusMessages.kayo,
-      httpStatus: isHTTPSuccess ? statusMessages.okay : statusMessages.kayo,
+      pingFeatureStatus,
+      sshFeatureStatus,
+      httpFeatureStatus,
+      pingStatus: featureStatusToMessage(pingFeatureStatus),
+      sshStatus: featureStatusToMessage(sshFeatureStatus),
+      httpStatus: featureStatusToMessage(httpFeatureStatus),
       serverUpDownTimeMessage,
       url,
       hostname,
@@ -238,21 +245,22 @@ function formatDiagnostics(diags: Diagnostics[]) {
   } = messages;
 
   return diags.map((d, serverId) => {
-    const { httpStatus, pingStatus, sshStatus, isPingSuccess, isSSHSuccess, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
+    const { httpStatus, pingStatus, sshStatus, pingFeatureStatus, httpFeatureStatus, serverUpDownTimeMessage, url, hostname, scheduleStatus } = d;
 
     const powerUrls = resolvePowerServiceUrls(serverId);
     const scheduleUrls = resolveScheduleServiceUrls(serverId);
+    const httpLinkUrl = httpFeatureStatus === FeatureStatus.UNAVAILABLE ? '' : interpolate(pingMessages.httpLinkItem, { url });
 
     return `
       <li>
         <h2>${interpolate(pingMessages.serverTitle, { serverId })}${hostname && (': ' + hostname) || ''}</h2>
-        <p>${!isPingSuccess && !isSSHSuccess ? pingMessages.offline : ''}</p>
+        <p>${pingFeatureStatus === FeatureStatus.KO ? pingMessages.offline : ''}</p>
         <ul>
           <li>${interpolate(pingMessages.scheduleItem, { scheduleStatus })}</li>
           <li>${serverUpDownTimeMessage}</li>
           <li>${interpolate(pingMessages.pingItem, { pingStatus })}</li>
           <li>${interpolate(pingMessages.sshItem, { sshStatus })}</li>
-          <li>${interpolate(pingMessages.httpItem, { httpStatus, url })}</li>
+          <li>${interpolate(pingMessages.httpItem, { httpStatus })} ${httpLinkUrl}</li>
           <li>${interpolate(pingMessages.actionsItem, { ...powerUrls, ...scheduleUrls })}</li>
         </ul>
       </li>
@@ -264,8 +272,23 @@ function updateAppStateWithDiags(appState: AppState, diags: Diagnostics[]) {
   // console.log('ping::updateAppStateWithDiags', {  appState, diags });
   
   diags.forEach((diag, serverId) => {
-    appState.servers[serverId].lastPingStatus = diag.isPingSuccess ? FeatureStatus.OK : FeatureStatus.KO;
+    appState.servers[serverId].lastPingStatus = diag.pingFeatureStatus;
   });
 
   // console.log('ping::updateAppStateWithDiags', { appState });
+}
+
+function featureStatusToMessage(featureStatus: FeatureStatus) {
+  const {
+    status: statusMessages,
+  } = messages;
+
+  switch(featureStatus) {
+    case FeatureStatus.OK:
+      return statusMessages.okay;
+    case FeatureStatus.KO:
+      return statusMessages.kayo;
+    case FeatureStatus.UNAVAILABLE:
+      return statusMessages.unavail;
+  }
 }
