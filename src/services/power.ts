@@ -91,9 +91,7 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
 
     logger.info(`(off-server:${serverId}) ${messages.sshOK}`);
 
-    const commandOptions: SSHExecCommandOptions = {
-
-    };
+    const commandOptions: SSHExecCommandOptions = {};
     const password = sshConfiguration?.password;
     if (password !== undefined) {
       commandOptions.stdin = `${password}\n`; 
