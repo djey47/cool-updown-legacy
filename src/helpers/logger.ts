@@ -11,7 +11,7 @@ shell.mkdir('-p', logsDirectory);
 const logsFile = path.join(logsDirectory, 'app.log');
 
 export default new winston.Logger({
-  level: 'info',
+  level: 'debug',
   handleExceptions: false,
   transports: [
     new winston.transports.Console({
