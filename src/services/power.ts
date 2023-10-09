@@ -14,7 +14,8 @@ import type { ApiRequest } from '../model/api';
 
 const ssh = new NodeSSH();
 
-const DEFAULT_SSH_OFF_COMMAND = 'sudo -S shutdown -h now';
+// Background process (-b), read password from stdin (-S), shutdown server in one minute
+const DEFAULT_SSH_OFF_COMMAND = 'sudo -bS shutdown -h 1';
 
 /**
  * Handles ON request for all servers
@@ -101,6 +102,7 @@ export async function offServer(req: Express.Request, res: TypedResponse<string>
 
     logger.debug(`(off-server:${serverId}) STDOUT: ${stdout}`);
     logger.debug(`(off-server:${serverId}) STDERR: ${stderr}`);
+    logger.debug(`(off-server:${serverId}) shutdown command exit code: ${code}`);
 
     if (code !== 0) throw stderr;
 

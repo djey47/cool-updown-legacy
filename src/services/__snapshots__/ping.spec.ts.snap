@@ -523,7 +523,7 @@ exports[`ping service should send appropriate response when serverStoppedAt more
         <p></p>
         <ul>
           <li>Schedule: <b>DISABLED</b></li>
-          <li>Last stop attempt: <b>1 hour(s) ago</b>.</li>
+          <li>Last stop attempt: <b>less than one minute ago</b>.</li>
           <li>Ping test: <b>OK</b></li>
           <li>SSH test: <b>OK</b></li>
           <li>HTTP test: <b>OK</b> <a href="http://localhost" target="_blank">URL</a></li>

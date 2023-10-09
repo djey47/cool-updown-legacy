@@ -92,7 +92,7 @@ Note: `config/local-test.json` is used for testing during development only!
 | `... hostName`| name or IP address to join your server via SSH | / |
 | `>> ssh` | Set of SSH access related configuration as described below | {...} |
 | `... keyPath`| location of your private key to be used for SSH (PEM format, RSA only supported) | / |
-| `... offCommand`| any command used to shut the system down | sudo -S shutdown -h 1 |
+| `... offCommand`| any command used to shut the system down | sudo -bS shutdown -h 1 |
 | `... user`| user name to join your server via SSH (sudoer) | / |
 | `... password`| password for user above if required for sudo | / |
 | `... port`| TCP port to join your server via SSH | 22 |
